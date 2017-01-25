@@ -1,0 +1,129 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Header Files\PGCore">
+      <UniqueIdentifier>{efb77372-d6d4-486e-b8b2-a537352d7f7d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\PGEngine">
+      <UniqueIdentifier>{556ca62f-f9b0-4ad0-8b0d-4eaf0f7fa5fe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\PGGame">
+      <UniqueIdentifier>{42b202fa-9c3f-4431-af9f-8c8e719f198e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\PGGui">
+      <UniqueIdentifier>{bae6f3b4-74f4-4527-9c9d-4dd39312b907}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="targetver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PGLinkedList.h">
+      <Filter>Header Files\PGCore</Filter>
+    </ClInclude>
+    <ClInclude Include="PGString.h">
+      <Filter>Header Files\PGCore</Filter>
+    </ClInclude>
+    <ClInclude Include="PGBuildableObject.h">
+      <Filter>Header Files\PGEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="PGBaseObject.h">
+      <Filter>Header Files\PGEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="PGMesh.h">
+      <Filter>Header Files\PGEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="PGMeshInstance.h">
+      <Filter>Header Files\PGGame</Filter>
+    </ClInclude>
+    <ClInclude Include="PGBaseScene.h">
+      <Filter>Header Files\PGEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="PGCore.h">
+      <Filter>Header Files\PGCore</Filter>
+    </ClInclude>
+    <ClInclude Include="PGBaseRenderer.h">
+      <Filter>Header Files\PGEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="PGControler.h">
+      <Filter>Header Files\PGEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="PGGameWindow.h">
+      <Filter>Header Files\PGEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="PGTexture.h">
+      <Filter>Header Files\PGEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="PGBaseGame.h">
+      <Filter>Header Files\PGEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="PGSceneEntity.h">
+      <Filter>Header Files\PGEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="PGBaseEvent.h">
+      <Filter>Header Files\PGEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="PGAssetManager.h">
+      <Filter>Header Files\PGEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="PGFont.h">
+      <Filter>Header Files\PGEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="PGBaseObjectList.h">
+      <Filter>Header Files\PGEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="PGDebugger.h">
+      <Filter>Header Files\PGCore</Filter>
+    </ClInclude>
+    <ClInclude Include="PGGameInstance.h">
+      <Filter>Header Files\PGGame</Filter>
+    </ClInclude>
+    <ClInclude Include="PGUICanvas.h">
+      <Filter>Header Files\PGGui</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PGUIBaseElement.h">
+      <Filter>Header Files\PGGui</Filter>
+    </ClInclude>
+    <ClInclude Include="PGShaderSources.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PGMousePicker.h">
+      <Filter>Header Files\PGEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="PGBaseCamera.h">
+      <Filter>Header Files\PGEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="PG3DPrimitive.h">
+      <Filter>Header Files\PGCore</Filter>
+    </ClInclude>
+    <ClInclude Include="PGTerrainEditorScene.h">
+      <Filter>Header Files\PGGame</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
