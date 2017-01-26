@@ -104,7 +104,6 @@ namespace PGEngine {
 				double updateFctTimer = 0;
 				double updateFctTargetFrequency = PG_60HZT;
 				double last_update_pass_stamp = 0;
-				sprintf_s(frame_cpt_buffer, "| Frame count : %i|\n", FrameRenderGlobalCount);
 				while (this->ShouldGameClose == false) {
 
 					current_pass_time_stamp = glfwGetTime();
@@ -112,13 +111,14 @@ namespace PGEngine {
 					last_pass_time_stamp = current_pass_time_stamp;
 
 
-
-					glfwPollEvents();				
+					glfwPollEvents();
+									
 					updateFctTimer += delta_time;
 					while (updateFctTimer >= updateFctTargetFrequency) {
 						double deltaTimeForUpdate = (glfwGetTime() - last_update_pass_stamp);
 						last_update_pass_stamp = glfwGetTime();
 
+						
 						if (this->EventManager != nullptr) {
 							this->EventManager->UpdateAndRecycle(delta_time);
 						}
@@ -131,9 +131,9 @@ namespace PGEngine {
 				
 
 					this->Render();
+					//Note(Marc): Render debug stuff here
 					this->GameRenderer->RenderUIText(fps_info_buffer, v3(0.f, 0.f, 1.f), v4(0.3f, 0.5f, 0.2f, 1.f), 0.3f, this->Default_Engine_Font);
-					//this->GameRenderer->textMesh->Render(frame_cpt_buffer, v3(120.f,0.f, 1.f), v4(0.3f, 0.5f, 0.2f, 1.f), 0.3f, this->Default_Engine_Font);
-
+					
 					renderFctCallCpt++;
 					generalFctTime += delta_time;
 					if (generalFctTime >= 1.f) {
@@ -143,7 +143,6 @@ namespace PGEngine {
 						generalFctTime -= 1.f;
 						}
 					
-					//sprintf_s(frame_cpt_buffer, "| Frame count : %i|\n", FrameRenderGlobalCount);
 					glfwSwapBuffers(this->GameWindow->Gl_Window);
 					glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 					FrameRenderGlobalCount++;

@@ -72,11 +72,11 @@ class PGTerrainEditorScene : public PGBaseScene {
 			renderer->axisMesh->Render(v3(0.f, 0.f, 0.f), v4(0.f, 0.f, 1.f, 1.f));
 			renderer->cubeMesh->Render(v3(scene_light.position.x, scene_light.position.y, scene_light.position.z), v3(0.1f, 0.1f, 0.1f), v4(light_color, 1.f));
 
-			for (int i = 0; i <= 9; i++)  {
+			/*for (int i = 0; i <= 9; i++)  {
 				if (obj_list[i].w == 1) {
 					renderer->materialHexagoneMesh->Render(v3(obj_list[i]), v3(2.0f, 2.0f, 0.5f), &Material_Copper);
 				}
-			}
+			}*/
 			
 		//	renderer->lightedCubeMesh->Render(v3(-1.f, -2.f, 0.f), v3(1.0f), v4(1.f, 0.f, 1.f, 1.f));
 			renderer->materialHexagoneMesh->Render(v3(-9.5f, -9.f, 2.f), v3(2.0f, 2.0f, 0.5f), &Material_Gold);
@@ -91,7 +91,7 @@ class PGTerrainEditorScene : public PGBaseScene {
 
 			float water_height = 0.5f;
 
-			v2 hexa_grid_size = v2(10,10);
+			v2 hexa_grid_size = v2(20,20);
 			float hexa_size = 0.7f;
 			v3 major_row_offset = v3(hexa_size, (2 * hexa_size) - (hexa_size / glm::tan(glm::radians(60.f))), 0.f);
 			v3 minor_row_offset = v3(-hexa_size, (2 * hexa_size) - (hexa_size / glm::tan(glm::radians(60.f))), 0.f);
