@@ -51,7 +51,7 @@ class PGUICanvas : public PGBuildableObject {
 				this->ortho_Projection = glm::ortho(0.0f, static_cast<r32>(this->GameWindow->GetWidth()), static_cast<r32>(this->GameWindow->GetHeight()), 0.0f, -1.0f, 1.0f);
 
 				PGUIMenuWindow *menu_window = new PGUIMenuWindow();
-					menu_window->SetSize(v2(300.f, 500.f));
+					menu_window->SetSize(v2(300.f, 300.f));
 					menu_window->SetPossition(v2(10.f, 10.f));
 					menu_window->SetMenuTitle("Test title\n", asset_manager->SeachForFont("Roboto-Light\n"), v3(1.f, 0.2f, 0.5f));
 
