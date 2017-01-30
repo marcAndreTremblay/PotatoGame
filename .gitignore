@@ -48,10 +48,11 @@ artifacts/
 *_p.c
 *_i.h
 *.ilk
-*.meta
-*.obj
+.meta
+.obj
 .pch
 .pdb
+.ipch
 *.pgc
 *.pgd
 *.rsp
@@ -78,7 +79,7 @@ ipch/
 *.ncb
 *.opendb
 *.opensdf
-*.sdf
+.sdf
 *.cachefile
 *.VC.db
 *.VC.VC.opendb

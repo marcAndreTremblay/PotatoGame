@@ -221,7 +221,8 @@ class PGTerrainEditorScene : public PGBaseScene {
 			int picked_index = -1;
 			//Picking into world space
 			//*************************************************************************************		
-			if(controler->IsRelease(PGMouseRight) == true){
+			if (controler->GetKey(PGKey_Left_Ctrl)->IsPress == true 
+				&& controler->IsRelease(PGMouseRight) == true) {
 				v3 world_ray;
 				v3 plane_normal = v3(0.f, 0.f, 1.f);
 				r32 offset = 0.f;
