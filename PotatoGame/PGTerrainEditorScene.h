@@ -20,6 +20,7 @@ private:
 public:
 	v4* grid_pos_data;
 	r32* grid_height_data;
+	PGMaterial* grid_material_data;
 	int selected_index;
 	v2 Grid_size; 
 	r32 Tile_size;
@@ -46,8 +47,10 @@ public:
 
 		v4 starting_offset = v4(-10.f, -10, 0.f, 0.f); //Note(Marc): Offset for the starting possition
 
-		grid_pos_data = (v4*)malloc(sizeof(v4)*grid_size.x*grid_size.y);
-		grid_height_data = (r32*)malloc(sizeof(r32)*grid_size.x*grid_size.y);
+		this->grid_pos_data = (v4*)malloc(sizeof(v4)*grid_size.x*grid_size.y);
+		this->grid_height_data = (r32*)malloc(sizeof(r32)*grid_size.x*grid_size.y);
+		this->grid_material_data = (PGMaterial*)malloc(sizeof(PGMaterial)*grid_size.x*grid_size.y);
+
 
 		float height_tempo = 0.f;
 
@@ -77,6 +80,7 @@ public:
 	~PGGridRawData() {
 		delete(grid_pos_data);
 		delete(grid_height_data);
+		delete(grid_material_data);
 	}
 
 };
@@ -88,9 +92,6 @@ class PGTerrainEditorScene : public PGBaseScene {
 		
 		PGGridRawData *grid_data;
 
-
-		v4 obj_list[10];
-		int next_index = 0;
 		PGLight scene_light;
 
 		double time;
@@ -222,7 +223,7 @@ class PGTerrainEditorScene : public PGBaseScene {
 			//Picking into world space
 			//*************************************************************************************		
 			if (controler->GetKey(PGKey_Left_Ctrl)->IsPress == true 
-				&& controler->IsRelease(PGMouseRight) == true) {
+				&& controler->IsRelease(PGMouse_Right) == true) {
 				v3 world_ray;
 				v3 plane_normal = v3(0.f, 0.f, 1.f);
 				r32 offset = 0.f;

@@ -325,15 +325,15 @@ public:
 		if (isChildActive == false) {
 			switch (this->State) {
 			case UIState_Hot:{
-							if (controler->IsPressed(PGMouseLeft) == true) {
+							if (controler->IsPressed(PGMouse_Left) == true) {
 								this->State = UIState_Left_Press;
 							}
-							if (controler->IsPressed(PGMouseRight) == true) {
+							if (controler->IsPressed(PGMouse_Right) == true) {
 								this->State = UIState_Right_Press;
 							}
 							break; }
 			case UIState_Left_Press:{
-							if (controler->IsRelease(PGMouseLeft) == true) {
+							if (controler->IsRelease(PGMouse_Left) == true) {
 								if (this->IsIntersection(mouse_ui_possition) == true) {
 									this->State = UIState_Hot;
 								}
@@ -344,7 +344,7 @@ public:
 							}
 							break; }
 			case UIState_Right_Press:{
-							if (controler->IsRelease(PGMouseRight) == true) {
+							if (controler->IsRelease(PGMouse_Right) == true) {
 								if (this->IsIntersection(mouse_ui_possition) == true) {
 									this->State = UIState_Hot;
 								}
@@ -425,14 +425,14 @@ public:
 		if (isChildActive == false) {
 			switch (this->State) {
 				case UIState_Hot:{
-						if (this->IsMovable == true && controler->IsPressed(PGMouseRight) == true) {
+						if (this->IsMovable == true && controler->IsPressed(PGMouse_Right) == true) {
 							this->State = UIState_Moving;
 						}
 						break;}
 				case UIState_Moving:{
 						this->Possition.x = this->Possition.x + controler->DeltaPossition.x;
 						this->Possition.y = this->Possition.y + controler->DeltaPossition.y;
-						if (controler->IsRelease(PGMouseRight) == true || controler->GetKey(PGMouseRight)->IsPress == false) {
+						if (controler->IsRelease(PGMouse_Right) == true || controler->GetKey(PGMouse_Right)->IsPress == false) {
 							if (this->IsIntersection(mouse_ui_possition)) {
 								this->State = UIState_Hot;
 							}

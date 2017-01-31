@@ -10,7 +10,7 @@ using namespace PGCore;
 namespace PGEngine{
 	class PGSceneEntity : public PGBaseObject{
 	protected:
-		v3 Possition;
+		v3 World_Possition;
 	private:
 	public:
 		PGSceneEntity() :

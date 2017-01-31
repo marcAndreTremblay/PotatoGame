@@ -1,5 +1,5 @@
-#if !defined(PG_GAME_INSTANCE_H)
-#define PG_GAME_INSTANCE_H
+#if !defined(PG_EDITOR_INSTANCE_H)
+#define PG_EDITOR_INSTANCE_H
 
 #include "stdafx.h"
 #include "PGBaseGame.h"
@@ -7,22 +7,22 @@
 
 using namespace PGEngine;
 
-class PGGameInstance :public PGBaseGame {
+class PGEditorInstance :public PGBaseGame {
 protected:
-	virtual void PGGameInstance::Render() override {
+	virtual void PGEditorInstance::Render() override {
 		PGBaseGame::Render();
 		this->game_canvas->Render(this->GameRenderer);
 		
 		
 	}
-	virtual void PGGameInstance::HandlerEvents() override {
+	virtual void PGEditorInstance::HandlerEvents() override {
 		PGBaseGame::HandlerEvents();
 
 	}
-	virtual void PGGameInstance::HandleControler() override {
+	virtual void PGEditorInstance::HandleControler() override {
 		PGBaseGame::HandleControler();
 	}
-	virtual void PGGameInstance::Update(double _TimeElapse) override {
+	virtual void PGEditorInstance::Update(double _TimeElapse) override {
 		PGBaseGame::Update(_TimeElapse);
 		
 		this->game_canvas->Update(this->Controlers, _TimeElapse);
@@ -30,12 +30,12 @@ protected:
 private:
 	PGUICanvas* game_canvas;	
 public:
-	PGGameInstance() {
+	PGEditorInstance() {
 	}
-	~PGGameInstance() {
+	~PGEditorInstance() {
 
 	}
-	virtual void PGGameInstance::Build() {
+	virtual void PGEditorInstance::Build() {
 		PGBaseGame::Build();
 		PGBuildableObject::StartBuilding();
 

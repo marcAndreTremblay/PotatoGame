@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "PGGameInstance.h"
+#include "PGEditorInstance.h"
 
 
 class PGV3 {
@@ -129,7 +129,7 @@ int main(int argc, char **argv)
 	*/
 
 
-	PGGameInstance* main_instance = new PGGameInstance();
+	PGEditorInstance* main_instance = new PGEditorInstance();
 		main_instance->Build();
 		main_instance->Start();
 	delete(main_instance);

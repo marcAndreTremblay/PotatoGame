@@ -90,9 +90,6 @@
     <ClInclude Include="PGDebugger.h">
       <Filter>Header Files\PGCore</Filter>
     </ClInclude>
-    <ClInclude Include="PGGameInstance.h">
-      <Filter>Header Files\PGGame</Filter>
-    </ClInclude>
     <ClInclude Include="PGUICanvas.h">
       <Filter>Header Files\PGGui</Filter>
     </ClInclude>
@@ -115,6 +112,9 @@
       <Filter>Header Files\PGCore</Filter>
     </ClInclude>
     <ClInclude Include="PGTerrainEditorScene.h">
+      <Filter>Header Files\PGGame</Filter>
+    </ClInclude>
+    <ClInclude Include="PGEditorInstance.h">
       <Filter>Header Files\PGGame</Filter>
     </ClInclude>
   </ItemGroup>

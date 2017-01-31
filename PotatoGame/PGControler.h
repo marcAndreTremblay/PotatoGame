@@ -35,9 +35,9 @@ public:
 	}
 };
 enum PGMouseKey {
-	PGMouseLeft = GLFW_MOUSE_BUTTON_LEFT,
-	PGMouseCenter = GLFW_MOUSE_BUTTON_MIDDLE,
-	PGMouseRight = GLFW_MOUSE_BUTTON_RIGHT
+	PGMouse_Left = GLFW_MOUSE_BUTTON_LEFT,
+	PGMouse_Center = GLFW_MOUSE_BUTTON_MIDDLE,
+	PGMouse_Right = GLFW_MOUSE_BUTTON_RIGHT
 };
 enum PGKey
 { 
@@ -82,9 +82,9 @@ public:
 	PGControler()
 	{
 		this->Mouse_Keys = new PGLinkedList<PGControlerKey>();
-			this->AddMouseKey(PGMouseLeft, "Space bar\n");
-			this->AddMouseKey(PGMouseCenter, "Space bar\n");
-			this->AddMouseKey(PGMouseRight, "Space bar\n");
+			this->AddMouseKey(PGMouse_Left, "Space bar\n");
+			this->AddMouseKey(PGMouse_Center, "Space bar\n");
+			this->AddMouseKey(PGMouse_Right, "Space bar\n");
 		
 		this->Keyboard_Keys = new PGLinkedList<PGControlerKey>();
 		DeltaPossition = {};

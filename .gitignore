@@ -52,7 +52,10 @@ artifacts/
 .obj
 .pch
 .pdb
+.sdf
 .ipch
+.vcxproj
+.vcxproj.filters
 *.pgc
 *.pgd
 *.rsp
