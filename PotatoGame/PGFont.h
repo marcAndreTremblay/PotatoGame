@@ -25,7 +25,7 @@ namespace PGEngine {
 			FT_Face Ft_face;
 		public:
 			PGCharacter CharacterCollection[128];
-			PGFont(FT_Library *ft_lib, char* file_path, char* font_name )
+			PGFont(FT_Library *ft_lib, char* file_path, char* font_name)
 				:PGBaseObject(){
 					this->Set_Name(font_name);
 					this->IsErrorWithFace = true;
