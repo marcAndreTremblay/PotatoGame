@@ -130,7 +130,7 @@ namespace PGEngine {
 			}
 			void PGMesh::Build() override = 0;
 			void PGMesh::Render();
-	};
+	};	
 
 
 }

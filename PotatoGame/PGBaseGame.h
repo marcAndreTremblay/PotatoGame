@@ -14,7 +14,7 @@ using namespace PGCore;
 #include "PGBaseScene.h"
 #include "PGAssetManager.h"
 #include "PGUICanvas.h"
-#include "PGTerrainEditorScene.h"
+#include "PGEditorScene.h"
 #include "PGMousePicker.h"
 
 namespace PGEngine {

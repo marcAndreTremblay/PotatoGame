@@ -2,6 +2,45 @@
 #include "PGEditorInstance.h"
 
 
+class PGBaseEvent2 {
+public:
+	PGBaseEvent2() {
+
+	}
+	~PGBaseEvent2() {
+
+	}
+};
+
+
+class PGEventListener {
+public:
+	PGEventListener() {
+
+	}
+	~PGEventListener() {
+
+	}
+	virtual void OnEvent(PGBaseEvent2 *event) {
+
+	}
+};
+class PGEventEmiter {
+	PGLinkedList<PGEventListener> listener_list;
+public:
+	PGEventEmiter() {
+
+	}
+	~PGEventEmiter() {
+
+	}
+	void EmiteEvent(PGBaseEvent2 event) { //Note(Marc): Maybe this should be protected
+
+	}
+	void ListenTo(PGEventListener* new_listener) {
+
+	}
+};
 class PGV3 {
 public:
 	float x;
@@ -40,6 +79,9 @@ public:
 
 int main(int argc, char **argv)
 {
+	
+
+
 	PGLinked2List<PGV3*>* test =  new PGLinked2List<PGV3*>();
 	test->Add(new PGV3(1.f));
 	
@@ -91,7 +133,7 @@ int main(int argc, char **argv)
 				if (match_cpt != 9) {
 					printf("Error reading face data\n");
 				}
-			}
+			}	
 			else if (strcmp(lineHeader, "usemtl") == 0) {
 			
 			}

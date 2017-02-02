@@ -100,7 +100,7 @@
     <ClInclude Include="PGLinkedList.h" />
     <ClInclude Include="PGMesh.h" />
     <ClInclude Include="PGMeshInstance.h" />
-    <ClInclude Include="PGTerrainEditorScene.h" />
+    <ClInclude Include="PGEditorScene.h" />
     <ClInclude Include="PGShaderSources.h" />
     <ClInclude Include="PGString.h" />
     <ClInclude Include="PGControler.h" />

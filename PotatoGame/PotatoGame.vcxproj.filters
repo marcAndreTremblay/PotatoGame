@@ -111,10 +111,10 @@
     <ClInclude Include="PG3DPrimitive.h">
       <Filter>Header Files\PGCore</Filter>
     </ClInclude>
-    <ClInclude Include="PGTerrainEditorScene.h">
+    <ClInclude Include="PGEditorInstance.h">
       <Filter>Header Files\PGGame</Filter>
     </ClInclude>
-    <ClInclude Include="PGEditorInstance.h">
+    <ClInclude Include="PGEditorScene.h">
       <Filter>Header Files\PGGame</Filter>
     </ClInclude>
   </ItemGroup>

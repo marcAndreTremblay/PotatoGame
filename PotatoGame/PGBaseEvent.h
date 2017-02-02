@@ -43,7 +43,7 @@ namespace PGEngine{
 		private:
 
 			PGLinkedList<PGBaseEvent>* EventList;
-		public:
+		public:	
 			PGString* Ref_Name;
 			PGEventWorkGroup(char *ref_name = nullptr) {
 				if (ref_name != nullptr) {
