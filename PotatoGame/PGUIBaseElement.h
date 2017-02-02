@@ -69,6 +69,7 @@ protected:
 	v2 Size;
 	v2 Possition;
 private:
+
 public:
 	bool IsVisible;	
 	r32 Opacity;

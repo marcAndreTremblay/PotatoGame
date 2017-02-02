@@ -18,7 +18,7 @@ namespace PGEngine {
 		private:
 		public:
 			PGBuildableObject() {
-				this->IsObjectBuild = false;
+				this->IsObjectBuild = false;	
 				this->IsObjLock = false;
 			}
 			~PGBuildableObject() {
