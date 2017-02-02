@@ -4,7 +4,7 @@
 #include "stdafx.h"
 
 #include "PGCore.h"
-#include "PGLinkedList.h"
+#include "PGList.h"
 #include "PGString.h"
 using namespace PGCore;
 
@@ -75,7 +75,7 @@ namespace PGEngine {
 				this->ShouldGameClose = false;
 				this->IsBuild = false;
 				this->CurrentViewedScene = nullptr;
-				this->LoadedScenes = new PGBaseObjList<PGBaseScene>();
+				this->LoadedScenes = new PGBaseObjList<PGBaseScene>(true);
 				this->Controlers = new PGControler();
 				this->GameWindow = new PGGameWindow(false, 1024, 768);
 				this->GameRenderer = new PGBaseRenderer();

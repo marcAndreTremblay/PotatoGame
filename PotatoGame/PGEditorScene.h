@@ -51,7 +51,7 @@ public:
 
 		this->grid_pos_data = (v4*)malloc(sizeof(v4)*grid_size.x*grid_size.y);
 		this->grid_height_data = (r32*)malloc(sizeof(r32)*grid_size.x*grid_size.y);
-		//this->grid_material_data = (PGMaterial*)malloc(sizeof(PGMaterial)*grid_size.x*grid_size.y);
+		this->grid_material_data = (PGMaterial*)malloc(sizeof(PGMaterial)*grid_size.x*grid_size.y);
 
 
 		float height_tempo = 0.f;
@@ -176,19 +176,8 @@ class PGTerrainEditorScene : public PGBaseScene {
 			renderer->PushLightColor(&light_color);
 			renderer->PushLightData(&scene_light);
 
-
 			renderer->axisMesh->Render(v3(0.f, 0.f, 0.f), v4(0.f, 0.f, 1.f, 1.f));
 			renderer->cubeMesh->Render(v3(scene_light.position.x, scene_light.position.y, scene_light.position.z), v3(0.1f, 0.1f, 0.1f), v4(light_color, 1.f));
-
-			/*for (int i = 0; i <= 9; i++)  {
-				if (obj_list[i].w == 1) {
-					renderer->materialHexagoneMesh->Render(v3(obj_list[i]), v3(2.0f, 2.0f, 0.5f), &Material_Copper);
-				}
-			}*/
-			
-			renderer->materialHexagoneMesh->Render(v3(-9.5f, -9.f, 2.f), v3(2.0f, 2.0f, 0.5f), &Material_Gold);
-			renderer->materialHexagoneMesh->Render(v3(-3.5f, -2.f, 2.f), v3(2.0f, 2.0f, 0.5f), &Material_Emerald);
-
 	
 			if (grid_data != nullptr) {
 				for (int grid_index = 0;
@@ -203,45 +192,8 @@ class PGTerrainEditorScene : public PGBaseScene {
 					}
 				}
 			}
-			
-
-
-			//float water_height = 0.5f;
-
-			//v2 hexa_grid_size = v2(20,20);
-			//float hexa_size = 0.7f;
-			//v3 major_row_offset = v3(hexa_size, (2 * hexa_size) - (hexa_size / glm::tan(glm::radians(60.f))), 0.f);
-			//v3 minor_row_offset = v3(-hexa_size, (2 * hexa_size) - (hexa_size / glm::tan(glm::radians(60.f))), 0.f);
-			//
-			//v3 target_possition = v3(0.f, 0.f, 0.f);
-			//for (int y_xpt = 0; y_xpt < hexa_grid_size.y; y_xpt++) {	
-			//	v3 row_start_tempo = target_possition;
-			//	for (int x_xpt = 0; x_xpt < hexa_grid_size.x; x_xpt++) {
-			//		v4 tile_color = v4(0.23f, 0.34f, 0.19f, 1.f);
-
-			//		float sincos_value = (float)(glm::sin(target_possition.y / 2.0f  *time) + glm::cos(target_possition.x / 1.5f  * tempo_var));
-			//		float tile_height = 1.f + sincos_value;
-			//		float distance_from_peak = glm::distance(peak_possition, target_possition);
-			//		if (distance_from_peak < peak_influance_radius) {
-			//			tile_height += (peak_influance_radius - distance_from_peak);
-			//			tile_color = v4(0.3f, 0.3f, 0.3f, 1.f);
-			//		}
-			//		renderer->materialHexagoneMesh->Render(target_possition, v3(hexa_size, hexa_size, tile_height), &Material_Test);
-			//			if (tile_height < water_height) {
-			//				renderer->lightedHexagoneMesh->Render(v3(target_possition.x, target_possition.y, tile_height), v3(hexa_size, hexa_size, water_height - tile_height), v4(0.3f, 0.7f, 0.99f, 0.8f));
-			//			}
-			//		target_possition.x += hexa_size*2.f;
-			//	}
-			//	target_possition = row_start_tempo;
-			//	if (y_xpt % 2 == 0) {//If pair
-			//		target_possition += major_row_offset;
-			//	}
-			//	else {
-			//		target_possition += minor_row_offset;
-			//	}
-			//}
-
 		}
+
 		void PGTerrainEditorScene::Build(PGEventWorkGroup* targetWorkGroup,PGMousePicker* mouse_picker)  {
 			PGBaseScene::Build(targetWorkGroup,mouse_picker);
 
@@ -257,7 +209,7 @@ class PGTerrainEditorScene : public PGBaseScene {
 				grid_data->LoadFromFile("Asset/layout_1.pgmap");
 			}
 			else {
-				grid_data = new PGGridRawData(v2(12, 14), 1.f);
+				grid_data = new PGGridRawData(v2(15, 15), 1.f);
 			}
 
 			

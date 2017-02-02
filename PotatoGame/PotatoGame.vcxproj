@@ -97,7 +97,7 @@
     <ClInclude Include="PGBaseRenderer.h" />
     <ClInclude Include="PGCore.h" />
     <ClInclude Include="PGBaseGame.h" />
-    <ClInclude Include="PGLinkedList.h" />
+    <ClInclude Include="PGList.h" />
     <ClInclude Include="PGMesh.h" />
     <ClInclude Include="PGMeshInstance.h" />
     <ClInclude Include="PGEditorScene.h" />

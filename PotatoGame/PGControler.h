@@ -6,7 +6,7 @@
 #include "PGCore.h"
 #include "PGGameWindow.h"
 #include "PGString.h"
-#include "PGLinkedList.h"		
+#include "PGList.h"		
 
 using namespace PGCore;
 
@@ -68,8 +68,8 @@ class PGControler
 {
 protected:
 private:
-	PGLinkedList<PGControlerKey>* Keyboard_Keys;
-	PGLinkedList<PGControlerKey>* Mouse_Keys;
+	PGLList<PGControlerKey>* Keyboard_Keys;
+	PGLList<PGControlerKey>* Mouse_Keys;
 	void PGControler::AddMouseKey(PGMouseKey new_key_id, char* _Ref_Name = nullptr) {
 		Mouse_Keys->Add(new PGControlerKey(new_key_id, _Ref_Name));
 	}
@@ -81,12 +81,12 @@ public:
 	v2 DeltaPossition;
 	PGControler()
 	{
-		this->Mouse_Keys = new PGLinkedList<PGControlerKey>();
+		this->Mouse_Keys = new PGLList<PGControlerKey>();
 			this->AddMouseKey(PGMouse_Left, "Space bar\n");
 			this->AddMouseKey(PGMouse_Center, "Space bar\n");
 			this->AddMouseKey(PGMouse_Right, "Space bar\n");
 		
-		this->Keyboard_Keys = new PGLinkedList<PGControlerKey>();
+		this->Keyboard_Keys = new PGLList<PGControlerKey>();
 		DeltaPossition = {};
 			this->AddKeyboardKey(PGKey_Space, "Space bar\n");
 			this->AddKeyboardKey(PGKey_Up, "Up_Key\n");

@@ -1,7 +1,7 @@
 #if !defined(PG_ASSET_MANAGER_H)
 #define PG_ASSET_MANAGER_H
 
-#include "PGLinkedList.h"
+#include "PGList.h"
 #include "PGBaseObjectList.h"
 #include "PGFont.h"
 #include "PGTexture.h"
@@ -12,9 +12,9 @@ using namespace PGCore;
 namespace PGEngine {
 	class PGRawObjFile : PGBaseObject, PGBuildableObject {
 	protected:
-		PGLinkedList<v3>* Vertices;
-		PGLinkedList<v2>* UVs;
-		PGLinkedList<v3>* Normals;
+		PGLList<v3>* Vertices;
+		PGLList<v2>* UVs;
+		PGLList<v3>* Normals;
 	private:
 		PGString *File_Path;
 	public:
@@ -23,9 +23,9 @@ namespace PGEngine {
 			this->File_Path = new PGString(FILE_PATH);
 
 
-			Vertices = new PGLinkedList<v3>();
-			UVs = new PGLinkedList<v2>();
-			Normals = new PGLinkedList<v3>();
+			Vertices = new PGLList<v3>(true);
+			UVs = new PGLList<v2>(true);
+			Normals = new PGLList<v3>(true);
 		}
 		~PGRawObjFile() {
 			delete(File_Path);
@@ -68,13 +68,13 @@ namespace PGEngine {
 				this->IsFontLoadingEnable = false;
 
 				/* Init Texture loading */
-				this->Textures_List = new PGBaseObjList<PGTexture>();
+				this->Textures_List = new PGBaseObjList<PGTexture>(true);
 				FreeImage_Initialise(false);
 				FreeImage_SetOutputMessage(FreeImageErrorHandler);
 
 
 				/* Init Font loading */
-				this->Fonts_List = new PGBaseObjList<PGFont>();
+				this->Fonts_List = new PGBaseObjList<PGFont>(true);
 				this->Ft_lib_Intance = new FT_Library();
 				FT_Error result_error = FT_Init_FreeType(this->Ft_lib_Intance);
 				if (result_error != false) {
@@ -84,7 +84,7 @@ namespace PGEngine {
 					this->IsFontLoadingEnable = true;
 				}
 
-				this->Obj_Model_List = new PGBaseObjList<PGRawObjFile>();
+				this->Obj_Model_List = new PGBaseObjList<PGRawObjFile>(true);
 			}
 			~PGAssetManager() {
 				delete(this->Fonts_List);

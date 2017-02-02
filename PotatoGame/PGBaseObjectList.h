@@ -2,16 +2,16 @@
 #define PG_BASE_OBJ_LIST_H
 
 #include "PGString.h"
-#include "PGLinkedList.h"
+#include "PGList.h"
 #include "PGBaseObject.h"
 
 using namespace PGCore;
 
 namespace PGEngine {
 	template <class PGBaseObject>
-	class PGBaseObjList :public PGLinkedList<PGBaseObject> {
+	class PGBaseObjList :public PGLList<PGBaseObject> {
 		public:
-			PGBaseObjList() {
+			PGBaseObjList(bool managing = false) : PGLList(managing) {
 
 			}
 			~PGBaseObjList() {
@@ -19,7 +19,7 @@ namespace PGEngine {
 			}
 
 			void Add(PGBaseObject* element) override {
-				PGLinkedList::Add(element);
+				PGLList::Add(element);
 			}
 
 			PGBaseObject* PGBaseObjList::FindById(unsigned int id) {

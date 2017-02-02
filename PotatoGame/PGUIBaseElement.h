@@ -1,6 +1,48 @@
 #if !defined(PG_UI_BASE_ELEMENT_H)
 #define PG_UI_BASE_ELEMENT_H
 
+
+
+class PGUIEvent {
+public:
+	PGUIEvent() {
+
+	}
+	~PGUIEvent() {
+
+	}
+};
+
+
+class PGEventListener {
+public:
+	PGEventListener() {
+
+	}
+	~PGEventListener() {
+
+	}
+	virtual void OnEvent(PGUIEvent *event) {
+		
+	}
+};
+class PGEventEmiter {
+	PGLList<PGEventListener*> *listener_list;
+public:
+	PGEventEmiter() {
+		this->listener_list = new PGLList<PGEventListener*>();
+	}
+	~PGEventEmiter() {
+		
+	}
+	void EmiteEvent(PGUIEvent event) { //Note(Marc): Maybe this should be protected
+
+	}
+	void ListenTo(PGEventListener* new_listener) {
+
+	}
+};
+
 enum UIElementEvent {
 	UIEvent_Press,
 	UIEvent_Release
@@ -75,7 +117,7 @@ public:
 	r32 Opacity;
 	PGBaseUIElement() {
 
-		this->Child_list = new PGBaseObjList<PGBaseUIElement>();
+		this->Child_list = new PGBaseObjList<PGBaseUIElement>(true);
 		this->IsVisible = true;
 		this->Parent = nullptr;
 		this->State = UIState_Idle;

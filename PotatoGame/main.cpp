@@ -2,45 +2,7 @@
 #include "PGEditorInstance.h"
 
 
-class PGBaseEvent2 {
-public:
-	PGBaseEvent2() {
 
-	}
-	~PGBaseEvent2() {
-
-	}
-};
-
-
-class PGEventListener {
-public:
-	PGEventListener() {
-
-	}
-	~PGEventListener() {
-
-	}
-	virtual void OnEvent(PGBaseEvent2 *event) {
-
-	}
-};
-class PGEventEmiter {
-	PGLinkedList<PGEventListener> listener_list;
-public:
-	PGEventEmiter() {
-
-	}
-	~PGEventEmiter() {
-
-	}
-	void EmiteEvent(PGBaseEvent2 event) { //Note(Marc): Maybe this should be protected
-
-	}
-	void ListenTo(PGEventListener* new_listener) {
-
-	}
-};
 class PGV3 {
 public:
 	float x;
@@ -72,7 +34,15 @@ public:
 		this->z = this->z + rhs.z;
 		return *this; // return the result by reference
 	}
+	bool operator==(const PGV3& rhs) // compound assignment (does not need to be a member,
+	{
+		if (this->x != rhs.x) return false;
+		if (this->y != rhs.y) return false;
+		if (this->z != rhs.z) return false;
+		return true;
+	}
 };
+
 
 
 #include "PGAssetManager.h"
@@ -80,10 +50,6 @@ public:
 int main(int argc, char **argv)
 {
 	
-
-
-	PGLinked2List<PGV3*>* test =  new PGLinked2List<PGV3*>();
-	test->Add(new PGV3(1.f));
 	
 	v3 v_tab[100];
 	int v_c_index = 0;

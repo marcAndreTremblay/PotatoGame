@@ -2,7 +2,7 @@
 #define PG_EVENT_H
 
 #include "PGCore.h"
-#include "PGLinkedList.h"
+#include "PGList.h"
 #include "PGString.h"
 
 using namespace PGCore;
@@ -42,14 +42,14 @@ namespace PGEngine{
 		protected:
 		private:
 
-			PGLinkedList<PGBaseEvent>* EventList;
+			PGLList<PGBaseEvent>* EventList;
 		public:	
 			PGString* Ref_Name;
 			PGEventWorkGroup(char *ref_name = nullptr) {
 				if (ref_name != nullptr) {
 					this->Ref_Name = new PGString(ref_name);
 				}
-				this->EventList = new PGLinkedList<PGBaseEvent>();
+				this->EventList = new PGLList<PGBaseEvent>();
 			}
 			~PGEventWorkGroup() {
 				delete(Ref_Name);
@@ -86,10 +86,10 @@ namespace PGEngine{
 	class PGEventManager {
 		protected:
 		private:
-			PGLinkedList<PGEventWorkGroup>* WorkGroups;
+			PGLList<PGEventWorkGroup>* WorkGroups;
 		public:
 			PGEventManager() {
-				WorkGroups = new PGLinkedList<PGEventWorkGroup>();
+				WorkGroups = new PGLList<PGEventWorkGroup>();
 			}
 			~PGEventManager() {
 				delete(WorkGroups);

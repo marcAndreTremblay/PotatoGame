@@ -42,10 +42,11 @@ namespace PGEngine {
 					this->ShouldUpdate = true;
 					this->ShouldRender = true;
 					this->ShouldHandleControler = true;
-					this->Entities = new PGBaseObjList<PGSceneEntity>();
+					this->Entities = new PGBaseObjList<PGSceneEntity>(true);
 			}
 			~PGBaseScene() {
 				delete(this->Entities);
+				delete(this->Camera);
 			}
 			bool PGBaseScene::IsRenderable() {
 				if (this->PGBuildableObject::IsLock() == true) return false;

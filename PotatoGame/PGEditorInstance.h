@@ -33,7 +33,7 @@ public:
 	PGEditorInstance() {
 	}
 	~PGEditorInstance() {
-
+		delete(game_canvas);
 	}
 	virtual void PGEditorInstance::Build() {
 		PGBaseGame::Build();

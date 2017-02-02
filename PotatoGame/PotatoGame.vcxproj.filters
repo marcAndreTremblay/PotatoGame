@@ -33,9 +33,6 @@
     <ClInclude Include="targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="PGLinkedList.h">
-      <Filter>Header Files\PGCore</Filter>
-    </ClInclude>
     <ClInclude Include="PGString.h">
       <Filter>Header Files\PGCore</Filter>
     </ClInclude>
@@ -116,6 +113,9 @@
     </ClInclude>
     <ClInclude Include="PGEditorScene.h">
       <Filter>Header Files\PGGame</Filter>
+    </ClInclude>
+    <ClInclude Include="PGList.h">
+      <Filter>Header Files\PGCore</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -2,7 +2,7 @@
 #define PG_UI_CANVAS_H
 
 #include "PGCore.h"
-#include "PGLinkedList.h"
+#include "PGList.h"
 using namespace PGCore;
 
 
@@ -36,7 +36,7 @@ class PGUICanvas : public PGBuildableObject {
 	public:
 		PGUICanvas() {
 			this->NextElementId = 1;
-			this->element_list = new PGBaseObjList<PGBaseUIElement>();
+			this->element_list = new PGBaseObjList<PGBaseUIElement>(true);
 			
 		}
 		~PGUICanvas() {
