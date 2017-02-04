@@ -90,12 +90,20 @@ public:
 			fwrite(&Grid_size.y, sizeof(float), 1, file_2);
 			fwrite(&Tile_size, sizeof(float), 1, file_2);
 			
-			fwrite(grid_pos_data, sizeof(v4), Grid_size.x*Grid_size.y, file_2);
-			fwrite(grid_height_data, sizeof(float), Grid_size.x*Grid_size.y,file_2);
-			fwrite(grid_material_data, sizeof(PGMaterial), Grid_size.x*Grid_size.y, file_2);
 
+			v4* pos_tempo = grid_pos_data;
+			r32* height_tempo = grid_height_data;
+			PGMaterial* mat_tempo = grid_material_data;
+			for (int i = 0; i < Grid_size.x*Grid_size.y; i++) {
+				fwrite(pos_tempo, sizeof(v4), 1, file_2);
+				fwrite(height_tempo, sizeof(float), 1, file_2);
+				fwrite(mat_tempo, sizeof(PGMaterial), 1, file_2);
+				pos_tempo++;
+				height_tempo++;
+				mat_tempo++;
+			}
 			fclose(file_2);
-		}
+		}	
 
 	}
 	void LoadFromFile(char *file_path) {
@@ -117,10 +125,19 @@ public:
 			this->grid_height_data = (r32*)malloc(sizeof(r32)*x*y);
 			this->grid_material_data = (PGMaterial*)malloc(sizeof(PGMaterial)*x*y);
 			
-			fread(grid_pos_data, sizeof(v4), x*y, file_2);
-			fread(grid_height_data, sizeof(float), x*y, file_2);
-			fread(grid_material_data, sizeof(PGMaterial), x*y, file_2);
-			
+
+			v4* pos_tempo = grid_pos_data;
+			r32* height_tempo = grid_height_data;
+			PGMaterial* mat_tempo = grid_material_data;
+			for (int i = 0; i < Grid_size.x*Grid_size.y; i++) {
+				fread(pos_tempo, sizeof(v4), 1, file_2);
+				fread(height_tempo, sizeof(float), 1, file_2);
+				fread(mat_tempo, sizeof(PGMaterial), 1, file_2);
+				pos_tempo++;
+				height_tempo++;
+				mat_tempo++;
+			}
+
 			fclose(file_2);
 		}
 	}

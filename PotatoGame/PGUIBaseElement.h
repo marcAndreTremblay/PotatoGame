@@ -1,19 +1,30 @@
-#if !defined(PG_UI_BASE_ELEMENT_H)
+#if !defined(PG_UI_BASE_ELEMENT_H)=90
 #define PG_UI_BASE_ELEMENT_H
 
 
-
+enum UIEventCode {
+	UIEvent_Nothing = 0,
+	UIEvent_Hide_Window = 1,
+	UIEvent_Show_Window = 2,
+	UIEvent_Button_Press = 3,
+	UIEvent_Button_Release = 4
+};
 class PGUIEvent {
+	void *sender;
+	UIEventCode code;
 public:
+	PGUIEvent(void* sender_ptr, UIEventCode event_code) {
+		this->code = event_code;
+		this->sender = sender_ptr;
+	}
 	PGUIEvent() {
-
+		this->code = UIEvent_Nothing;
+		this->sender = nullptr;
 	}
 	~PGUIEvent() {
 
 	}
 };
-
-
 class PGEventListener {
 public:
 	PGEventListener() {
@@ -22,24 +33,32 @@ public:
 	~PGEventListener() {
 
 	}
-	virtual void OnEvent(PGUIEvent *event) {
+	virtual void PGEventListener::OnEvent(PGUIEvent *event) {
 		
 	}
 };
 class PGEventEmiter {
-	PGLList<PGEventListener*> *listener_list;
+protected:
+private:
+	PGLList<PGEventListener> *listener_list;
 public:
 	PGEventEmiter() {
-		this->listener_list = new PGLList<PGEventListener*>();
+		this->listener_list = new PGLList<PGEventListener>(false);
 	}
 	~PGEventEmiter() {
-		
+		delete(this->listener_list);
+	}	
+	void PGEventEmiter::AddListener(PGEventListener* new_listener) {
+		if (new_listener != nullptr) {
+			this->listener_list->Add(new_listener);
+		}
 	}
-	void EmiteEvent(PGUIEvent event) { //Note(Marc): Maybe this should be protected
-
-	}
-	void ListenTo(PGEventListener* new_listener) {
-
+	void PGEventEmiter::EmiteEvent(PGUIEvent* new_event) {
+		for (PGListNode<PGEventListener> *c_node = listener_list->GetHead(); c_node != nullptr; c_node = c_node->GetNext()) {
+			PGEventListener* current_ui_listener = c_node->GetData();
+			current_ui_listener->OnEvent(new_event);
+		}
+		delete(new_event);
 	}
 };
 
@@ -81,7 +100,7 @@ public:
 	}
 };
 
-class PGBaseUIElement : public PGBaseObject {
+class PGBaseUIElement : public PGBaseObject, public PGEventEmiter, public PGEventListener {
 protected:
 	UIElementState State;
 	PGBaseUIElement* Parent;//Un-managed resource
@@ -370,6 +389,7 @@ public:
 			case UIState_Hot:{
 							if (controler->IsPressed(PGMouse_Left) == true) {
 								this->State = UIState_Left_Press;
+								this->EmiteEvent(new PGUIEvent());
 							}
 							if (controler->IsPressed(PGMouse_Right) == true) {
 								this->State = UIState_Right_Press;

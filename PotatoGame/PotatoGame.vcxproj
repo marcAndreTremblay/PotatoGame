@@ -87,7 +87,6 @@
     <ClInclude Include="PGBaseObjectList.h" />
     <ClInclude Include="PGBuildableObject.h" />
     <ClInclude Include="PGBaseEvent.h" />
-    <ClInclude Include="PGDebugger.h" />
     <ClInclude Include="PGFont.h" />
     <ClInclude Include="PGEditorInstance.h" />
     <ClInclude Include="PGMousePicker.h" />

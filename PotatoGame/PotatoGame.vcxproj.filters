@@ -84,9 +84,6 @@
     <ClInclude Include="PGBaseObjectList.h">
       <Filter>Header Files\PGEngine</Filter>
     </ClInclude>
-    <ClInclude Include="PGDebugger.h">
-      <Filter>Header Files\PGCore</Filter>
-    </ClInclude>
     <ClInclude Include="PGUICanvas.h">
       <Filter>Header Files\PGGui</Filter>
     </ClInclude>

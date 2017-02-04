@@ -71,12 +71,13 @@ namespace PGCore {
 			this->head = nullptr;
 			this->tail = nullptr;
 			this->element_count = 0;
-
+			//Todo(Marc): Check if this is clean
+			
 			while (old_head != nullptr) {
-				PGListNode<T>* current_node = next_node;
+				PGListNode<T>* current_node = old_head;
 				old_head = current_node->GetNext();
 				if (this->managing_object == true) {
-					delete(current_node->element);
+					delete(current_node->GetData());
 				}
 				delete(current_node);
 			}
@@ -91,10 +92,12 @@ namespace PGCore {
 						delete(current_node->GetData());
 					}
 					delete(current_node);
+					element_count--;
 				}
 				last_visited_node = current_node;
 				current_node = current_node->GetNext();
 			}
+			
 		}
 
 	};
