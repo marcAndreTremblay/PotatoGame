@@ -1,4 +1,4 @@
-#if !defined(PG_UI_BASE_ELEMENT_H)=90
+#if !defined(PG_UI_BASE_ELEMENT_H)
 #define PG_UI_BASE_ELEMENT_H
 
 
@@ -10,9 +10,9 @@ enum UIEventCode {
 	UIEvent_Button_Release = 4
 };
 class PGUIEvent {
+public:
 	void *sender;
 	UIEventCode code;
-public:
 	PGUIEvent(void* sender_ptr, UIEventCode event_code) {
 		this->code = event_code;
 		this->sender = sender_ptr;
@@ -62,10 +62,6 @@ public:
 	}
 };
 
-enum UIElementEvent {
-	UIEvent_Press,
-	UIEvent_Release
-};
 enum UIElementState {
 	UIState_Idle = 0,
 	UIState_Hot = 1,
@@ -212,15 +208,7 @@ public:
 
 };
 
-class PGUIEventListener {
-	PGUIEventListener() {
 
-	}
-	~PGUIEventListener() {
-
-	}
-	virtual void PGUIEventListener::HandleEvents(PGBaseUIElement* sender, UIElementEvent event_type) {}
-};
 
 
 class PGUILabel : public PGBaseUIElement {
@@ -389,10 +377,11 @@ public:
 			case UIState_Hot:{
 							if (controler->IsPressed(PGMouse_Left) == true) {
 								this->State = UIState_Left_Press;
-								this->EmiteEvent(new PGUIEvent());
+								this->EmiteEvent(new PGUIEvent(this, UIEvent_Button_Press));
 							}
 							if (controler->IsPressed(PGMouse_Right) == true) {
 								this->State = UIState_Right_Press;
+								this->EmiteEvent(new PGUIEvent(this, UIEvent_Button_Press));
 							}
 							break; }
 			case UIState_Left_Press:{
@@ -403,7 +392,7 @@ public:
 								else {
 									this->State = UIState_Idle;
 								}
-
+								this->EmiteEvent(new PGUIEvent(this, UIEvent_Button_Release));
 							}
 							break; }
 			case UIState_Right_Press:{
@@ -414,6 +403,7 @@ public:
 								else {
 									this->State = UIState_Idle;
 								}
+								this->EmiteEvent(new PGUIEvent(this, UIEvent_Button_Release));
 							}
 							break; }
 
@@ -448,6 +438,7 @@ public:
 		this->Hide_Button = new PGUIButton();
 				this->Hide_Button->SetSize(v2(menu_button_default_size));
 				this->Hide_Button->SetPossition(v2(0.f, 0.f));
+				this->Hide_Button->AddListener(this);
 		
 		this->Title_Label = new PGUILabel();
 			this->Title_Label->SetPossition(v2(3.f, 3.f));
@@ -525,7 +516,16 @@ public:
 	void PGUIMenuWindow::AddChild(PGBaseUIElement* child_element) override {
 		Main_Panel->AddChild(child_element);
 	}
+	virtual void PGUIMenuWindow::OnEvent(PGUIEvent *event) {
+		PGEventListener::OnEvent(event);
+		if (event->sender == this->Hide_Button) {
+			if (event->code == UIEvent_Button_Release) {
+				this->IsVisible = false;
+			}
+		}
 
+
+	}
 };
 
 #endif 

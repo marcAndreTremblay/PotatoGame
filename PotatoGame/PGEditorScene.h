@@ -51,7 +51,7 @@ public:
 
 		this->grid_pos_data = (v4*)malloc(sizeof(v4)*grid_size.x*grid_size.y);
 		this->grid_height_data = (r32*)malloc(sizeof(r32)*grid_size.x*grid_size.y);
-		this->grid_material_data = (PGMaterial*)malloc(sizeof(PGMaterial)*grid_size.x*grid_size.y);
+	//	this->grid_material_data = (PGMaterial*)malloc(sizeof(PGMaterial)*grid_size.x*grid_size.y);
 
 
 		float height_tempo = 0.f;
@@ -84,61 +84,74 @@ public:
 		delete(grid_material_data);
 	}
 	void SaveToFile(char *file_path) {
+		printf("Saving to |%s|\n", file_path);
 		FILE * file_2 = fopen(file_path, "w");
 		if (file_2 != nullptr) {
-			fwrite(&Grid_size.x, sizeof(float), 1, file_2);
-			fwrite(&Grid_size.y, sizeof(float), 1, file_2);
-			fwrite(&Tile_size, sizeof(float), 1, file_2);
-			
-
+			int result = 0;
+			result += fwrite(&Grid_size.x, sizeof(float), 1, file_2);
+			result += fwrite(&Grid_size.y, sizeof(float), 1, file_2);
+			result += fwrite(&Tile_size, sizeof(float), 1, file_2);
+			printf("Header write count |%i|\n", result);
+			result = 0;
 			v4* pos_tempo = grid_pos_data;
 			r32* height_tempo = grid_height_data;
 			PGMaterial* mat_tempo = grid_material_data;
 			for (int i = 0; i < Grid_size.x*Grid_size.y; i++) {
-				fwrite(pos_tempo, sizeof(v4), 1, file_2);
-				fwrite(height_tempo, sizeof(float), 1, file_2);
-				fwrite(mat_tempo, sizeof(PGMaterial), 1, file_2);
+				result += fwrite(pos_tempo, sizeof(v4), 1, file_2);
+				result += fwrite(height_tempo, sizeof(float), 1, file_2);
+			//	result += fwrite(mat_tempo, sizeof(PGMaterial), 1, file_2);
 				pos_tempo++;
 				height_tempo++;
 				mat_tempo++;
 			}
+			printf("Tile data write count |%i|\n", result);
 			fclose(file_2);
-		}	
+		}
+		else {
+			printf("Error with file saving\n");
+		}
 
 	}
 	void LoadFromFile(char *file_path) {
 		if (grid_pos_data != nullptr) delete(grid_pos_data);
 		if (grid_height_data != nullptr) delete(grid_height_data);
-		if (grid_material_data != nullptr) delete(grid_material_data);
-
+	//	if (grid_material_data != nullptr) delete(grid_material_data);
+		printf("Loading from |%s|\n", file_path);
 		FILE * file_2 = fopen(file_path, "r");
 		if (file_2 != nullptr) {
 			float x, y , size;
-			fread(&x, sizeof(float), 1, file_2);
-			fread(&y, sizeof(float), 1, file_2);
-			fread(&size, sizeof(float), 1, file_2);
+			int result = 0;
+			result += fread(&x, sizeof(float), 1, file_2);
+			result += fread(&y, sizeof(float), 1, file_2);
+			result += fread(&size, sizeof(float), 1, file_2);
 			
+			printf("Header read count |%i|\n", result);
+			result = 0;
+
 			this->Tile_size = size;
 			this->Grid_size = v2(x,y);
 			
 			this->grid_pos_data = (v4*)malloc(sizeof(v4)*x*y);
 			this->grid_height_data = (r32*)malloc(sizeof(r32)*x*y);
-			this->grid_material_data = (PGMaterial*)malloc(sizeof(PGMaterial)*x*y);
+		//	this->grid_material_data = (PGMaterial*)malloc(sizeof(PGMaterial)*x*y);
 			
 
 			v4* pos_tempo = grid_pos_data;
 			r32* height_tempo = grid_height_data;
 			PGMaterial* mat_tempo = grid_material_data;
 			for (int i = 0; i < Grid_size.x*Grid_size.y; i++) {
-				fread(pos_tempo, sizeof(v4), 1, file_2);
-				fread(height_tempo, sizeof(float), 1, file_2);
-				fread(mat_tempo, sizeof(PGMaterial), 1, file_2);
+				result += fread(pos_tempo, sizeof(v4), 1, file_2);
+				result += fread(height_tempo, sizeof(float), 1, file_2);
+			//	result += fread(mat_tempo, sizeof(PGMaterial), 1, file_2);
 				pos_tempo++;
 				height_tempo++;
 				mat_tempo++;
 			}
-
+			printf("Tile data read count |%i|\n", result);
 			fclose(file_2);
+		}
+		else {
+			printf("Error with file loading\n");
 		}
 	}
 
@@ -185,10 +198,7 @@ class PGTerrainEditorScene : public PGBaseScene {
 		}
 		void PGTerrainEditorScene::Render(PGBaseRenderer *renderer) override {
 			PGBaseScene::Render(renderer);
-
-			v3 peak_possition = v3(6.f, 6.f, 0.f);
-			float peak_influance_radius = 5.0f;
-
+	
 			renderer->PushLightPossition(&scene_light.position);
 			renderer->PushLightColor(&light_color);
 			renderer->PushLightData(&scene_light);
@@ -201,11 +211,20 @@ class PGTerrainEditorScene : public PGBaseScene {
 					grid_index < grid_data->Grid_size.x*grid_data->Grid_size.y;
 					grid_index++) {
 					if (grid_index == grid_data->selected_index) {
-						renderer->materialHexagoneMesh->Render(v3(grid_data->grid_pos_data[grid_index]), v3(grid_data->Tile_size, grid_data->Tile_size, grid_data->grid_height_data[grid_index]), &Material_Emerald);
+						renderer->materialHexagoneMesh->Render(v3(grid_data->grid_pos_data[grid_index]), v3(grid_data->Tile_size, grid_data->Tile_size, grid_data->grid_height_data[grid_index]), &Material_Copper);
 					}
 					else {
-						renderer->materialHexagoneMesh->Render(v3(grid_data->grid_pos_data[grid_index]), v3(grid_data->Tile_size, grid_data->Tile_size, grid_data->grid_height_data[grid_index]), &Material_Gold);
-
+						int  i = grid_index;
+						if (i % 3 == 0) {
+							renderer->materialHexagoneMesh->Render(v3(grid_data->grid_pos_data[grid_index]), v3(grid_data->Tile_size, grid_data->Tile_size, grid_data->grid_height_data[grid_index]), &Material_Brown);
+						}
+						else if(i % 2){
+							renderer->materialHexagoneMesh->Render(v3(grid_data->grid_pos_data[grid_index]), v3(grid_data->Tile_size, grid_data->Tile_size, grid_data->grid_height_data[grid_index]), &Material_Green);
+						}
+						else {
+							renderer->materialHexagoneMesh->Render(v3(grid_data->grid_pos_data[grid_index]), v3(grid_data->Tile_size, grid_data->Tile_size, grid_data->grid_height_data[grid_index]), &Material_Blue);
+						}
+						
 					}
 				}
 			}
@@ -214,7 +233,7 @@ class PGTerrainEditorScene : public PGBaseScene {
 		void PGTerrainEditorScene::Build(PGEventWorkGroup* targetWorkGroup,PGMousePicker* mouse_picker)  {
 			PGBaseScene::Build(targetWorkGroup,mouse_picker);
 
-			this->Set_Name("TestScene");			
+			this->Set_Name("GridEditorScene");			
 			
 			this->Camera = new PGBaseCamera(v3(0, 10, 10), v3(0, 0, 0), v3(0, 0, 1));
 			this->Projection_Matrice = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 50.0f);
@@ -369,4 +388,4 @@ class PGTerrainEditorScene : public PGBaseScene {
 		}
 };
 
-#endif
+#endif		

@@ -1,4 +1,4 @@
-#if !defined(PG_GAME_RENDERER_H)
+#if !defined(PG_GAME_RENDERER_H)	
 #define PG_GAME_RENDERER_H
 
 #include "stdafx.h"
@@ -100,16 +100,9 @@ namespace PGEngine {
 		}
 		
 		void PGBaseRenderer::PushLightData(PGLight* _light) {
-			int test = sizeof(v4);
 			glBindBuffer(GL_UNIFORM_BUFFER, this->SceneAdvanceLight_UBO_Ref_Id);
-				glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(v4), &_light->position);
-				glBufferSubData(GL_UNIFORM_BUFFER, sizeof(v4), sizeof(v4), &_light->ambient);
-				glBufferSubData(GL_UNIFORM_BUFFER, 2 * sizeof(v4), sizeof(v4), &_light->diffuse);
-				glBufferSubData(GL_UNIFORM_BUFFER, 3 * sizeof(v4), sizeof(v4), &_light->specular);
-
-				
-
-				glBindBuffer(GL_UNIFORM_BUFFER, 0);
+				glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(PGLight), _light);
+			glBindBuffer(GL_UNIFORM_BUFFER, 0);
 		}
 
 		virtual void PGBaseRenderer::Build() {
