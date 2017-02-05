@@ -21,6 +21,7 @@ public:
 	v4* grid_pos_data = nullptr;
 	r32* grid_height_data = nullptr;
 	PGMaterial* grid_material_data = nullptr;
+	bool* selected_indexes = nullptr;
 	int selected_index;
 	v2 Grid_size; 
 	r32 Tile_size;
@@ -28,6 +29,7 @@ public:
 		selected_index = -1;
 		Grid_size = v2(0, 0);
 		Tile_size = 0;
+
 	}
 	PGGridRawData(v2 grid_size, r32 grid_tile_size) {
 		Grid_size = grid_size;
@@ -51,8 +53,8 @@ public:
 
 		this->grid_pos_data = (v4*)malloc(sizeof(v4)*grid_size.x*grid_size.y);
 		this->grid_height_data = (r32*)malloc(sizeof(r32)*grid_size.x*grid_size.y);
-	//	this->grid_material_data = (PGMaterial*)malloc(sizeof(PGMaterial)*grid_size.x*grid_size.y);
-
+		this->grid_material_data = (PGMaterial*)malloc(sizeof(PGMaterial)*grid_size.x*grid_size.y);
+		this->selected_indexes = (bool*)malloc(sizeof(bool)*grid_size.x*grid_size.y);
 
 		float height_tempo = 0.f;
 
@@ -60,13 +62,12 @@ public:
 		for (int y_xpt = 0; y_xpt < grid_size.y; y_xpt++) {
 			v4 row_start_tempo = starting_offset;
 			for (int x_xpt = 0; x_xpt < grid_size.x; x_xpt++) {
-				v4 tile_color = v4(0.23f, 0.34f, 0.19f, 1.f);
-
+				
 
 				starting_offset.x += grid_tile_size*2.f;
 				grid_pos_data[index_cpt] = starting_offset;
-				grid_height_data[index_cpt] = 1 + sin(y_xpt/4.f) ;
-
+				grid_height_data[index_cpt] = 2 + 1.3f*sin(y_xpt / 2.5f)*cos(x_xpt / 2.5f);
+				grid_material_data[index_cpt] = Material_Brown;
 				index_cpt++;
 			}
 			starting_offset = row_start_tempo;
@@ -85,26 +86,32 @@ public:
 	}
 	void SaveToFile(char *file_path) {
 		printf("Saving to |%s|\n", file_path);
-		FILE * file_2 = fopen(file_path, "w");
+		FILE * file_2 = fopen(file_path, "wb");
+		
 		if (file_2 != nullptr) {
 			int result = 0;
 			result += fwrite(&Grid_size.x, sizeof(float), 1, file_2);
 			result += fwrite(&Grid_size.y, sizeof(float), 1, file_2);
 			result += fwrite(&Tile_size, sizeof(float), 1, file_2);
 			printf("Header write count |%i|\n", result);
-			result = 0;
-			v4* pos_tempo = grid_pos_data;
-			r32* height_tempo = grid_height_data;
-			PGMaterial* mat_tempo = grid_material_data;
-			for (int i = 0; i < Grid_size.x*Grid_size.y; i++) {
-				result += fwrite(pos_tempo, sizeof(v4), 1, file_2);
-				result += fwrite(height_tempo, sizeof(float), 1, file_2);
-			//	result += fwrite(mat_tempo, sizeof(PGMaterial), 1, file_2);
-				pos_tempo++;
-				height_tempo++;
-				mat_tempo++;
-			}
-			printf("Tile data write count |%i|\n", result);
+
+				v4* tempo_p_ptr = grid_pos_data;
+				r32* tempo_h_ptr = grid_height_data;
+				PGMaterial* tempo_m_ptr = grid_material_data;
+				for (int i = 0; i < Grid_size.x*Grid_size.y; i++) {
+					result = fwrite((void*)tempo_p_ptr, sizeof(v4), 1, file_2);
+					if (ferror(file_2) != 0 || result != 1) { printf(" %i -- Error possition saving\n",i); }
+					result = fwrite((void*)tempo_h_ptr, sizeof(r32), 1, file_2);
+					if (ferror(file_2) != 0 || result != 1) { printf(" %i -- Error height saving\n", i); }
+					result = fwrite((void*)tempo_m_ptr, sizeof(PGMaterial), 1, file_2);
+					if (ferror(file_2) != 0 || result != 1) { printf(" %i -- Error material saving\n", i); }
+					tempo_h_ptr++;
+					tempo_p_ptr++;
+					tempo_m_ptr++;
+				}
+				
+				
+			
 			fclose(file_2);
 		}
 		else {
@@ -115,9 +122,8 @@ public:
 	void LoadFromFile(char *file_path) {
 		if (grid_pos_data != nullptr) delete(grid_pos_data);
 		if (grid_height_data != nullptr) delete(grid_height_data);
-	//	if (grid_material_data != nullptr) delete(grid_material_data);
 		printf("Loading from |%s|\n", file_path);
-		FILE * file_2 = fopen(file_path, "r");
+		FILE * file_2 = fopen(file_path, "rb");
 		if (file_2 != nullptr) {
 			float x, y , size;
 			int result = 0;
@@ -126,27 +132,33 @@ public:
 			result += fread(&size, sizeof(float), 1, file_2);
 			
 			printf("Header read count |%i|\n", result);
-			result = 0;
+			
 
 			this->Tile_size = size;
 			this->Grid_size = v2(x,y);
 			
 			this->grid_pos_data = (v4*)malloc(sizeof(v4)*x*y);
 			this->grid_height_data = (r32*)malloc(sizeof(r32)*x*y);
-		//	this->grid_material_data = (PGMaterial*)malloc(sizeof(PGMaterial)*x*y);
+			this->grid_material_data = (PGMaterial*)malloc(sizeof(PGMaterial)*x*y);
+			this->selected_indexes = (bool*)malloc(sizeof(bool)*x*y);
 			
-
-			v4* pos_tempo = grid_pos_data;
-			r32* height_tempo = grid_height_data;
-			PGMaterial* mat_tempo = grid_material_data;
+			v4* tempo_p_ptr = grid_pos_data;
+			r32* tempo_h_ptr = grid_height_data;
+			PGMaterial* tempo_m_ptr = grid_material_data;
 			for (int i = 0; i < Grid_size.x*Grid_size.y; i++) {
-				result += fread(pos_tempo, sizeof(v4), 1, file_2);
-				result += fread(height_tempo, sizeof(float), 1, file_2);
-			//	result += fread(mat_tempo, sizeof(PGMaterial), 1, file_2);
-				pos_tempo++;
-				height_tempo++;
-				mat_tempo++;
+				result = fread((void*)tempo_p_ptr, sizeof(v4), 1, file_2);
+				if (ferror(file_2) != 0 || result != 1) { printf(" %i -- Error possition reading\n", i); }
+				result = fread((void*)tempo_h_ptr, sizeof(r32), 1, file_2);
+				if (ferror(file_2) != 0 || result != 1) { printf(" %i -- Error height reading\n", i); }
+				result = fread((void*)tempo_m_ptr, sizeof(PGMaterial), 1, file_2);
+				if (ferror(file_2) != 0 || result != 1) { printf(" %i -- Error material reading\n", i); }
+				tempo_h_ptr++;
+				tempo_p_ptr++;
+				tempo_m_ptr++;
 			}
+
+				
+			
 			printf("Tile data read count |%i|\n", result);
 			fclose(file_2);
 		}
@@ -210,21 +222,11 @@ class PGTerrainEditorScene : public PGBaseScene {
 				for (int grid_index = 0;
 					grid_index < grid_data->Grid_size.x*grid_data->Grid_size.y;
 					grid_index++) {
-					if (grid_index == grid_data->selected_index) {
+					if (grid_data->selected_indexes[grid_index] == true) {
 						renderer->materialHexagoneMesh->Render(v3(grid_data->grid_pos_data[grid_index]), v3(grid_data->Tile_size, grid_data->Tile_size, grid_data->grid_height_data[grid_index]), &Material_Copper);
 					}
 					else {
-						int  i = grid_index;
-						if (i % 3 == 0) {
-							renderer->materialHexagoneMesh->Render(v3(grid_data->grid_pos_data[grid_index]), v3(grid_data->Tile_size, grid_data->Tile_size, grid_data->grid_height_data[grid_index]), &Material_Brown);
-						}
-						else if(i % 2){
-							renderer->materialHexagoneMesh->Render(v3(grid_data->grid_pos_data[grid_index]), v3(grid_data->Tile_size, grid_data->Tile_size, grid_data->grid_height_data[grid_index]), &Material_Green);
-						}
-						else {
-							renderer->materialHexagoneMesh->Render(v3(grid_data->grid_pos_data[grid_index]), v3(grid_data->Tile_size, grid_data->Tile_size, grid_data->grid_height_data[grid_index]), &Material_Blue);
-						}
-						
+						renderer->materialHexagoneMesh->Render(v3(grid_data->grid_pos_data[grid_index]), v3(grid_data->Tile_size, grid_data->Tile_size, grid_data->grid_height_data[grid_index]), &grid_data->grid_material_data[grid_index]);						
 					}
 				}
 			}
@@ -262,21 +264,36 @@ class PGTerrainEditorScene : public PGBaseScene {
 
 			if (controler->GetKey(PGKey_Left_Ctrl)->IsPress == true) {
 				if (controler->IsRelease(PGKey_A) == true) {
-					if (grid_data->selected_index >= 0 && grid_data->selected_index < grid_data->Grid_size.x*grid_data->Grid_size.y) {
-						grid_data->grid_height_data[grid_data->selected_index] -= 0.1f;
+					for (int grid_index = 0;
+						grid_index < grid_data->Grid_size.x*grid_data->Grid_size.y;
+						grid_index++) {
+						if (grid_data->selected_indexes[grid_index] == true) {
+							grid_data->grid_height_data[grid_index] -= 0.1f;
+						}
 					}
+
 				}
 			
 				if( controler->IsRelease(PGKey_Q) == true) {
-					if (grid_data->selected_index >= 0 && grid_data->selected_index < grid_data->Grid_size.x*grid_data->Grid_size.y) {
-						grid_data->grid_height_data[grid_data->selected_index] += 0.1f;
+					for (int grid_index = 0;
+						grid_index < grid_data->Grid_size.x*grid_data->Grid_size.y;
+						grid_index++) {
+						if (grid_data->selected_indexes[grid_index] == true) {
+							grid_data->grid_height_data[grid_index] += 0.1f;
+						}
 					}
 				}
 				if (controler->IsRelease(PGKey_S) == true) {
 					grid_data->SaveToFile("Asset/layout_1.pgmap");
 				}
 			}
-
+			if (controler->IsRelease(PGKey_Left_Ctrl) == true) {
+				for (int grid_index = 0;
+					grid_index < grid_data->Grid_size.x*grid_data->Grid_size.y;
+					grid_index++) {
+					grid_data->selected_indexes[grid_index] = false;
+				}
+			}
 			int picked_index = -1;
 			//Picking into world space
 			//*************************************************************************************		
@@ -297,11 +314,17 @@ class PGTerrainEditorScene : public PGBaseScene {
 					
 					float dist = glm::distance(result_point, v3(grid_data->grid_pos_data[grid_index].x, grid_data->grid_pos_data[grid_index].y, grid_data->grid_height_data[grid_index]));
 					if (dist < grid_data->Tile_size) {
-						picked_index = grid_index;
+						if (grid_data->selected_indexes[grid_index] == true) {
+							grid_data->selected_indexes[grid_index] = false;
+						}
+						else {
+							grid_data->selected_indexes[grid_index] = true;
+						}
 						break;
 					}
 				}
-				grid_data->selected_index = picked_index;
+				
+				
 			}
 			//*************************************************************************************
 			if (controler->GetKey(PGKey_Left_Ctrl)->IsPress == true) {

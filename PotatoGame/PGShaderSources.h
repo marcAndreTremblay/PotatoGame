@@ -15,10 +15,10 @@ const PGMaterial Material_Obsidian = { v3(0.05375f, 0.05f, 0.06625f), v3(0.18275
 const PGMaterial Material_Turquoise = { v3(0.1f, 0.18725f, 0.1745f), v3(0.396f, 0.74151f, 0.69102f), v3(0.297254f, 0.30829f, 0.306678f), 8.8f };
 const PGMaterial Material_Copper = { v3(0.19125f, 0.0735f, 0.0225f), v3(0.7038f, 0.27048f, 0.0828f), v3(0.256777f, 0.137622f, 0.086014f), 12.8f };
 
-const PGMaterial Material_Green = { v3(0.0f, 0.0f, 0.0f), v3(0.54f, 0.89f, 0.39f), v3(0.0f, 0.0f, 0.0f), 20.f };
-const PGMaterial Material_Brown = { v3(0.0f, 0.0f, 0.0f), v3(0.8f, 0.6f, 0.35f), v3(0.0f, 0.0f, 0.0f), 20.f };
-const PGMaterial Material_Blue = { v3(0.0f, 0.0f, 0.0f), v3(0.0f, 0.56f, 0.89f), v3(0.0f, 0.0f, 0.0f), 20.f };
-const PGMaterial Material_Gray = { v3(0.0f, 0.0f, 0.0f), v3(0.46f, 0.46f, 0.46f), v3(0.0f, 0.0f, 0.0f), 20.f };
+const PGMaterial Material_Green = { v3(0.01f, 0.01f, 0.0f), v3(0.54f, 0.89f, 0.39f), v3(0.0f, 0.0f, 0.0f), 20.f };
+const PGMaterial Material_Brown = { v3(0.0f, 0.01f, 0.01f), v3(0.8f, 0.6f, 0.35f), v3(0.0f, 0.0f, 0.0f), 20.f };
+const PGMaterial Material_Blue = { v3(0.01f, 0.01f, 0.0f), v3(0.0f, 0.56f, 0.89f), v3(0.0f, 0.0f, 0.0f), 20.f };
+const PGMaterial Material_Gray = { v3(0.01f, 0.0f, 0.01f), v3(0.46f, 0.46f, 0.46f), v3(0.0f, 0.0f, 0.0f), 20.f };
 
 //const PGMaterial Material_Obsidian = ­{  };
 //Note(Marc): Be aware, variables order match the same struct in the fragment shader, do not modify 1 without the other
@@ -480,7 +480,6 @@ void main() {
 	float diff = max(dot(norm, lightDir), 0.0f);
 	vec3 diffuse = vec3(Light.diffuse) * (diff * Material.diffuse);
 
-	// Specular is bug right now dont know why
 	vec3 viewDir = normalize(-FragPos); // The viewer is at(0, 0, 0) so viewDir is(0, 0, 0) - Position = > -Position
 	vec3 reflectDir = reflect(-lightDir, norm);
 	float spec = pow(max(dot(viewDir, reflectDir), 0.0), Material.shininess);
