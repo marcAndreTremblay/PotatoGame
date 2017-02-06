@@ -82,7 +82,20 @@ namespace PGEngine {
 				PGBuildableObject::EndBuilding();
 			}
 			void PGFont::GetFontBondingBox(char* text_in, r32 scale_in, v2 *box_out) {
-				
+				v2 tempo_data = v2(0.f, 0.f);
+				float lower_bearing_y = 0;
+				float upper_bering_y = 0.f;
+				for (char *current_char = text_in; *current_char != '\n'; current_char++) {
+					PGCharacter * ch = &CharacterCollection[*current_char];
+					if ((ch->Size.y - ch->Bearing.y) > lower_bearing_y) {
+						lower_bearing_y = ch->Size.y - ch->Bearing.y;
+					}
+					if (ch->Bearing.y > upper_bering_y) {
+						upper_bering_y = ch->Bearing.y;
+					}
+					tempo_data.x += ((ch->Advance >> 6) * scale_in);
+				}
+				tempo_data.y = lower_bearing_y + upper_bering_y;
 			}	
 	};
 }

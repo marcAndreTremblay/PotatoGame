@@ -16,9 +16,10 @@ const PGMaterial Material_Turquoise = { v3(0.1f, 0.18725f, 0.1745f), v3(0.396f, 
 const PGMaterial Material_Copper = { v3(0.19125f, 0.0735f, 0.0225f), v3(0.7038f, 0.27048f, 0.0828f), v3(0.256777f, 0.137622f, 0.086014f), 12.8f };
 
 const PGMaterial Material_Green = { v3(0.01f, 0.01f, 0.0f), v3(0.54f, 0.89f, 0.39f), v3(0.0f, 0.0f, 0.0f), 20.f };
-const PGMaterial Material_Brown = { v3(0.0f, 0.01f, 0.01f), v3(0.8f, 0.6f, 0.35f), v3(0.0f, 0.0f, 0.0f), 20.f };
+const PGMaterial Material_Brown_1 = { v3(0.0f, 0.01f, 0.01f), v3(0.71f, 0.52f, 0.36f), v3(1.0f, 0.41f, 0.1f), 20.f };
+const PGMaterial Material_Brown_2 = { v3(0.0f, 0.01f, 0.01f), v3(0.8f, 0.5f, 0.35f), v3(1.0f, 0.41f, 0.1f), 20.f };
 const PGMaterial Material_Blue = { v3(0.01f, 0.01f, 0.0f), v3(0.0f, 0.56f, 0.89f), v3(0.0f, 0.0f, 0.0f), 20.f };
-const PGMaterial Material_Gray = { v3(0.01f, 0.0f, 0.01f), v3(0.46f, 0.46f, 0.46f), v3(0.0f, 0.0f, 0.0f), 20.f };
+const PGMaterial Material_Gray = { v3(0.01f, 0.0f, 0.01f), v3(0.26f, 0.26f, 0.26f), v3(0.0f, 0.0f, 0.0f), 20.f };
 
 //const PGMaterial Material_Obsidian = ­{  };
 //Note(Marc): Be aware, variables order match the same struct in the fragment shader, do not modify 1 without the other

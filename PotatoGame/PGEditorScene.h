@@ -22,11 +22,10 @@ public:
 	r32* grid_height_data = nullptr;
 	PGMaterial* grid_material_data = nullptr;
 	bool* selected_indexes = nullptr;
-	int selected_index;
+	
 	v2 Grid_size; 
 	r32 Tile_size;
 	PGGridRawData() {
-		selected_index = -1;
 		Grid_size = v2(0, 0);
 		Tile_size = 0;
 
@@ -49,14 +48,13 @@ public:
 		v4 major_row_offset = v4(grid_tile_size, (2 * grid_tile_size) - (grid_tile_size / glm::tan(glm::radians(60.f))), 0.f, 0.f);
 		v4 minor_row_offset = v4(-grid_tile_size, (2 * grid_tile_size) - (grid_tile_size / glm::tan(glm::radians(60.f))), 0.f, 0.f);
 
-		v4 starting_offset = v4(-10.f, -10, 0.f, 0.f); //Note(Marc): Offset for the starting possition
+		v4 starting_offset = v4(0.f, 0, 0.f, 0.f); //Note(Marc): Offset for the starting possition
 
 		this->grid_pos_data = (v4*)malloc(sizeof(v4)*grid_size.x*grid_size.y);
 		this->grid_height_data = (r32*)malloc(sizeof(r32)*grid_size.x*grid_size.y);
 		this->grid_material_data = (PGMaterial*)malloc(sizeof(PGMaterial)*grid_size.x*grid_size.y);
 		this->selected_indexes = (bool*)malloc(sizeof(bool)*grid_size.x*grid_size.y);
 
-		float height_tempo = 0.f;
 
 		int index_cpt = 0;
 		for (int y_xpt = 0; y_xpt < grid_size.y; y_xpt++) {
@@ -67,7 +65,7 @@ public:
 				starting_offset.x += grid_tile_size*2.f;
 				grid_pos_data[index_cpt] = starting_offset;
 				grid_height_data[index_cpt] = 2 + 1.3f*sin(y_xpt / 2.5f)*cos(x_xpt / 2.5f);
-				grid_material_data[index_cpt] = Material_Brown;
+				grid_material_data[index_cpt] = Material_Brown_1;
 				index_cpt++;
 			}
 			starting_offset = row_start_tempo;
@@ -83,6 +81,7 @@ public:
 		delete(grid_pos_data);
 		delete(grid_height_data);
 		delete(grid_material_data);
+		delete(selected_indexes);
 	}
 	void SaveToFile(char *file_path) {
 		printf("Saving to |%s|\n", file_path);
@@ -166,7 +165,27 @@ public:
 			printf("Error with file loading\n");
 		}
 	}
-
+	void BuildGridPosData(v3 offset) {
+		v4 major_row_offset = v4(this->Tile_size, (2 * this->Tile_size) - (this->Tile_size / glm::tan(glm::radians(60.f))), 0.f, 0.f);
+		v4 minor_row_offset = v4(-this->Tile_size, (2 * this->Tile_size) - (this->Tile_size / glm::tan(glm::radians(60.f))), 0.f, 0.f);
+		v4 starting_offset = v4(offset, 0.f);
+		int index_cpt = 0;
+		for (int y_xpt = 0; y_xpt < this->Grid_size.y; y_xpt++) {
+			v4 row_start_tempo = starting_offset;
+			for (int x_xpt = 0; x_xpt < this->Grid_size.x; x_xpt++) {
+				grid_pos_data[index_cpt] = starting_offset;
+				starting_offset.x += this->Tile_size*2.f;
+				index_cpt++;
+			}
+			starting_offset = row_start_tempo;
+			if (y_xpt % 2 == 0) {//If pair
+				starting_offset += major_row_offset;
+			}
+			else {
+				starting_offset += minor_row_offset;
+			}
+		}
+	}
 };
  
 class PGTerrainEditorScene : public PGBaseScene {
@@ -198,15 +217,6 @@ class PGTerrainEditorScene : public PGBaseScene {
 		}
 		void PGTerrainEditorScene::Update(PGControler *controler, double timeElapse) override {
 			PGBaseScene::Update(controler, timeElapse);
-			time += timeElapse / 9.f;
-			tempo_var += timeElapse / 7.f;
-			if (time > 1.f) {
-				this->time = 0.1f;
-			}
-			if (tempo_var > 1.1f) {
-				this->tempo_var = 0.1f;
-			}
-
 		}
 		void PGTerrainEditorScene::Render(PGBaseRenderer *renderer) override {
 			PGBaseScene::Render(renderer);
@@ -245,6 +255,7 @@ class PGTerrainEditorScene : public PGBaseScene {
 			if (file_2 != nullptr) {
 				grid_data = new PGGridRawData();
 				grid_data->LoadFromFile("Asset/layout_1.pgmap");
+				//grid_data->BuildGridPosData(v3(0.f, 0.f, 0.f));
 			}
 			else {
 				grid_data = new PGGridRawData(v2(15, 15), 1.f);
@@ -263,6 +274,42 @@ class PGTerrainEditorScene : public PGBaseScene {
 			
 
 			if (controler->GetKey(PGKey_Left_Ctrl)->IsPress == true) {
+				if (controler->IsRelease(PGKey_1) == true) {
+					for (int grid_index = 0;
+						grid_index < grid_data->Grid_size.x*grid_data->Grid_size.y;
+						grid_index++) {
+						if (grid_data->selected_indexes[grid_index] == true) {
+							grid_data->grid_material_data[grid_index] = Material_Green;
+						}
+					}
+				}
+				if (controler->IsRelease(PGKey_2) == true) {
+					for (int grid_index = 0;
+						grid_index < grid_data->Grid_size.x*grid_data->Grid_size.y;
+						grid_index++) {
+						if (grid_data->selected_indexes[grid_index] == true) {
+							grid_data->grid_material_data[grid_index] = Material_Brown_1;
+						}
+					}
+				}
+				if (controler->IsRelease(PGKey_3) == true) {
+					for (int grid_index = 0;
+						grid_index < grid_data->Grid_size.x*grid_data->Grid_size.y;
+						grid_index++) {
+						if (grid_data->selected_indexes[grid_index] == true) {
+							grid_data->grid_material_data[grid_index] = Material_Gray;
+						}
+					}
+				}
+				if (controler->IsRelease(PGKey_4) == true) {
+					for (int grid_index = 0;
+						grid_index < grid_data->Grid_size.x*grid_data->Grid_size.y;
+						grid_index++) {
+						if (grid_data->selected_indexes[grid_index] == true) {
+							grid_data->grid_material_data[grid_index] = Material_Blue;
+						}
+					}
+				}
 				if (controler->IsRelease(PGKey_A) == true) {
 					for (int grid_index = 0;
 						grid_index < grid_data->Grid_size.x*grid_data->Grid_size.y;

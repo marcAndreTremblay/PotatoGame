@@ -41,6 +41,10 @@ enum PGMouseKey {
 };
 enum PGKey
 { 
+	PGKey_1 = GLFW_KEY_1,
+	PGKey_2 = GLFW_KEY_2,
+	PGKey_3 = GLFW_KEY_3,
+	PGKey_4 = GLFW_KEY_4,
 	PGKey_Space = GLFW_KEY_SPACE,
 	PGKey_Up = GLFW_KEY_UP,
 	PGKey_Down = GLFW_KEY_DOWN,
@@ -93,6 +97,10 @@ public:
 			this->AddKeyboardKey(PGKey_Down, "Down_Key\n");
 			this->AddKeyboardKey(PGKey_Left, "Left_Key\n");
 			this->AddKeyboardKey(PGKey_Right, "Right_Key\n");
+			this->AddKeyboardKey(PGKey_1, "1_Key\n");
+			this->AddKeyboardKey(PGKey_2, "2_Key\n");
+			this->AddKeyboardKey(PGKey_3, "3_Key\n");
+			this->AddKeyboardKey(PGKey_4, "4_Key\n");
 			this->AddKeyboardKey(PGKey_A, "A_Key\n");
 			this->AddKeyboardKey(PGKey_D, "D_Key\n");
 			this->AddKeyboardKey(PGKey_W, "W_Key\n");
