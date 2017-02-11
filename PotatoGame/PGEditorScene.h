@@ -82,7 +82,7 @@ public:
 		delete(grid_height_data);
 		delete(grid_material_data);
 		delete(selected_indexes);
-	}
+	} 
 	void SaveToFile(char *file_path) {
 		printf("Saving to |%s|\n", file_path);
 		FILE * file_2 = fopen(file_path, "wb");
@@ -140,17 +140,20 @@ public:
 			this->grid_height_data = (r32*)malloc(sizeof(r32)*x*y);
 			this->grid_material_data = (PGMaterial*)malloc(sizeof(PGMaterial)*x*y);
 			this->selected_indexes = (bool*)malloc(sizeof(bool)*x*y);
-			
+
+			int loaded_element_count = 0;
+
 			v4* tempo_p_ptr = grid_pos_data;
 			r32* tempo_h_ptr = grid_height_data;
 			PGMaterial* tempo_m_ptr = grid_material_data;
 			for (int i = 0; i < Grid_size.x*Grid_size.y; i++) {
 				result = fread((void*)tempo_p_ptr, sizeof(v4), 1, file_2);
-				if (ferror(file_2) != 0 || result != 1) { printf(" %i -- Error possition reading\n", i); }
+				if (ferror(file_2) != 0 || result != 1) { printf(" %i -- Error possition reading\n", i); break; }
 				result = fread((void*)tempo_h_ptr, sizeof(r32), 1, file_2);
-				if (ferror(file_2) != 0 || result != 1) { printf(" %i -- Error height reading\n", i); }
+				if (ferror(file_2) != 0 || result != 1) { printf(" %i -- Error height reading\n", i); break; }
 				result = fread((void*)tempo_m_ptr, sizeof(PGMaterial), 1, file_2);
-				if (ferror(file_2) != 0 || result != 1) { printf(" %i -- Error material reading\n", i); }
+				if (ferror(file_2) != 0 || result != 1) { printf(" %i -- Error material reading\n", i); break; }
+				loaded_element_count++;
 				tempo_h_ptr++;
 				tempo_p_ptr++;
 				tempo_m_ptr++;
@@ -158,14 +161,14 @@ public:
 
 				
 			
-			printf("Tile data read count |%i|\n", result);
+			printf("Element read count |%i|\n", loaded_element_count);
 			fclose(file_2);
 		}
 		else {
 			printf("Error with file loading\n");
 		}
 	}
-	void BuildGridPosData(v3 offset) {
+	void GenerateGridPossitionData(v3 offset) {
 		v4 major_row_offset = v4(this->Tile_size, (2 * this->Tile_size) - (this->Tile_size / glm::tan(glm::radians(60.f))), 0.f, 0.f);
 		v4 minor_row_offset = v4(-this->Tile_size, (2 * this->Tile_size) - (this->Tile_size / glm::tan(glm::radians(60.f))), 0.f, 0.f);
 		v4 starting_offset = v4(offset, 0.f);
@@ -247,7 +250,7 @@ class PGTerrainEditorScene : public PGBaseScene {
 
 			this->Set_Name("GridEditorScene");			
 			
-			this->Camera = new PGBaseCamera(v3(0, 10, 10), v3(0, 0, 0), v3(0, 0, 1));
+			this->Camera = new PGBaseCamera(v3(-10, -10, 15), v3(0, 0, 0), v3(0, 0, 1));
 			this->Projection_Matrice = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 50.0f);
 			
 			

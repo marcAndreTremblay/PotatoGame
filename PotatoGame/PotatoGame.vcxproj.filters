@@ -13,17 +13,17 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Header Files\PGCore">
+    <Filter Include="Header Files\PGGui">
+      <UniqueIdentifier>{bae6f3b4-74f4-4527-9c9d-4dd39312b907}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\PGGameEditor">
+      <UniqueIdentifier>{42b202fa-9c3f-4431-af9f-8c8e719f198e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\PGUtil">
       <UniqueIdentifier>{efb77372-d6d4-486e-b8b2-a537352d7f7d}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\PGEngine">
       <UniqueIdentifier>{556ca62f-f9b0-4ad0-8b0d-4eaf0f7fa5fe}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\PGGame">
-      <UniqueIdentifier>{42b202fa-9c3f-4431-af9f-8c8e719f198e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\PGGui">
-      <UniqueIdentifier>{bae6f3b4-74f4-4527-9c9d-4dd39312b907}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -34,7 +34,7 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="PGString.h">
-      <Filter>Header Files\PGCore</Filter>
+      <Filter>Header Files\PGUtil</Filter>
     </ClInclude>
     <ClInclude Include="PGBuildableObject.h">
       <Filter>Header Files\PGEngine</Filter>
@@ -46,13 +46,13 @@
       <Filter>Header Files\PGEngine</Filter>
     </ClInclude>
     <ClInclude Include="PGMeshInstance.h">
-      <Filter>Header Files\PGGame</Filter>
+      <Filter>Header Files\PGGameEditor</Filter>
     </ClInclude>
     <ClInclude Include="PGBaseScene.h">
       <Filter>Header Files\PGEngine</Filter>
     </ClInclude>
     <ClInclude Include="PGCore.h">
-      <Filter>Header Files\PGCore</Filter>
+      <Filter>Header Files\PGUtil</Filter>
     </ClInclude>
     <ClInclude Include="PGBaseRenderer.h">
       <Filter>Header Files\PGEngine</Filter>
@@ -103,16 +103,16 @@
       <Filter>Header Files\PGEngine</Filter>
     </ClInclude>
     <ClInclude Include="PG3DPrimitive.h">
-      <Filter>Header Files\PGCore</Filter>
+      <Filter>Header Files\PGUtil</Filter>
     </ClInclude>
     <ClInclude Include="PGEditorInstance.h">
-      <Filter>Header Files\PGGame</Filter>
+      <Filter>Header Files\PGGameEditor</Filter>
     </ClInclude>
     <ClInclude Include="PGEditorScene.h">
-      <Filter>Header Files\PGGame</Filter>
+      <Filter>Header Files\PGGameEditor</Filter>
     </ClInclude>
     <ClInclude Include="PGList.h">
-      <Filter>Header Files\PGCore</Filter>
+      <Filter>Header Files\PGUtil</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
