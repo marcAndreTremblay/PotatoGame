@@ -626,7 +626,7 @@ namespace PGGame {
 					while (*first_passs_ptr != '\n') {
 						PGCharacter * ch = &font->CharacterCollection[*first_passs_ptr];
 						if ((ch->Bearing.y*scale) > y_top_offset) {
-							y_top_offset = (float)ch->Bearing.y;
+							y_top_offset = (float)ch->Bearing.y*scale;
 						}
 						text_bounding_box.x += ((ch->Advance >> 6) * scale);
 						first_passs_ptr++;
@@ -635,7 +635,7 @@ namespace PGGame {
 					
 
 					v3 current_possition = possition;							
-					v3 current_origin = current_possition + v3(0.f, (y_top_offset*scale), 0.f);
+					v3 current_origin = current_possition + v3(0.f, y_top_offset, 0.f);
 				
 					for (char *current_char = text_string; *current_char != '\n'; current_char++) { 
 						PGCharacter * ch = &font->CharacterCollection[*current_char];

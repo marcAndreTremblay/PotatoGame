@@ -6,7 +6,7 @@
 #include "PGCore.h"
 #include "PGBaseRenderer.h"
 #include "PGControler.h"
-#include "PGSceneEntity.h"
+#include "PGEntity.h"
 #include "PGBaseEvent.h"
 #include "PGString.h"
 #include "PGBaseObjectList.h"
@@ -30,7 +30,7 @@ namespace PGEngine {
 			
 			}
 			PGEventWorkGroup* WorkGroup; //Note(marc): <- Unmanaged resources
-			PGBaseObjList<PGSceneEntity>* Entities;
+			PGBaseObjList<PGEntity>* Entities;
 			PGMousePicker* MousePicker; //Note(marc): <- Unmanaged resources
 		private:
 		public:
@@ -42,7 +42,7 @@ namespace PGEngine {
 					this->ShouldUpdate = true;
 					this->ShouldRender = true;
 					this->ShouldHandleControler = true;
-					this->Entities = new PGBaseObjList<PGSceneEntity>(true);
+					this->Entities = new PGBaseObjList<PGEntity>(true);
 			}
 			~PGBaseScene() {
 				delete(this->Entities);

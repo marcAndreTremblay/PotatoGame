@@ -6,7 +6,7 @@
 #include "PGCore.h"
 #include "PGBaseRenderer.h"	
 #include "PGControler.h"
-#include "PGSceneEntity.h"
+#include "PGEntity.h"
 #include "PGBaseEvent.h"
 #include "PGString.h"
 #include "PGBaseScene.h"

@@ -69,7 +69,8 @@ enum UIElementState {
 	UIState_Left_Press = 3,
 	UIState_Right_Press = 4,
 	UIState_Drag = 5,
-	UIState_Resizing = 6
+	UIState_Resizing = 6,
+	UIState_Selecting = 7
 };
 class PGUIMargin {
 public:
@@ -111,6 +112,15 @@ protected:
 		}
 		return false;
 	}
+	bool PGBaseUIElement::IsIntersection(v3* mouse_location, v2 size, v2 rel_possition) {
+		if ((mouse_location->x > rel_possition.x) && //Left
+			(mouse_location->x < rel_possition.x + (size.x)) && //Right
+			(mouse_location->y > rel_possition.y) && //Bottom
+			(mouse_location->y < rel_possition.y + (size.y))) { //Top
+			return true;
+		}
+		return false;
+	}
 	float GetRelativeZ() {
 		if (this->Parent != nullptr) {
 			return this->Parent->GetRelativeZ() + 0.001f;
@@ -126,7 +136,6 @@ protected:
 	v2 Size;
 	v2 Possition;
 private:
-
 public:
 	bool IsVisible;	
 	r32 Opacity;
@@ -240,7 +249,11 @@ public:
 
 	virtual void PGUILabel::Render(PGBaseRenderer *renderer) override {
 		if (this->IsVisible == true && this->Text != nullptr && this->Font != nullptr) {
+			v2 box = v2();
+			Font->GetFontBondingBox(this->Text->GetCharPtr(), Text_Size, &box);
+			
 			renderer->RenderUIText(this->Text->GetCharPtr(), v3(this->GetRelativePossition(), this->GetRelativeZ()), v4(this->Text_Color, this->GetRelativeOpacity()), this->Text_Size, this->Font);
+			//renderer->ui_panel_Mesh->Render(v3(this->GetRelativePossition(), this->GetRelativeZ()), box, v4(1.f, 1.f, 0.f, 1.f));
 		}
 	}
 	virtual bool PGUILabel::Update(PGControler *controler, double timeElapse, v3 *mouse_ui_possition) {
@@ -336,6 +349,7 @@ public:
 	void PGUIButton::SetFont(PGFont* font) {
 		this->Font = font;
 	}
+
 	PGUIButton() {
 		
 		this->Text_color = v3(0.f);
@@ -414,6 +428,143 @@ public:
 	}
 };
 
+
+
+class PGUISelectBox : public PGBaseUIElement {
+protected:
+private:
+	PGLList<PGBaseObject> *element_list;
+	int selected_index = 1; //Note(Marc): -1 for no selection
+	int index_to_show = 5;
+
+	//Fix property
+	PGFont *font;
+	v2 element_size;
+	r32 element_offset = 2.0f;
+	float font_size = 0.7f;
+public:
+	PGUISelectBox() {
+		element_list = new PGLList<PGBaseObject>(false);
+	}
+	~PGUISelectBox() {
+		delete(element_list);
+	}
+	void PGUISelectBox::SetFont(PGFont *_font) {
+		this->font = _font;
+	}
+	void PGUISelectBox::SetSize(v2 size) {
+		element_size.x = size.x - 10;
+		element_size.y = size.y ;
+		PGBaseUIElement::SetSize(size);
+	}
+	void PGUISelectBox::AddListElement(PGBaseObject *new_obj) {
+		element_list->Add(new_obj);
+	}
+	virtual bool PGUISelectBox::IsActif() override {
+		if (this->State == UIState_Selecting) return true; 
+		if (this->State == UIState_Hot) return true;
+		return false;
+	}
+	virtual void PGUISelectBox::Render(PGBaseRenderer *renderer) override	 {
+		if (this->IsVisible == true) {
+			
+			v3 pos_offset = v3(this->GetRelativePossition(), this->GetRelativeZ());
+			r32 rel_alpha = this->GetRelativeOpacity();
+		
+			v4 back_color = v4(0.3f, 0.5f, 0.3f, rel_alpha);
+			v4 text_color = v4(0.8f, 0.8f, 0.8f, rel_alpha);
+			char *selected_string = nullptr;
+			renderer->ui_panel_Mesh->Render(pos_offset, this->Size, back_color);
+
+			if (selected_index > -1) {
+				selected_string = element_list->GetAt(selected_index)->Get_Name()->GetCharPtr();
+				renderer->RenderUIText(selected_string, pos_offset + v3(0.f, 0.f, 0.1f), text_color, font_size, font);
+			}
+
+			switch (this->State) {
+				case UIState_Selecting:{
+								
+					pos_offset.y += this->element_size.y + element_offset;
+					
+					int cpt = 0;
+					for (PGListNode<PGBaseObject> *c_node = element_list->GetHead(); c_node != nullptr; c_node = c_node->GetNext()) {
+						PGBaseObject* current_ui_element = c_node->GetData();
+							
+						if (selected_index == cpt)    {
+							renderer->ui_panel_Mesh->Render(pos_offset, this->Size, v4(0.1f, 0.4f, 0.0f, rel_alpha));
+							renderer->RenderUIText(current_ui_element->Get_Name()->GetCharPtr(), pos_offset + v3(0.f, 0.f, 0.1f), text_color, font_size, font);
+						}
+						else {
+							renderer->ui_panel_Mesh->Render(pos_offset, this->Size, back_color);
+							renderer->RenderUIText(current_ui_element->Get_Name()->GetCharPtr(), pos_offset + v3(0.f, 0.f, 0.1f), text_color, font_size, font);
+						}
+											  
+						pos_offset.y += this->element_size.y + element_offset;
+						cpt++;
+					}
+					break;
+				}
+			}
+		}
+	}
+	virtual bool PGUISelectBox::Update(PGControler *controler, double timeElapse, v3* mouse_ui_possition) {
+		bool isChildActive = PGBaseUIElement::Update(controler, timeElapse, mouse_ui_possition);
+		if (isChildActive == false) {
+			switch (this->State) {
+				case UIState_Hot:{
+						if (controler->IsPressed(PGMouse_Right) == true) {
+							this->State = UIState_Selecting;
+							this->EmiteEvent(new PGUIEvent(this, UIEvent_Button_Press));
+						}
+						break;
+								}
+				case UIState_Selecting:{
+						if (controler->IsPressed(PGMouse_Left) == true) {
+							this->State = UIState_Idle;
+							this->EmiteEvent(new PGUIEvent(this, UIEvent_Button_Press));
+						}
+						break;
+				}
+			}
+		}
+		return isChildActive;
+	}
+};
+
+class PGUITreeList : public PGBaseUIElement {
+protected:
+private:
+	float child_advance = 10.f;
+public:
+
+	PGUITreeList() {
+
+	}
+	~PGUITreeList() {
+
+	}
+	virtual bool PGUITreeList::IsActif() override {
+		if (this->State != UIState_Hot) return true;
+		return false;
+	}
+	virtual void PGUITreeList::Render(PGBaseRenderer *renderer) override {
+		if (this->IsVisible == true) {
+			
+		}
+		PGBaseUIElement::Render(renderer);
+	}
+	virtual bool PGUITreeList::Update(PGControler *controler, double timeElapse, v3* mouse_ui_possition) {
+		bool isChildActive = PGBaseUIElement::Update(controler, timeElapse, mouse_ui_possition);
+		if (isChildActive == false) {
+			
+			
+		}
+		return isChildActive;
+	}
+};
+
+
+
 class PGUIMenuWindow : public PGBaseUIElement {
 protected:
 	r32 menu_button_default_size = 16.f;
@@ -457,14 +608,11 @@ public:
 	virtual void PGUIMenuWindow::Render(PGBaseRenderer *renderer) override {
 		if (this->IsVisible == true) {
 			
-			if (this->State == UIState_Idle) {
+			if (this->State != UIState_Idle) {
+				this->Opacity = 1.f;
+			}
+			else {
 				this->Opacity = 0.7f;
-			}
-			if (this->State == UIState_Hot) {
-				this->Opacity = 1.f;
-			}
-			if (this->State == UIState_Moving) {
-				this->Opacity = 1.f;
 			}
 			renderer->ui_panel_Mesh->Render(v3(this->GetRelativePossition(), 0.f), this->Size, v4(v3(0.2f, 0.2f, 0.2f), this->GetRelativeOpacity()));
 			PGBaseUIElement::Render(renderer);

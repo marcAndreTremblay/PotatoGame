@@ -49,6 +49,39 @@ static const GLfloat square_vertex_data[] = {
 	1.0f, -1.0f, 0.0f, 1.0f // Bottom Right 6
 };
 
+
+static const GLfloat tree_vertex_data_v3[] = {
+	0.0f, -1.0f, 0.4f,			// - 0
+	-1.0f, -0.4226497308f, 0.4f,// - 1
+	-1.0f, 0.4226497308f, 0.4f,	// - 2
+	0.0f, 1.0f, 0.4f,			// - 3
+	1.0f, 0.4226497308f, 0.4f,	// - 4
+	1.0f, -0.4226497308f, 0.4f,	// - 5
+
+	0.0f, 0.0f, 1.0f,			// - 6
+
+	0.5f, 0.5f, 0.4f,
+	-0.5f, 0.5f, 0.4f,
+	0.5f, -0.5f, 0.4f,
+	-0.5f, -0.5f, 0.4f,
+
+	0.5f, 0.5f, 0.0f,
+	-0.5f, 0.5f, 0.0f,		
+	0.5f, -0.5f, 0.0f,
+	-0.5f, -0.5f, 0.0f
+};
+	static const GLuint tree_indice_data[] = {
+		//Lower hexagone 
+		1, 5, 0,
+		2, 3, 1,
+		4, 5, 3,
+		3, 5, 1,
+		//Upper tree
+
+		//Wood trunck
+	};
+
+
 static const GLfloat hexagone_vertex_data_v3[] = {
 	0.0f, -1.0f, 1.0f, 
 	-1.0f, -0.4226497308f, 1.0f, 

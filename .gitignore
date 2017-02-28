@@ -50,11 +50,11 @@ artifacts/
 *_i.h
 *.ilk
 *.meta
-.obj
-.pch
-.pdb
-.sdf
-.ipch
+*.obj
+*.pch
+*.pdb
+*.sdf
+*.ipch
 *.vcxproj
 *.vcxproj.filters
 *.pgc
@@ -69,7 +69,7 @@ artifacts/
 *.log
 *.vspscc
 *.vssscc
-.builds
+*.builds
 *.pidb
 *.svclog
 *.scc
@@ -83,7 +83,7 @@ ipch/
 *.ncb
 *.opendb
 *.opensdf
-.sdf
+*sdf
 *.cachefile
 *.VC.db
 *.VC.VC.opendb

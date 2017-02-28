@@ -69,9 +69,6 @@
     <ClInclude Include="PGBaseGame.h">
       <Filter>Header Files\PGEngine</Filter>
     </ClInclude>
-    <ClInclude Include="PGSceneEntity.h">
-      <Filter>Header Files\PGEngine</Filter>
-    </ClInclude>
     <ClInclude Include="PGBaseEvent.h">
       <Filter>Header Files\PGEngine</Filter>
     </ClInclude>
@@ -113,6 +110,9 @@
     </ClInclude>
     <ClInclude Include="PGList.h">
       <Filter>Header Files\PGUtil</Filter>
+    </ClInclude>
+    <ClInclude Include="PGEntity.h">
+      <Filter>Header Files\PGEngine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

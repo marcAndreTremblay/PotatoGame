@@ -99,7 +99,23 @@ namespace PGCore {
 			}
 			
 		}
-
+		T* PGLList::GetAt(int target_index) {
+			if (target_index < 0 || target_index > element_count) return nullptr;
+			int cpt_index = 0;
+			PGListNode<T>* next_node = head;
+			while (next_node != nullptr) {
+				PGListNode<T>* current_node = next_node;
+				cpt_index++;
+				if (cpt_index == target_index) {
+					return current_node->GetData();
+				}
+				else {
+					next_node = current_node->GetNext();
+				}
+			}
+			return nullptr;
+		}
+		
 	};
 
 

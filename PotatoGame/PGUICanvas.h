@@ -51,10 +51,12 @@ class PGUICanvas : public PGBuildableObject {
 				this->ortho_Projection = glm::ortho(0.0f, static_cast<r32>(this->GameWindow->GetWidth()), static_cast<r32>(this->GameWindow->GetHeight()), 0.0f, -1.0f, 1.0f);
 
 				PGUIMenuWindow *menu_window = new PGUIMenuWindow();
-					menu_window->SetSize(v2(300.f, 300.f));
+					menu_window->SetSize(v2(300.f, 900.f));
 					menu_window->SetPossition(v2(10.f, 10.f));
 					menu_window->SetMenuTitle("Test title\n", asset_manager->SeachForFont("Roboto-Light\n"), v3(1.f, 0.2f, 0.5f));
 
+						
+						
 						PGUIImageBox* picture_1 = new PGUIImageBox();
 								picture_1->Set_Id(this->GetNextFreeId());
 								picture_1->SetSize(v2(32.f, 32.f));
@@ -85,6 +87,7 @@ class PGUICanvas : public PGBuildableObject {
 							menu_window->AddChild(child_button_1);
 					
 						PGUIButton *child_button_2 = new PGUIButton();
+							child_button_2->Set_Name("Best Button\n");
 								child_button_2->Set_Id(this->GetNextFreeId());
 								child_button_2->SetSize(v2(200.f, 64.f));
 								child_button_2->SetPossition(v2(60.f, 10.f));
@@ -93,12 +96,23 @@ class PGUICanvas : public PGBuildableObject {
 							menu_window->AddChild(child_button_2);
 
 						PGUILabel *label_1 = new PGUILabel();
+							label_1->Set_Name("Best label\n");
 								label_1->Set_Id(this->GetNextFreeId());
 								label_1->SetSize(v2(100.f, 64.f));
 								label_1->SetPossition(v2(60.f, 150.f));
-								label_1->SetText("Label\n");
+								label_1->SetText("pP\n");
 								label_1->SetFont(asset_manager->SeachForFont("Roboto_Bold\n"));
 							menu_window->AddChild(label_1);
+
+							PGUISelectBox* selected_box_test = new PGUISelectBox();
+								selected_box_test->Set_Id(this->GetNextFreeId());
+								selected_box_test->SetSize(v2(230.f, 35.f));
+								selected_box_test->SetPossition(v2(10.f, 200.f));
+								selected_box_test->SetFont(asset_manager->SeachForFont("Roboto-Light\n"));
+							selected_box_test->AddListElement(label_1);
+							selected_box_test->AddListElement(child_button_2);
+						menu_window->AddChild(selected_box_test);
+
 
 				
 				this->element_list->Add(menu_window);

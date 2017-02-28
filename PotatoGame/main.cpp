@@ -123,18 +123,6 @@ int main(int argc, char **argv)
 	}
 
 	
-	
-
-//	PGRawObjFile* test_file = new PGRawObjFile("Test_File\n", "Asset/RawOBJ/test_cube.obj//");
-//	test_file->Build();
-/*
-	v3 *tes2 = new v3(1.f);
-
-	*tes2 += v3(1.f) += v3(2.f);
-
-	PGV3 *test = new PGV3(1.f);
-	*test += (PGV3(3.f, 1.f, 2.f));
-	*/
 
 
 	PGEditorInstance* main_instance = new PGEditorInstance();

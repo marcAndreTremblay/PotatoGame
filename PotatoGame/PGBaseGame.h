@@ -102,19 +102,20 @@ namespace PGEngine {
 				double current_pass_time_stamp;
 
 				double updateFctTimer = 0;
-				double updateFctTargetFrequency = PG_60HZT;
+				double UpdateFrequency = PG_60HZT;
 				double last_update_pass_stamp = 0;
+				bool b2 = true;
 				while (this->ShouldGameClose == false) {
 
 					current_pass_time_stamp = glfwGetTime();
 					double delta_time = (current_pass_time_stamp - last_pass_time_stamp);
 					last_pass_time_stamp = current_pass_time_stamp;
 
-
-					glfwPollEvents();
+						glfwPollEvents();
+					
 									
 					updateFctTimer += delta_time;
-					while (updateFctTimer >= updateFctTargetFrequency) {
+					while (updateFctTimer >= UpdateFrequency) {
 						double deltaTimeForUpdate = (glfwGetTime() - last_update_pass_stamp);
 						last_update_pass_stamp = glfwGetTime();
 
@@ -126,7 +127,7 @@ namespace PGEngine {
 						this->Update(deltaTimeForUpdate);
 
 						updateFctCallCpt++;
-						updateFctTimer -= updateFctTargetFrequency;
+						updateFctTimer -= UpdateFrequency;
 					}
 				
 

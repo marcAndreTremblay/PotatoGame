@@ -5,6 +5,7 @@
 #include "PGBaseGame.h"
 
 
+
 using namespace PGEngine;
 
 class PGEditorInstance :public PGBaseGame {
@@ -29,7 +30,7 @@ protected:
 	}
 private:
 	PGUICanvas* game_canvas;	
-public:
+public:	
 	PGEditorInstance() {
 	}
 	~PGEditorInstance() {
