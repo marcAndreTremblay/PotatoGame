@@ -13,8 +13,6 @@ protected:
 	virtual void PGEditorInstance::Render() override {
 		PGBaseGame::Render();
 		this->game_canvas->Render(this->GameRenderer);
-		
-		
 	}
 	virtual void PGEditorInstance::HandlerEvents() override {
 		PGBaseGame::HandlerEvents();
@@ -41,7 +39,7 @@ public:
 		PGBuildableObject::StartBuilding();
 
 			//Build a work group for the game and active scenes
-			this->WorkGroup = EventManager->AddWorkGroup("Game_Scene\n");
+		
 
 		
 			this->AssetManager->LoadTexture(PG_PNG, "Asset/texture/Archer_right.png", "ArcherRight\n");
@@ -57,14 +55,17 @@ public:
 			
 
 			
+			
+			
 			//Build the needed UI for the game
 			this->game_canvas = new PGUICanvas();
 			this->game_canvas->Build(this->GameWindow,this->MousePicker ,this->AssetManager);
-
+			
+			
 			//Build the first scene
 			PGTerrainEditorScene* terrain_editor_scene = new PGTerrainEditorScene();
 				terrain_editor_scene->Set_Id(1);
-				terrain_editor_scene->Build(this->WorkGroup, this->MousePicker);
+				terrain_editor_scene->Build(this->MousePicker);
 			this->LoadedScenes->Add(terrain_editor_scene);
 
 			this->CurrentViewedScene = terrain_editor_scene;

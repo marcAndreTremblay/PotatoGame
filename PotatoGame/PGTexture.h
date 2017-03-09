@@ -16,7 +16,7 @@ namespace PGEngine {
 		PG_PNG = 0,
 		PG_BMP = 1
 	};
-	class PGTexture : public PGBaseObject, PGBuildableObject {
+	class PGTexture : public PGBaseObject	, PGBuildableObject {
 		protected:
 		private:
 			GLuint GenGlTex(FIBITMAP *bitmap) {
@@ -68,7 +68,6 @@ namespace PGEngine {
 			}
 			~PGTexture() {
 				glDeleteTextures(1, &OpenGL_Id);
-				delete(Ref_Name);
 				delete(File_Path);
 			}
 			void PGTexture::Build() override{

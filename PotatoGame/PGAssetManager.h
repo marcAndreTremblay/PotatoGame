@@ -37,6 +37,76 @@ namespace PGEngine {
 		void PGRawObjFile::Build() override {
 			PGBuildableObject::StartBuilding();
 			
+			//v3 v_tab[100];
+			//int v_c_index = 0;
+
+			//v3 vn_tab[100];
+			//int vn_c_index = 0;
+
+			//v2 vt_tab[100];
+			//int vt_c_index = 0;
+			//
+			//
+			//FILE * file = fopen("Asset/RawOBJ/test_cube.obj", "r");
+			//if (file != nullptr) {
+			//	char lineHeader[128]; //Note(Marc): We assume that a word wont be longer than 128 char, this is a silly assumtion
+			//	while (1) {
+			//		int res = fscanf(file, "%s", lineHeader);
+			//		//	printf("Read String1 |%s|\n", lineHeader);                                                   
+			//		if (res == EOF) {
+			//			break; // EOF = End Of File. Quit the loop.
+			//		}
+			//		if (strcmp(lineHeader, "v") == 0) {
+			//			int match_cpt = fscanf_s(file, "%f %f %f\n", &v_tab[v_c_index].x, &v_tab[v_c_index].y, &v_tab[v_c_index].z);
+			//			if (match_cpt != 3) {
+			//				printf("Error reading vertices tangent Num:|%i|\n", v_c_index);
+			//			}
+			//			v_c_index++;
+			//		}
+			//		else if (strcmp(lineHeader, "vn") == 0) {
+			//			int match_cpt = fscanf_s(file, "%f %f %f\n", &vn_tab[vn_c_index].x, &vn_tab[vn_c_index].y, &vn_tab[vn_c_index].z);
+			//			if (match_cpt != 3) {
+			//				printf("Error reading vertices tangent Num:|%i|\n", vn_c_index);
+			//			}
+			//			vn_c_index++;
+			//		}
+			//		else if (strcmp(lineHeader, "vt") == 0) {
+			//			int match_cpt = fscanf_s(file, "%f %f\n", &vt_tab[vt_c_index].x, &vt_tab[vt_c_index].y);
+			//			if (match_cpt != 2) {
+			//				printf("Error reading Tex coords Num:|%i|\n", vt_c_index);
+			//			}
+			//			vt_c_index++;
+			//		}
+			//		else if (strcmp(lineHeader, "f") == 0) {
+			//			unsigned int face_data[9] = {};
+			//			int match_cpt = fscanf(file, "%d/%d/%d %d/%d/%d %d/%d/%d\n",  &face_data[0], &face_data[1], &face_data[2],
+			//														&face_data[3], &face_data[4], &face_data[5], 
+			//														&face_data[6], &face_data[7], &face_data[8]);
+			//			if (match_cpt != 9) {
+			//				printf("Error reading face data\n");
+			//			}
+			//		}	
+			//		else if (strcmp(lineHeader, "usemtl") == 0) {
+			//		
+			//		}
+			//		else if (strcmp(lineHeader, "s") == 0) {
+			//		
+			//		}
+
+			//	}
+			//}
+			//while (v_c_index >= 1) {
+			//	printf("Verticles : %f %f %f\n", v_tab[v_c_index].x, v_tab[v_c_index].y, v_tab[v_c_index].z);
+			//	v_c_index--;
+			//}
+			//while (vn_c_index >= 1) {
+			//	printf("Normal  : %f %f %f\n", vn_tab[vn_c_index].x, vn_tab[vn_c_index].y, vn_tab[vn_c_index].z);
+			//	vn_c_index--;
+			//}
+			//while (vt_c_index >= 1) {
+			//	printf("V tex : %f %f\n", vt_tab[vt_c_index].x, vt_tab[vt_c_index].y);
+			//	vt_c_index--;
+			//}
 
 
 			PGBuildableObject::EndBuilding();

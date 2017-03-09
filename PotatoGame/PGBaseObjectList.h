@@ -15,8 +15,8 @@ namespace PGEngine {
 
 			}
 			~PGBaseObjList() {
-
-			}
+				
+			}	
 
 			void Add(PGBaseObject* element) override {
 				PGLList::Add(element);

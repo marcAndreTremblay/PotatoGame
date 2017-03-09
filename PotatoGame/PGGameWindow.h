@@ -13,6 +13,7 @@ namespace PGEngine {
 	private:
 		int WindowWidth;
 		int WindowHeight;
+		m4 ortho;
 	public:
 		GLFWwindow* Gl_Window;
 		GLFWmonitor *GL_Monitor;
@@ -52,6 +53,7 @@ namespace PGEngine {
 					glfwSetCursorPos(this->Gl_Window, this->WindowWidth / 2, this->WindowHeight / 2);
 					glViewport(0, 0, this->WindowWidth, this->WindowHeight);
 				}
+				ortho = glm::ortho<r32>(0.0f, static_cast<r32>(WindowWidth), static_cast<r32>(WindowHeight), 0.0f, -1.0f, 1.0f);
 			}
 			else {
 				//Todo(Marc): debugg.... 
@@ -59,6 +61,9 @@ namespace PGEngine {
 		}
 		~PGGameWindow() {
 			glfwTerminate();
+		}
+		m4* PGGameWindow::GetOrtho() {
+			return &ortho;
 		}
 		int PGGameWindow::GetHeight() {
 			return this->WindowHeight;
@@ -73,6 +78,7 @@ namespace PGEngine {
 			glViewport(0, 0, this->WindowWidth, this->WindowHeight);
 			glfwSetWindowSize(this->Gl_Window, this->WindowWidth, this->WindowHeight);
 			glfwSetWindowPos(this->Gl_Window, (mode->width / 2) - (this->WindowWidth / 2), (mode->height / 2) - (this->WindowHeight / 2));
+			ortho = glm::ortho<r32>(0.0f, static_cast<r32>(this->WindowWidth), static_cast<r32>(this->WindowHeight), 0.0f, -1.0f, 1.0f);
 		}
 	};
 }

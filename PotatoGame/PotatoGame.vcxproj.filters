@@ -114,6 +114,12 @@
     <ClInclude Include="PGEntity.h">
       <Filter>Header Files\PGEngine</Filter>
     </ClInclude>
+    <ClInclude Include="PGUICore.h">
+      <Filter>Header Files\PGGui</Filter>
+    </ClInclude>
+    <ClInclude Include="PGMapGrid.h">
+      <Filter>Header Files\PGGameEditor</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

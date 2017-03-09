@@ -31,11 +31,9 @@ namespace PGEngine {
 			PGControler* Controlers;
 			PGGameWindow* GameWindow;
 			PGBaseRenderer* GameRenderer;
-			PGEventManager* EventManager;
 			PGAssetManager* AssetManager;
 			
 			PGMousePicker* MousePicker;
-			PGEventWorkGroup* WorkGroup; //Note(marc): <- Unmanaged resources
 
 			virtual void PGBaseGame::HandlerEvents() {
 				if (glfwWindowShouldClose(this->GameWindow->Gl_Window) == 1) {
@@ -79,7 +77,6 @@ namespace PGEngine {
 				this->Controlers = new PGControler();
 				this->GameWindow = new PGGameWindow(false, 1024, 768);
 				this->GameRenderer = new PGBaseRenderer();
-				this->EventManager = new PGEventManager();
 				this->AssetManager = new PGAssetManager();
 				this->MousePicker = new PGMousePicker(this->GameWindow);
 			}
@@ -88,6 +85,8 @@ namespace PGEngine {
 				delete(this->Controlers);
 				delete(this->GameRenderer);
 				delete(this->GameWindow);
+				delete(this->AssetManager);
+				delete(this->MousePicker);
 			}
 			void PGBaseGame::Start() {
 				unsigned int FrameRenderGlobalCount = 0;
@@ -119,10 +118,6 @@ namespace PGEngine {
 						double deltaTimeForUpdate = (glfwGetTime() - last_update_pass_stamp);
 						last_update_pass_stamp = glfwGetTime();
 
-						
-						if (this->EventManager != nullptr) {
-							this->EventManager->UpdateAndRecycle(delta_time);
-						}
 						this->Controlers->Update(this->GameWindow);
 						this->Update(deltaTimeForUpdate);
 
@@ -138,7 +133,7 @@ namespace PGEngine {
 					renderFctCallCpt++;
 					generalFctTime += delta_time;
 					if (generalFctTime >= 1.f) {
-						sprintf_s(fps_info_buffer, "FPS : %d UPS : %d\n", renderFctCallCpt, updateFctCallCpt);
+						sprintf(fps_info_buffer, "FPS : %d UPS : %d\n", renderFctCallCpt, updateFctCallCpt);
 						updateFctCallCpt = 0;
 						renderFctCallCpt = 0;
 						generalFctTime -= 1.f;

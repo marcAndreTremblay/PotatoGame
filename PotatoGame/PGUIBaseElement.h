@@ -2,6 +2,8 @@
 #define PG_UI_BASE_ELEMENT_H
 
 
+#include "PGUICore.h"
+
 enum UIEventCode {
 	UIEvent_Nothing = 0,
 	UIEvent_Hide_Window = 1,
@@ -442,6 +444,8 @@ private:
 	v2 element_size;
 	r32 element_offset = 2.0f;
 	float font_size = 0.7f;
+	v4 back_color = v4(0.3f, 0.5f, 0.3f, 1.f);
+	v4 text_color = v4(0.8f, 0.8f, 0.8f, 1.f);
 public:
 	PGUISelectBox() {
 		element_list = new PGLList<PGBaseObject>(false);
@@ -471,8 +475,10 @@ public:
 			v3 pos_offset = v3(this->GetRelativePossition(), this->GetRelativeZ());
 			r32 rel_alpha = this->GetRelativeOpacity();
 		
-			v4 back_color = v4(0.3f, 0.5f, 0.3f, rel_alpha);
-			v4 text_color = v4(0.8f, 0.8f, 0.8f, rel_alpha);
+			
+			back_color.a = rel_alpha;			
+			text_color.a = rel_alpha;
+
 			char *selected_string = nullptr;
 			renderer->ui_panel_Mesh->Render(pos_offset, this->Size, back_color);
 
@@ -480,30 +486,26 @@ public:
 				selected_string = element_list->GetAt(selected_index)->Get_Name()->GetCharPtr();
 				renderer->RenderUIText(selected_string, pos_offset + v3(0.f, 0.f, 0.1f), text_color, font_size, font);
 			}
+			if (this->State == UIState_Selecting) {
+				pos_offset.y += this->element_size.y + element_offset;
 
-			switch (this->State) {
-				case UIState_Selecting:{
-								
-					pos_offset.y += this->element_size.y + element_offset;
-					
-					int cpt = 0;
-					for (PGListNode<PGBaseObject> *c_node = element_list->GetHead(); c_node != nullptr; c_node = c_node->GetNext()) {
-						PGBaseObject* current_ui_element = c_node->GetData();
-							
-						if (selected_index == cpt)    {
-							renderer->ui_panel_Mesh->Render(pos_offset, this->Size, v4(0.1f, 0.4f, 0.0f, rel_alpha));
-							renderer->RenderUIText(current_ui_element->Get_Name()->GetCharPtr(), pos_offset + v3(0.f, 0.f, 0.1f), text_color, font_size, font);
-						}
-						else {
-							renderer->ui_panel_Mesh->Render(pos_offset, this->Size, back_color);
-							renderer->RenderUIText(current_ui_element->Get_Name()->GetCharPtr(), pos_offset + v3(0.f, 0.f, 0.1f), text_color, font_size, font);
-						}
-											  
-						pos_offset.y += this->element_size.y + element_offset;
-						cpt++;
+				int cpt = 0;
+				for (PGListNode<PGBaseObject> *c_node = element_list->GetHead(); c_node != nullptr; c_node = c_node->GetNext()) {
+					PGBaseObject* current_ui_element = c_node->GetData();
+
+					if (selected_index == cpt) {
+						renderer->ui_panel_Mesh->Render(pos_offset, this->Size, v4(0.1f, 0.4f, 0.0f, rel_alpha));
+						renderer->RenderUIText(current_ui_element->Get_Name()->GetCharPtr(), pos_offset + v3(0.f, 0.f, 0.1f), text_color, font_size, font);
 					}
-					break;
+					else {
+						renderer->ui_panel_Mesh->Render(pos_offset, this->Size, back_color);
+						renderer->RenderUIText(current_ui_element->Get_Name()->GetCharPtr(), pos_offset + v3(0.f, 0.f, 0.1f), text_color, font_size, font);
+					}
+
+					pos_offset.y += this->element_size.y + element_offset;
+					cpt++;
 				}
+		
 			}
 		}
 	}
@@ -514,13 +516,22 @@ public:
 				case UIState_Hot:{
 						if (controler->IsPressed(PGMouse_Right) == true) {
 							this->State = UIState_Selecting;
-							this->EmiteEvent(new PGUIEvent(this, UIEvent_Button_Press));
 						}
 						break;
 								}
 				case UIState_Selecting:{
 						if (controler->IsPressed(PGMouse_Left) == true) {
-							this->State = UIState_Idle;
+							v3 rec_location = v3(this->GetRelativePossition(), 0);
+							rec_location.y += this->element_size.y + element_offset;
+							if (this->IsIntersection(mouse_ui_possition)) {
+								this->State = UIState_Hot;
+							}
+							else {
+								this->State = UIState_Idle;
+							}
+
+
+							
 							this->EmiteEvent(new PGUIEvent(this, UIEvent_Button_Press));
 						}
 						break;

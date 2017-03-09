@@ -11,6 +11,7 @@ namespace PGEngine {
 	class PGBaseCamera {
 	protected:
 	private:
+		m4 view;
 	public:
 		v3 Possition;
 		v3 LookAt;
@@ -23,12 +24,13 @@ namespace PGEngine {
 		~PGBaseCamera() {
 
 		}
-		m4 PGBaseCamera::GetViewMatrice() {
-			return glm::lookAt(
+		m4* PGBaseCamera::GetViewMatrice() {
+			view = glm::lookAt(
 				this->Possition, // Camera is at
 				this->LookAt, // and looks at
 				this->Up  // Head is up 
 				);
+			return &view; 
 		}
 		void PGBaseCamera::RotateZAxis(r32 rad_angle, v3 origin) {
 			r32 tempoX = this->Possition.x;

@@ -14,11 +14,6 @@
 #include "PGBaseCamera.h"
 
 namespace PGEngine {
-	enum SceneParameters {
-		GeneralWorkGroup = 1,
-		SceneWorkGroup = 2,
-		
-	};
 	class PGBaseScene : public PGBaseObject, PGBuildableObject {
 		protected:
 			PGBaseCamera * Camera;
@@ -26,10 +21,7 @@ namespace PGEngine {
 			virtual void PGBaseScene::HandleControler(PGControler *controler) {
 				
 			}
-			virtual void PGBaseScene::HandlerEvents(PGEventWorkGroup *work_group) {
-			
-			}
-			PGEventWorkGroup* WorkGroup; //Note(marc): <- Unmanaged resources
+
 			PGBaseObjList<PGEntity>* Entities;
 			PGMousePicker* MousePicker; //Note(marc): <- Unmanaged resources
 		private:
@@ -60,15 +52,14 @@ namespace PGEngine {
 				if (this->ShouldUpdate == false) return false;
 				return true;
 			}
-			virtual void PGBaseScene::Build(PGEventWorkGroup* targetWorkGroup,PGMousePicker* mouse_picker) {
+			virtual void PGBaseScene::Build(PGMousePicker* mouse_picker) {
 				this->PGBuildableObject::StartBuilding();
-				this->WorkGroup = targetWorkGroup;
 				this->MousePicker = mouse_picker;
 
 				this->PGBuildableObject::EndBuilding();
 			}
 			virtual void PGBaseScene::Render(PGBaseRenderer *renderer) {		
-				renderer->SetWorldView(&this->Camera->GetViewMatrice());	
+				renderer->SetWorldView(this->Camera->GetViewMatrice());	
 				renderer->SetWorldProjection(&this->Projection_Matrice);
 
 			}
@@ -78,7 +69,7 @@ namespace PGEngine {
 						this->HandleControler(controler);
 					}
 				}
-				this->HandlerEvents(WorkGroup);
+				
 			}
 
 	};

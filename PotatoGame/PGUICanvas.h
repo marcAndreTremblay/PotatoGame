@@ -28,7 +28,7 @@ class PGUICanvas : public PGBuildableObject {
 
 	private:
 		unsigned int NextElementId;
-		m4 ortho_Projection;
+		m4* ortho_Projection;
 		PGMousePicker* MousePicker;
 		PGGameWindow* GameWindow;
 		PGEventWorkGroup* work_group; //Un-managed resources
@@ -46,9 +46,6 @@ class PGUICanvas : public PGBuildableObject {
 			this->StartBuilding();
 				this->MousePicker = _mouse_picker;
 				this->GameWindow = game_window;
-
-
-				this->ortho_Projection = glm::ortho(0.0f, static_cast<r32>(this->GameWindow->GetWidth()), static_cast<r32>(this->GameWindow->GetHeight()), 0.0f, -1.0f, 1.0f);
 
 				PGUIMenuWindow *menu_window = new PGUIMenuWindow();
 					menu_window->SetSize(v2(300.f, 900.f));
@@ -121,8 +118,8 @@ class PGUICanvas : public PGBuildableObject {
 		void PGUICanvas::Render(PGBaseRenderer *renderer) {
 			if (this->IsLock() == false && this->IsBuild() == true) {
 
-				this->ortho_Projection = glm::ortho(0.0f, static_cast<r32>(this->GameWindow->GetWidth()), static_cast<r32>(this->GameWindow->GetHeight()), 0.0f, -1.0f, 1.0f);
-				renderer->SetUIProjection(&ortho_Projection);
+				this->ortho_Projection = this->GameWindow->GetOrtho();
+				renderer->SetUIProjection(ortho_Projection);
 
 				for (PGListNode<PGBaseUIElement> *c_node = element_list->GetHead(); c_node != nullptr; c_node = c_node->GetNext()) {
 					PGBaseUIElement* current_ui_element = c_node->GetData();
@@ -131,7 +128,7 @@ class PGUICanvas : public PGBuildableObject {
 			}
 		}
 		void PGUICanvas::Update(PGControler *controler, double timeElapse) {
-			v3 mouse_ui_space = this->MousePicker->TranformWindowStoUIS(controler,&this->ortho_Projection);
+			v3 mouse_ui_space = this->MousePicker->TranformWindowStoUIS(controler,this->ortho_Projection);
 			for (PGListNode<PGBaseUIElement> *c_node = element_list->GetHead(); c_node != nullptr; c_node = c_node->GetNext()) {
 				PGBaseUIElement* current_ui_element = c_node->GetData();
 					current_ui_element->Update(controler, timeElapse, &mouse_ui_space);
