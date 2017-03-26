@@ -9,9 +9,9 @@ using namespace PGCore;
 
 namespace PGEngine {
 	template <class PGBaseObject>
-	class PGBaseObjList :public PGLList<PGBaseObject> {
+	class PGBaseObjList :public PGList<PGBaseObject> {
 		public:
-			PGBaseObjList(bool managing = false) : PGLList(managing) {
+			PGBaseObjList(bool managing = false) : PGList(managing) {
 
 			}
 			~PGBaseObjList() {
@@ -19,7 +19,7 @@ namespace PGEngine {
 			}	
 
 			void Add(PGBaseObject* element) override {
-				PGLList::Add(element);
+				PGList::Add(element);
 			}
 
 			PGBaseObject* PGBaseObjList::FindById(unsigned int id) {

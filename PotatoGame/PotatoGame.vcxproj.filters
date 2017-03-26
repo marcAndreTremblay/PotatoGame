@@ -25,6 +25,9 @@
     <Filter Include="Header Files\PGEngine">
       <UniqueIdentifier>{556ca62f-f9b0-4ad0-8b0d-4eaf0f7fa5fe}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\PGGui\UIElement">
+      <UniqueIdentifier>{ab25fff7-c81c-4b5f-ae70-85634104da8a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -87,9 +90,6 @@
     <ClInclude Include="stdafx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="PGUIBaseElement.h">
-      <Filter>Header Files\PGGui</Filter>
-    </ClInclude>
     <ClInclude Include="PGShaderSources.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -119,6 +119,21 @@
     </ClInclude>
     <ClInclude Include="PGMapGrid.h">
       <Filter>Header Files\PGGameEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="PGUIBaseElement.h">
+      <Filter>Header Files\PGGui</Filter>
+    </ClInclude>
+    <ClInclude Include="PGTree.h">
+      <Filter>Header Files\PGUtil</Filter>
+    </ClInclude>
+    <ClInclude Include="PGGameModel.h">
+      <Filter>Header Files\PGEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="PGUITreeList.h">
+      <Filter>Header Files\PGGui\UIElement</Filter>
+    </ClInclude>
+    <ClInclude Include="PGUISelectList.h">
+      <Filter>Header Files\PGGui\UIElement</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

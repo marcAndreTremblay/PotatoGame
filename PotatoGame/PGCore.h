@@ -1,6 +1,7 @@
 #if !defined(PG_CORE_H)
 #define PG_CORE_H
 
+
 namespace PGCore {
 
 	typedef glm::int8 int8;

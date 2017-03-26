@@ -34,20 +34,5 @@ StdAfx.h, StdAfx.cpp
 /////////////////////////////////////////////////////////////////////////////
 Other notes:
 
-AppWizard uses "TODO:" comments to indicate parts of the source code you
-should add to or customize.
 
 /////////////////////////////////////////////////////////////////////////////
-class _className_
-{
-protected:
-	/* Variable */
-	/* Functions */
-private:
-	/* Variable */
-	/* Functions */
-public:
-	/* Variable */
-	/* Constructors */
-	/* Functions */
-};

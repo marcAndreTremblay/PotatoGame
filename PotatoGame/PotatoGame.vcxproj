@@ -89,6 +89,7 @@
     <ClInclude Include="PGBaseEvent.h" />
     <ClInclude Include="PGFont.h" />
     <ClInclude Include="PGEditorInstance.h" />
+    <ClInclude Include="PGGameModel.h" />
     <ClInclude Include="PGMapGrid.h" />
     <ClInclude Include="PGMousePicker.h" />
     <ClInclude Include="PGEntity.h" />
@@ -105,9 +106,12 @@
     <ClInclude Include="PGString.h" />
     <ClInclude Include="PGControler.h" />
     <ClInclude Include="PGTexture.h" />
+    <ClInclude Include="PGTree.h" />
     <ClInclude Include="PGUIBaseElement.h" />
     <ClInclude Include="PGUICanvas.h" />
     <ClInclude Include="PGUICore.h" />
+    <ClInclude Include="PGUISelectList.h" />
+    <ClInclude Include="PGUITreeList.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>

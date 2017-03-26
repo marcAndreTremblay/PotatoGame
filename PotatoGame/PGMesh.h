@@ -17,7 +17,7 @@ namespace PGEngine {
 			GLuint VertexShaderID;	
 			GLuint FragmentShaderID;
 			GLuint GeometryShaderID;
-			GLuint CompileShaderScr(GLuint shaderId, const char * shader_scr) {
+			GLuint CompileShaderScr(GLuint shaderId, const char * shader_scr)	 {
 				GLint Result = GL_FALSE;
 				int InfoLogLength;
 	
@@ -106,7 +106,7 @@ namespace PGEngine {
 				glDeleteProgram(this->ShaderID);
 			}
 			void PGShader::Use() {
-			glUseProgram(this->ShaderID);
+				glUseProgram(this->ShaderID);
 		}
 	};
 

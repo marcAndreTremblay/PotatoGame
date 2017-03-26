@@ -15,7 +15,7 @@ namespace PGEngine {
 	class PGBaseRenderer {
 	protected:
 		GLuint Renderer_UBO_Ref_Id; //ubo binding point 1
-		GLuint SceneLight_UBO_Ref_Id; //ubo binding point 2
+		GLuint SceneLight_UBO_Ref_Id; //ubo binding point 2  //Todo(Marc): Remove thi from renderer
 		GLuint SceneAdvanceLight_UBO_Ref_Id; //ubo binding point 3
 	private:
 		PGTextMesh *textMesh;
@@ -29,7 +29,7 @@ namespace PGEngine {
 		PGMaterielHexagoneMesh *materialHexagoneMesh;
 		PGUIPanelMesh* ui_panel_Mesh;
 		PGUIImageMesh* ui_image_mesh;
-
+		PGMModelMesh* model_renderer;
 		
 			
 
@@ -124,8 +124,8 @@ namespace PGEngine {
 			glBindBuffer(GL_UNIFORM_BUFFER, this->SceneAdvanceLight_UBO_Ref_Id);
 				glBufferData(GL_UNIFORM_BUFFER, 4 * sizeof(glm::vec4), NULL, GL_DYNAMIC_DRAW); // allocate bytes of memory
 					glBindBufferBase(GL_UNIFORM_BUFFER, 3, this->SceneAdvanceLight_UBO_Ref_Id);
-
-
+					model_renderer = new PGMModelMesh();
+						model_renderer->Build();
 			this->ui_image_mesh = new PGUIImageMesh();
 			this->ui_image_mesh->Build();
 

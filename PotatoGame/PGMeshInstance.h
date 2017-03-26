@@ -3,7 +3,7 @@
 
 
 #include "stdafx.h"
-
+#include "PGAssetManager.h"
 #include "PGCore.h"
 #include "PGList.h"
 #include "PGShaderSources.h"
@@ -385,7 +385,7 @@ namespace PGGame {
 				glGenBuffers(1, &this->EBO);
 			}
 			~PGMaterielHexagoneMesh() {
-				glDeleteBuffers(1, &this->EBO);
+			//	glDeleteBuffers(1, &this->EBO);
 			}
 			v3 ReadVector3(const GLfloat* target) {
 				v3 vec = {};
@@ -686,6 +686,62 @@ namespace PGGame {
 
 				glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)(4 * sizeof(GLfloat)));
 				glEnableVertexAttribArray(1);
+
+				PGBuildableObject::EndBuilding();
+			}
+		};
+
+
+
+		class PGMModelMesh :public PGMesh {
+		private:
+			GLuint Unif_Translate;
+			GLuint Unif_Scale;
+
+			GLuint Unif_Mat_Ambient;
+			GLuint Unif_Mat_Diffuse;
+			GLuint Unif_Mat_Specular;
+			GLuint Unif_Mat_Shinniness;
+		public:
+			PGMModelMesh() :
+				PGMesh(new PGShader(model_vertex_shader, Model_FragShader)) {
+			}
+			~PGMModelMesh() {
+				
+			}
+			void PGMModelMesh::Render(RawModelData* model, v3 possition, v3 size/*, const PGMaterial* material*/) {
+				if (this->PGMesh::IsBuild() == true) {
+					this->Shader->Use();
+					glBindVertexArray(model->VAO);
+
+					//Vertex shader uniform variable
+					glUniformMatrix4fv(this->Unif_Translate, 1, GL_FALSE, &glm::translate(m4(1.f), possition)[0][0]);
+					glUniformMatrix4fv(this->Unif_Scale, 1, GL_FALSE, &glm::scale(m4(1.f), size)[0][0]);
+
+					//// Set material properties
+					//glUniform3fv(Unif_Mat_Ambient, 1, &material->ambient[0]);
+					//glUniform3fv(Unif_Mat_Diffuse, 1, &material->diffuse[0]);
+					//glUniform3fv(Unif_Mat_Specular, 1, &material->specular[0]);
+					//glUniform1f(Unif_Mat_Shinniness, material->shininess);
+
+					glDrawArrays(GL_TRIANGLES, 0, model->face_count*3);
+				}
+			}
+			void PGMModelMesh::Build() {
+				PGBuildableObject::StartBuilding();
+				glUniformBlockBinding(this->Shader->ShaderID, glGetUniformBlockIndex(this->Shader->ShaderID, "Renderer_UBO"), 1);
+				glUniformBlockBinding(this->Shader->ShaderID, glGetUniformBlockIndex(this->Shader->ShaderID, "SceneAdvanceLightData_UBO"), 3);
+
+
+				this->Unif_Translate = glGetUniformLocation(this->Shader->ShaderID, "Translate");
+				this->Unif_Scale = glGetUniformLocation(this->Shader->ShaderID, "Scale");
+
+			/*	this->Unif_Mat_Ambient = glGetUniformLocation(this->Shader->ShaderID, "Material.ambient");
+				this->Unif_Mat_Diffuse = glGetUniformLocation(this->Shader->ShaderID, "Material.diffuse");
+				this->Unif_Mat_Specular = glGetUniformLocation(this->Shader->ShaderID, "Material.specular");
+				this->Unif_Mat_Shinniness = glGetUniformLocation(this->Shader->ShaderID, "Material.shininess");*/
+
+
 
 				PGBuildableObject::EndBuilding();
 			}

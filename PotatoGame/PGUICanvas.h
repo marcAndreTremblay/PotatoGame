@@ -1,6 +1,9 @@
 #if !defined(PG_UI_CANVAS_H)
 #define PG_UI_CANVAS_H
 
+#include "PGUIBaseElement.h"
+
+
 #include "PGCore.h"
 #include "PGList.h"
 using namespace PGCore;
@@ -16,8 +19,9 @@ using namespace PGCore;
 #include "PGMousePicker.h"
 using namespace PGEngine;
 
-#include "PGUIBaseElement.h"
 
+#include "PGUITreeList.h"
+#include "PGUISelectList.h"
 
 class PGUICanvas : public PGBuildableObject {
 	protected:	
@@ -25,13 +29,10 @@ class PGUICanvas : public PGBuildableObject {
 			this->NextElementId += 1;
 		return NextElementId;
 	}
-
 	private:
 		unsigned int NextElementId;
-		m4* ortho_Projection;
 		PGMousePicker* MousePicker;
 		PGGameWindow* GameWindow;
-		PGEventWorkGroup* work_group; //Un-managed resources
 		PGBaseObjList<PGBaseUIElement>* element_list;
 	public:
 		PGUICanvas() {
@@ -97,7 +98,7 @@ class PGUICanvas : public PGBuildableObject {
 								label_1->Set_Id(this->GetNextFreeId());
 								label_1->SetSize(v2(100.f, 64.f));
 								label_1->SetPossition(v2(60.f, 150.f));
-								label_1->SetText("pP\n");
+								label_1->SetText("Label test\n");
 								label_1->SetFont(asset_manager->SeachForFont("Roboto_Bold\n"));
 							menu_window->AddChild(label_1);
 
@@ -110,16 +111,23 @@ class PGUICanvas : public PGBuildableObject {
 							selected_box_test->AddListElement(child_button_2);
 						menu_window->AddChild(selected_box_test);
 
+						PGUISelectView* select_view_test = new PGUISelectView();
+							select_view_test->SetSize(v2(300, 50));
+							select_view_test->SetPossition(v2(0.f, 0.f));
 
-				
+						PGUITreeView* tree_list_test = new PGUITreeView(asset_manager->SeachForFont("Hammersmith_Regular\n"));
+							tree_list_test->SetSize(v2(200, 300));
+							tree_list_test->SetPossition(v2(0.f, 400.f));
+						
+							menu_window->AddChild(tree_list_test);
 				this->element_list->Add(menu_window);
+				this->element_list->Add(select_view_test);
 			this->EndBuilding();
 		}
 		void PGUICanvas::Render(PGBaseRenderer *renderer) {
 			if (this->IsLock() == false && this->IsBuild() == true) {
 
-				this->ortho_Projection = this->GameWindow->GetOrtho();
-				renderer->SetUIProjection(ortho_Projection);
+				renderer->SetUIProjection(this->GameWindow->GetOrtho());
 
 				for (PGListNode<PGBaseUIElement> *c_node = element_list->GetHead(); c_node != nullptr; c_node = c_node->GetNext()) {
 					PGBaseUIElement* current_ui_element = c_node->GetData();
@@ -128,7 +136,7 @@ class PGUICanvas : public PGBuildableObject {
 			}
 		}
 		void PGUICanvas::Update(PGControler *controler, double timeElapse) {
-			v3 mouse_ui_space = this->MousePicker->TranformWindowStoUIS(controler,this->ortho_Projection);
+			v3 mouse_ui_space = this->MousePicker->TranformWindowStoUIS(controler, this->GameWindow->GetOrtho());
 			for (PGListNode<PGBaseUIElement> *c_node = element_list->GetHead(); c_node != nullptr; c_node = c_node->GetNext()) {
 				PGBaseUIElement* current_ui_element = c_node->GetData();
 					current_ui_element->Update(controler, timeElapse, &mouse_ui_space);

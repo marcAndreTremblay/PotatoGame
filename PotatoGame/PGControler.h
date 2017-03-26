@@ -45,6 +45,7 @@ enum PGKey
 	PGKey_2 = GLFW_KEY_2,
 	PGKey_3 = GLFW_KEY_3,
 	PGKey_4 = GLFW_KEY_4,
+	PGKey_5 = GLFW_KEY_5,
 	PGKey_Space = GLFW_KEY_SPACE,
 	PGKey_Up = GLFW_KEY_UP,
 	PGKey_Down = GLFW_KEY_DOWN,
@@ -72,8 +73,8 @@ class PGControler
 {
 protected:
 private:
-	PGLList<PGControlerKey>* Keyboard_Keys;
-	PGLList<PGControlerKey>* Mouse_Keys;
+	PGList<PGControlerKey>* Keyboard_Keys;
+	PGList<PGControlerKey>* Mouse_Keys;
 	void PGControler::AddMouseKey(PGMouseKey new_key_id, char* _Ref_Name = nullptr) {
 		Mouse_Keys->Add(new PGControlerKey(new_key_id, _Ref_Name));
 	}
@@ -85,12 +86,12 @@ public:
 	v2 DeltaPossition;
 	PGControler()
 	{
-		this->Mouse_Keys = new PGLList<PGControlerKey>();
+		this->Mouse_Keys = new PGList<PGControlerKey>();
 			this->AddMouseKey(PGMouse_Left, "Space bar\n");
 			this->AddMouseKey(PGMouse_Center, "Space bar\n");
 			this->AddMouseKey(PGMouse_Right, "Space bar\n");
 		
-		this->Keyboard_Keys = new PGLList<PGControlerKey>();
+		this->Keyboard_Keys = new PGList<PGControlerKey>();
 		DeltaPossition = {};
 			this->AddKeyboardKey(PGKey_Space, "Space bar\n");
 			this->AddKeyboardKey(PGKey_Up, "Up_Key\n");
@@ -101,6 +102,7 @@ public:
 			this->AddKeyboardKey(PGKey_2, "2_Key\n");
 			this->AddKeyboardKey(PGKey_3, "3_Key\n");
 			this->AddKeyboardKey(PGKey_4, "4_Key\n");
+			this->AddKeyboardKey(PGKey_5, "4_Key\n");
 			this->AddKeyboardKey(PGKey_A, "A_Key\n");
 			this->AddKeyboardKey(PGKey_D, "D_Key\n");
 			this->AddKeyboardKey(PGKey_W, "W_Key\n");

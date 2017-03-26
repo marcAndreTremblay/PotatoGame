@@ -28,7 +28,7 @@ class MapNode {
 public:
 	int Index;
 	float Height; //Note(Marc) : Maybe we should not keep this in here , instead calculte the node_link value with it
-	NodeLink link_array[5]; //Note(Marc): don't know if this should be dynamic , will help if this stay static for speed
+	NodeLink link_array[6]; //Note(Marc): don't know if this should be dynamic , will help if this stay static for speed
 	MapNode() {
 		Index = -1;
 		Height = 0;
@@ -48,18 +48,66 @@ public:
 	MapPathGraph(int array_size, int stride, r32* height_array) {
 		this->node_array = (MapNode*)malloc(sizeof(MapNode)*array_size);
 		
+		
+
 		// Step 1  : Build all nodes
 		for (int i = 0; i < array_size; i++) {
 			node_array[i].Height = height_array[i];
 			node_array[i].Index = i;
 		}
 		// Step 2 : Build all links
+		int row_cpt = 0;
+		int row_min = row_cpt*stride;
+		int row_max = row_cpt*(stride)+(stride - 1);
 		for (int i = 0; i < array_size; i++) {
-			if (node_array[i].Index - 1 >= 0) {
-				
+			int bottom_l, bottom_r, top_l, top_r, right, left;
+			if (row_cpt % 2 == 0) {//Even row
+				bottom_l = i - stride - 1 ;
+				bottom_r  = i - stride;
+				top_l = i + stride + 1;
+				top_r = i + stride;
+				right = i + 1;
+				left = i - 1;
 			}
-			if (node_array[i].Index + 1 < array_size) {
+			else {//Odd row
+				bottom_l = i - stride ;
+				bottom_r = i - stride + 1;
+				top_l = i + stride;
+				top_r = i + stride + 1;
+				right = i + 1;
+				left = i - 1;
+			}
+			//Check node validity 
+			if (top_l < array_size && 
+				top_l >= row_min + stride ) {
 
+			}
+			if (top_r < array_size &&
+				top_r <= row_max + stride) {
+
+			}
+			if (bottom_l >= 0 &&
+				bottom_l >= row_min - stride)  {
+
+			}
+			if (bottom_r >= 0 &&
+				bottom_r <= row_max - stride) {
+
+			}
+			if (right < array_size && 
+				right <= row_max) {
+
+			}
+			if (left >= 0 &&
+				left >= row_min) {
+
+			}
+
+			//This instruction must be at the end of the for loop
+			if (i % 7 == 0) {
+				row_cpt++;
+				row_min = row_cpt*stride;
+				row_max = row_cpt*(stride)+(stride - 1);
 			}
 		}
 
@@ -75,7 +123,7 @@ public:
 	r32* grid_height_data = nullptr;
 	PGMaterial* grid_material_data = nullptr;
 	bool* selected_indexes = nullptr;
-
+	int* tile_type = nullptr;
 	v2 Grid_size;
 	r32 Tile_size;
 	PGGridRawData() {
@@ -107,7 +155,7 @@ public:
 		this->grid_height_data = (r32*)malloc(sizeof(r32)*grid_size.x*grid_size.y);
 		this->grid_material_data = (PGMaterial*)malloc(sizeof(PGMaterial)*grid_size.x*grid_size.y);
 		this->selected_indexes = (bool*)malloc(sizeof(bool)*grid_size.x*grid_size.y);
-
+		this->tile_type = (int*)malloc(sizeof(int)*grid_size.x*grid_size.y);
 
 		int index_cpt = 0;
 		for (int y_xpt = 0; y_xpt < grid_size.y; y_xpt++) {
@@ -134,13 +182,12 @@ public:
 		delete(grid_pos_data);
 		delete(grid_height_data);
 		delete(grid_material_data);
-		delete(selected_indexes);
+		delete(selected_indexes);	
+		delete(tile_type);
 	}
 	void SaveToFile(char *file_path) {
 		printf("Saving to |%s|\n", file_path);
-		FILE * file_2 = nullptr;
-		fopen_s(&file_2, file_path, "wb");
-
+		FILE * file_2 = fopen(file_path, "wb");
 		if (file_2 != nullptr) {
 			int result = 0;
 			result += fwrite(&Grid_size.x, sizeof(float), 1, file_2);
@@ -151,6 +198,7 @@ public:
 			v4* tempo_p_ptr = grid_pos_data;
 			r32* tempo_h_ptr = grid_height_data;
 			PGMaterial* tempo_m_ptr = grid_material_data;
+			int* tempo_tt_ptr = tile_type;
 			for (int i = 0; i < Grid_size.x*Grid_size.y; i++) {
 				result = fwrite((void*)tempo_p_ptr, sizeof(v4), 1, file_2);
 				if (ferror(file_2) != 0 || result != 1) { printf(" %i -- Error possition saving\n", i); }
@@ -158,9 +206,12 @@ public:
 				if (ferror(file_2) != 0 || result != 1) { printf(" %i -- Error height saving\n", i); }
 				result = fwrite((void*)tempo_m_ptr, sizeof(PGMaterial), 1, file_2);
 				if (ferror(file_2) != 0 || result != 1) { printf(" %i -- Error material saving\n", i); }
+				result = fwrite((void*)tempo_tt_ptr, sizeof(int), 1, file_2);
+				if (ferror(file_2) != 0 || result != 1) { printf(" %i -- Error int saving\n", i); }
 				tempo_h_ptr++;
 				tempo_p_ptr++;
 				tempo_m_ptr++;
+				tempo_tt_ptr++;
 			}
 
 
@@ -194,12 +245,14 @@ public:
 			this->grid_height_data = (r32*)malloc(sizeof(r32)*x*y);
 			this->grid_material_data = (PGMaterial*)malloc(sizeof(PGMaterial)*x*y);
 			this->selected_indexes = (bool*)malloc(sizeof(bool)*x*y);
+			this->tile_type = (int*)malloc(sizeof(int)*x*y);
 
 			int loaded_element_count = 0;
 
 			v4* tempo_p_ptr = grid_pos_data;
 			r32* tempo_h_ptr = grid_height_data;
 			PGMaterial* tempo_m_ptr = grid_material_data;
+			int* tempo_tt_ptr = tile_type;
 			for (int i = 0; i < Grid_size.x*Grid_size.y; i++) {
 				result = fread((void*)tempo_p_ptr, sizeof(v4), 1, file_2);
 				if (ferror(file_2) != 0 || result != 1) { printf(" %i -- Error possition reading\n", i); break; }
@@ -207,10 +260,13 @@ public:
 				if (ferror(file_2) != 0 || result != 1) { printf(" %i -- Error height reading\n", i); break; }
 				result = fread((void*)tempo_m_ptr, sizeof(PGMaterial), 1, file_2);
 				if (ferror(file_2) != 0 || result != 1) { printf(" %i -- Error material reading\n", i); break; }
+				result = fread((void*)tempo_tt_ptr, sizeof(int), 1, file_2);
+				if (ferror(file_2) != 0 || result != 1) { printf(" %i -- Error tile type reading\n", i); break; }
 				loaded_element_count++;
 				tempo_h_ptr++;
 				tempo_p_ptr++;
 				tempo_m_ptr++;
+				tempo_tt_ptr++;
 			}
 
 

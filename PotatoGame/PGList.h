@@ -23,23 +23,23 @@ namespace PGCore {
 
 
 	template <class T>
-	class PGLList {
+	class PGList {
 	private:
 		/* Variable */
 		PGListNode<T>* head;
 		PGListNode<T>* tail;
-		int element_count;
 		bool managing_object;
 	public:
 		/* Variable */
+		int element_count;
 		/* Constructors */
-		PGLList(bool manage_obj = false) {
+		PGList(bool manage_obj = false) {
 			this->managing_object = manage_obj;
 			this->element_count = 0;
 			this->head = nullptr;
 			this->tail = nullptr;
 		}
-		~PGLList() {
+		~PGList() {
 			PGListNode<T>* next_node = head;
 			while (next_node != nullptr) {
 				PGListNode<T>* current_node = next_node;
@@ -51,10 +51,10 @@ namespace PGCore {
 			}
 		}
 		/* Functions */
-		PGListNode<T>* PGLList::GetHead() {
+		PGListNode<T>* PGList::GetHead() {
 			return this->head;
 		}
-		virtual void PGLList::Add(T* new_element) {
+		virtual void PGList::Add(T* new_element) {
 			PGListNode<T> *new_node = new PGListNode<T>(new_element);
 			this->element_count++;
 			if (head == nullptr) {
@@ -66,7 +66,7 @@ namespace PGCore {
 				this->tail = new_node;
 			}
 		}
-		void PGLList::Clear() {
+		void PGList::Clear() {
 			PGListNode<T>* old_head = this->head;
 			this->head = nullptr;
 			this->tail = nullptr;
@@ -82,7 +82,7 @@ namespace PGCore {
 				delete(current_node);
 			}
 		}
-		void PGLList::Remove(T* target_element) {
+		void PGList::Remove(T* target_element) {
 			PGListNode<T>* last_visited_node = this->head;
 			PGListNode<T>* current_node = this->head;
 			while (current_node != nullptr) {
@@ -99,7 +99,7 @@ namespace PGCore {
 			}
 			
 		}
-		T* PGLList::GetAt(int target_index) {
+		T* PGList::GetAt(int target_index) {
 			if (target_index < 0 || target_index > element_count) return nullptr;
 			int cpt_index = 0;
 			PGListNode<T>* next_node = head;

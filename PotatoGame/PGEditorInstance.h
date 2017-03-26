@@ -46,7 +46,8 @@ public:
 			this->AssetManager->LoadTexture(PG_BMP, "Asset/uvtemplate.bmp", "UV_Template\n");
 			this->AssetManager->LoadTexture(PG_PNG, "Asset/texture/asteroid_1.png", "Asteroid_1\n");
 			this->AssetManager->LoadTexture(PG_PNG, "Asset/texture/solar_panel.png", "SolarPanel\n");
-			 
+			this->AssetManager->LoadTexture(PG_PNG, "Asset/texture/Water_0.png", "Water\n");
+
 			//Load a basic Font for debugging
 			this->Default_Engine_Font = this->AssetManager->LoadFont("Asset/font/Roboto-Bold.ttf", "Roboto_Bold\n");
 			this->AssetManager->LoadFont("Asset/font/Roboto-Light.ttf", "Roboto-Light\n");

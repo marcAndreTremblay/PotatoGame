@@ -7,7 +7,7 @@
 #include "PGBaseRenderer.h"
 #include "PGControler.h"
 #include "PGEntity.h"
-#include "PGBaseEvent.h"
+
 #include "PGString.h"
 #include "PGBaseObjectList.h"
 #include "PGMousePicker.h"

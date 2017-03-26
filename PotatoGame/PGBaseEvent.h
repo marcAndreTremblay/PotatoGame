@@ -42,14 +42,14 @@ namespace PGEngine{
 		protected:
 		private:
 
-			PGLList<PGBaseEvent>* EventList;
+			PGList<PGBaseEvent>* EventList;
 		public:	
 			PGString* Ref_Name;
 			PGEventWorkGroup(char *ref_name = nullptr) {
 				if (ref_name != nullptr) {
 					this->Ref_Name = new PGString(ref_name);
 				}
-				this->EventList = new PGLList<PGBaseEvent>();
+				this->EventList = new PGList<PGBaseEvent>();
 			}
 			~PGEventWorkGroup() {
 				delete(Ref_Name);
@@ -86,10 +86,10 @@ namespace PGEngine{
 	class PGEventManager {
 		protected:
 		private:
-			PGLList<PGEventWorkGroup>* WorkGroups;
+			PGList<PGEventWorkGroup>* WorkGroups;
 		public:
 			PGEventManager() {
-				WorkGroups = new PGLList<PGEventWorkGroup>();
+				WorkGroups = new PGList<PGEventWorkGroup>();
 			}
 			~PGEventManager() {
 				delete(WorkGroups);

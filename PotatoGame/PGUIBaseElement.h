@@ -4,100 +4,7 @@
 
 #include "PGUICore.h"
 
-enum UIEventCode {
-	UIEvent_Nothing = 0,
-	UIEvent_Hide_Window = 1,
-	UIEvent_Show_Window = 2,
-	UIEvent_Button_Press = 3,
-	UIEvent_Button_Release = 4
-};
-class PGUIEvent {
-public:
-	void *sender;
-	UIEventCode code;
-	PGUIEvent(void* sender_ptr, UIEventCode event_code) {
-		this->code = event_code;
-		this->sender = sender_ptr;
-	}
-	PGUIEvent() {
-		this->code = UIEvent_Nothing;
-		this->sender = nullptr;
-	}
-	~PGUIEvent() {
 
-	}
-};
-class PGEventListener {
-public:
-	PGEventListener() {
-
-	}
-	~PGEventListener() {
-
-	}
-	virtual void PGEventListener::OnEvent(PGUIEvent *event) {
-		
-	}
-};
-class PGEventEmiter {
-protected:
-private:
-	PGLList<PGEventListener> *listener_list;
-public:
-	PGEventEmiter() {
-		this->listener_list = new PGLList<PGEventListener>(false);
-	}
-	~PGEventEmiter() {
-		delete(this->listener_list);
-	}	
-	void PGEventEmiter::AddListener(PGEventListener* new_listener) {
-		if (new_listener != nullptr) {
-			this->listener_list->Add(new_listener);
-		}
-	}
-	void PGEventEmiter::EmiteEvent(PGUIEvent* new_event) {
-		for (PGListNode<PGEventListener> *c_node = listener_list->GetHead(); c_node != nullptr; c_node = c_node->GetNext()) {
-			PGEventListener* current_ui_listener = c_node->GetData();
-			current_ui_listener->OnEvent(new_event);
-		}
-		delete(new_event);
-	}
-};
-
-enum UIElementState {
-	UIState_Idle = 0,
-	UIState_Hot = 1,
-	UIState_Moving = 2,
-	UIState_Left_Press = 3,
-	UIState_Right_Press = 4,
-	UIState_Drag = 5,
-	UIState_Resizing = 6,
-	UIState_Selecting = 7
-};
-class PGUIMargin {
-public:
-	r32 Left, Right, Top, Bottom;
-	PGUIMargin(r32 left, r32 right, r32 top, r32 bottom) {
-		this->Left = left;
-		this->Right = right;
-		this->Top = top;
-		this->Bottom = bottom;
-	}
-	PGUIMargin(r32 margin) {
-		this->Left = margin;
-		this->Right = margin;
-		this->Top = margin;
-		this->Bottom = margin;
-	}
-	PGUIMargin() {
-		this->Left = 0.f;
-		this->Right = 0.f;
-		this->Top = 0.f;
-		this->Bottom = 0.f;
-	}	
-	~PGUIMargin() {
-	}
-};
 
 class PGBaseUIElement : public PGBaseObject, public PGEventEmiter, public PGEventListener {
 protected:
@@ -114,15 +21,7 @@ protected:
 		}
 		return false;
 	}
-	bool PGBaseUIElement::IsIntersection(v3* mouse_location, v2 size, v2 rel_possition) {
-		if ((mouse_location->x > rel_possition.x) && //Left
-			(mouse_location->x < rel_possition.x + (size.x)) && //Right
-			(mouse_location->y > rel_possition.y) && //Bottom
-			(mouse_location->y < rel_possition.y + (size.y))) { //Top
-			return true;
-		}
-		return false;
-	}
+
 	float GetRelativeZ() {
 		if (this->Parent != nullptr) {
 			return this->Parent->GetRelativeZ() + 0.001f;
@@ -155,7 +54,10 @@ public:
 		delete(this->Child_list);
 		this->Parent = nullptr;
 	}
-	
+	virtual bool PGBaseUIElement::IsActif() {
+		if (this->State == UIState_Hot) return true;
+		return false;
+	}
 	virtual void PGBaseUIElement::SetPossition(v2 possition) {
 		this->Possition = possition;
 	}
@@ -212,14 +114,9 @@ public:
 		}
 		return (this->Possition);
 	}
-	virtual bool PGBaseUIElement::IsActif() {
-		if (this->State == UIState_Hot) return true;
-		return false;
-	}
+
 
 };
-
-
 
 
 class PGUILabel : public PGBaseUIElement {
@@ -431,13 +328,13 @@ public:
 };
 
 
-
 class PGUISelectBox : public PGBaseUIElement {
 protected:
 private:
-	PGLList<PGBaseObject> *element_list;
+	PGList<PGBaseObject> *element_list;
 	int selected_index = 1; //Note(Marc): -1 for no selection
-	int index_to_show = 5;
+	int hot_index = -1;
+
 
 	//Fix property
 	PGFont *font;
@@ -448,7 +345,7 @@ private:
 	v4 text_color = v4(0.8f, 0.8f, 0.8f, 1.f);
 public:
 	PGUISelectBox() {
-		element_list = new PGLList<PGBaseObject>(false);
+		element_list = new PGList<PGBaseObject>(false);
 	}
 	~PGUISelectBox() {
 		delete(element_list);
@@ -519,19 +416,14 @@ public:
 						}
 						break;
 								}
-				case UIState_Selecting:{
-						if (controler->IsPressed(PGMouse_Left) == true) {
-							v3 rec_location = v3(this->GetRelativePossition(), 0);
-							rec_location.y += this->element_size.y + element_offset;
+				case UIState_Selecting:{						   
+						if (controler->IsPressed(PGMouse_Left) == true) {							
 							if (this->IsIntersection(mouse_ui_possition)) {
 								this->State = UIState_Hot;
 							}
 							else {
 								this->State = UIState_Idle;
 							}
-
-
-							
 							this->EmiteEvent(new PGUIEvent(this, UIEvent_Button_Press));
 						}
 						break;
@@ -542,37 +434,7 @@ public:
 	}
 };
 
-class PGUITreeList : public PGBaseUIElement {
-protected:
-private:
-	float child_advance = 10.f;
-public:
 
-	PGUITreeList() {
-
-	}
-	~PGUITreeList() {
-
-	}
-	virtual bool PGUITreeList::IsActif() override {
-		if (this->State != UIState_Hot) return true;
-		return false;
-	}
-	virtual void PGUITreeList::Render(PGBaseRenderer *renderer) override {
-		if (this->IsVisible == true) {
-			
-		}
-		PGBaseUIElement::Render(renderer);
-	}
-	virtual bool PGUITreeList::Update(PGControler *controler, double timeElapse, v3* mouse_ui_possition) {
-		bool isChildActive = PGBaseUIElement::Update(controler, timeElapse, mouse_ui_possition);
-		if (isChildActive == false) {
-			
-			
-		}
-		return isChildActive;
-	}
-};
 
 
 

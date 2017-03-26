@@ -35,6 +35,7 @@ namespace PGEngine {
 			
 			PGMousePicker* MousePicker;
 
+
 			virtual void PGBaseGame::HandlerEvents() {
 				if (glfwWindowShouldClose(this->GameWindow->Gl_Window) == 1) {
 					this->ShouldGameClose = true;
@@ -103,7 +104,7 @@ namespace PGEngine {
 				double updateFctTimer = 0;
 				double UpdateFrequency = PG_60HZT;
 				double last_update_pass_stamp = 0;
-				bool b2 = true;
+				
 				while (this->ShouldGameClose == false) {
 
 					current_pass_time_stamp = glfwGetTime();

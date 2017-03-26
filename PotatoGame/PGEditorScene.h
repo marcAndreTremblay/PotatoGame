@@ -20,13 +20,13 @@
 
 class PGTerrainEditorScene : public PGBaseScene {
 	protected:
-	private:
-		v3 light_color =  v3(1.f, 1.f, 1.f);
-		
+	private:	
 		PGGridRawData *grid_data;
 
 		PGLight scene_light;
-
+		RawModelData *test_model;
+		RawModelData *test_model2;
+		RawModelData *test_model3;
 		double time;
 		double tempo_var;
 		
@@ -35,12 +35,12 @@ class PGTerrainEditorScene : public PGBaseScene {
 			this->time = 0.1f;
 			this->tempo_var = 0.1f;
 			this->scene_light = PGLight();
-			this->scene_light.position = v4(-1.f, -1.f, 5.f, 1.f);
+			this->scene_light.position = v4(15.f, 15.f, 14.f, 1.f);
 			
 			this->scene_light.diffuse = v4(1.f, 1.f, 1.f, 1.f);
-			this->scene_light.ambient = v4(1.f, 1.f, 1.f, 1.f);
-			this->scene_light.specular = v4(0.75f, 0.75f, 0.75f, 1.f);
-
+			this->scene_light.ambient = v4(0.6f, 0.6f, 0.6f, 1.f);
+			this->scene_light.specular = v4(0.6f, 0.6f, 0.6f, 1.f);
+			
 		}
 		~PGTerrainEditorScene() {
 			delete(grid_data);
@@ -51,23 +51,39 @@ class PGTerrainEditorScene : public PGBaseScene {
 		void PGTerrainEditorScene::Render(PGBaseRenderer *renderer) override {
 			PGBaseScene::Render(renderer);
 	
-			renderer->PushLightPossition(&scene_light.position);
-			renderer->PushLightColor(&light_color);
+			renderer->PushLightPossition(&scene_light.position);;
 			renderer->PushLightData(&scene_light);
 
 			renderer->axisMesh->Render(v3(0.f, 0.f, 0.f), v4(0.f, 0.f, 1.f, 1.f));
-			renderer->cubeMesh->Render(v3(scene_light.position.x, scene_light.position.y, scene_light.position.z), v3(0.1f, 0.1f, 0.1f), v4(light_color, 1.f));
+			renderer->cubeMesh->Render(v3(scene_light.position.x, scene_light.position.y, scene_light.position.z), v3(0.1f, 0.1f, 0.1f), scene_light.diffuse);
 	
+			if (test_model != nullptr) {
+				renderer->model_renderer->Render(test_model, v3(5.f, 5.f, 17.f), v3(1.f, 1.f, 1.f));
+			}
+			if (test_model2 != nullptr) {
+				renderer->model_renderer->Render(test_model2, v3(10.f, 10.f, 17.f), v3(1.f, 1.f, 1.f));
+			}
+			if (test_model3 != nullptr) {
+				renderer->model_renderer->Render(test_model3, v3(17.f, 17.f, 17.f), v3(1.2f, 1.2f, 1.2f));
+			}
 			if (grid_data != nullptr) {
+				v3 possition;
+				v3 scale;
 				for (int grid_index = 0;
 					grid_index < grid_data->Grid_size.x*grid_data->Grid_size.y;
 					grid_index++) {
+					possition = v3(grid_data->grid_pos_data[grid_index]);
+					scale = v3(grid_data->Tile_size, grid_data->Tile_size, grid_data->grid_height_data[grid_index]);
 					if (grid_data->selected_indexes[grid_index] == true) {
-						renderer->materialHexagoneMesh->Render(v3(grid_data->grid_pos_data[grid_index]), v3(grid_data->Tile_size, grid_data->Tile_size, grid_data->grid_height_data[grid_index]), &Material_Copper);
+						renderer->materialHexagoneMesh->Render(possition, scale, &Material_Copper);
 					}
 					else {
-						renderer->materialHexagoneMesh->Render(v3(grid_data->grid_pos_data[grid_index]), v3(grid_data->Tile_size, grid_data->Tile_size, grid_data->grid_height_data[grid_index]), &grid_data->grid_material_data[grid_index]);						
+						renderer->materialHexagoneMesh->Render(possition, scale, &grid_data->grid_material_data[grid_index]);
 					}
+					if (grid_data->tile_type[grid_index] != 0)  {
+						renderer->model_renderer->Render(test_model3, v3(possition.x, possition.y, scale.z), v3(1.f, 1.f, 1.f));
+					}
+						
 				}
 			}
 		}
@@ -77,10 +93,24 @@ class PGTerrainEditorScene : public PGBaseScene {
 
 			this->Set_Name("GridEditorScene");			
 			
-			this->Camera = new PGBaseCamera(v3(-10, -10, 15), v3(0, 0, 0), v3(0, 0, 1));
+			this->Camera = new PGBaseCamera(
+					v3(-10, -10, 15), //Possition
+					v3(0, 0, 0), //look at
+					v3(0, 0, 1)	 //up
+					);
 			this->Projection_Matrice = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 50.0f);
 			
+			test_model = new RawModelData("Asset/RawOBJ/rock_1_0.obj","Asset/RawOBJ/");
+			test_model->LoadIntoVAO();
+
+			test_model3 = new RawModelData("Asset/RawOBJ/forest.obj", "Asset/RawOBJ/");
+			test_model3->LoadIntoVAO();
+
+			test_model2 = new RawModelData("Asset/RawOBJ/spere2.obj", "Asset/RawOBJ/");
+			test_model2->LoadIntoVAO();
+
 			
+
 			FILE * file_2 = fopen("Asset/layout_1.pgmap", "r");
 			if (file_2 != nullptr) {
 				grid_data = new PGGridRawData();
@@ -137,6 +167,15 @@ class PGTerrainEditorScene : public PGBaseScene {
 						grid_index++) {
 						if (grid_data->selected_indexes[grid_index] == true) {
 							grid_data->grid_material_data[grid_index] = Material_Blue;
+						}
+					}
+				}
+				if (controler->IsRelease(PGKey_5) == true) {
+					for (int grid_index = 0;
+						grid_index < grid_data->Grid_size.x*grid_data->Grid_size.y;
+						grid_index++) {
+						if (grid_data->selected_indexes[grid_index] == true) {
+							grid_data->tile_type[grid_index] = 1;
 						}
 					}
 				}
@@ -204,31 +243,9 @@ class PGTerrainEditorScene : public PGBaseScene {
 				
 			}
 			//*************************************************************************************
+			//Todo(Marc): remove all light systems
 			if (controler->GetKey(PGKey_Left_Ctrl)->IsPress == true) {
-				if (controler->GetKey(PGKey_Left)->IsPress == true) {
-					this->light_color -= v3(0.01f, 0.0f, 0.0f);
-					if (this->light_color.x < 0.f) this->light_color.x = 0.f;
-				}
-				if (controler->GetKey(PGKey_Right)->IsPress == true) {
-					this->light_color += v3(0.01f, 0.0f, 0.0f);
-					if (this->light_color.x > 1.f) this->light_color.x = 1.f;	
-				}
-				if (controler->GetKey(PGKey_Up)->IsPress == true) {
-					this->light_color -= v3(0.f, 0.01f, 0.0f);
-					if (this->light_color.y < 0.f) this->light_color.y = 0.f;
-				}
-				if (controler->GetKey(PGKey_Down)->IsPress == true) {
-					this->light_color += v3(0.f, 0.01f, 0.0f);
-					if (this->light_color.y > 1.f) this->light_color.y = 1.f;
-				}
-				if (controler->GetKey(PGKey_Page_Up)->IsPress == true) {
-					this->light_color -= v3(0.f, 0.0f, 0.01f);
-					if (this->light_color.z < 0.f) this->light_color.z = 0.f;
-				}
-				if (controler->GetKey(PGKey_Page_Down)->IsPress == true) {
-					this->light_color += v3(0.f, 0.0f, 0.01f);
-					if (this->light_color.z > 1.f) this->light_color.z = 1.f;
-				}
+
 			}
 			else {
 				if (controler->GetKey(PGKey_Left)->IsPress == true) {

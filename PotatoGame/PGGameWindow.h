@@ -1,4 +1,4 @@
-#if !defined(PG_GAME_WINDOW_H)
+	#if !defined(PG_GAME_WINDOW_H)
 #define PG_GAME_WINDOW_H
 
 #include "stdafx.h"
@@ -75,6 +75,7 @@ namespace PGEngine {
 			this->WindowWidth = width;
 			this->WindowHeight = height;
 			const GLFWvidmode* mode = glfwGetVideoMode(this->GL_Monitor);
+			
 			glViewport(0, 0, this->WindowWidth, this->WindowHeight);
 			glfwSetWindowSize(this->Gl_Window, this->WindowWidth, this->WindowHeight);
 			glfwSetWindowPos(this->Gl_Window, (mode->width / 2) - (this->WindowWidth / 2), (mode->height / 2) - (this->WindowHeight / 2));
