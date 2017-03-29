@@ -1,8 +1,8 @@
 #if !defined(PG_MAP_GRID_H)
 #define PG_MAP_GRID_H
 
-#include "PGCore.h"
-#include "PGBaseRenderer.h"
+#include "Core.h"
+#include "BaseRenderer.h"
 using namespace PG::Core;
 
 

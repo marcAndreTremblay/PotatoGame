@@ -8,8 +8,8 @@
 //
 //
 //
-//#include "PGString.h"
-//#include "PGTexture.h"
+//#include "String.h"
+//#include "Texture.h"
 
 //
 //class Particle {
@@ -53,10 +53,10 @@
 //};
 //class ParticleManager {
 //public:
-//	PGList <ParticleEffect> *effect_list;
+//	List <ParticleEffect> *effect_list;
 //	int max_active_effect; //?
 //	ParticleManager() {
-//		effect_list = new PGList <ParticleEffect>();
+//		effect_list = new List <ParticleEffect>();
 //	}
 //	~ParticleManager() {
 //		delete(effect_list);

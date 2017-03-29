@@ -4,26 +4,26 @@
 
 #include "stdafx.h"
 #include "AssetManager.h"
-#include "PGCore.h"
-#include "PGList.h"
+#include "Core.h"
+#include "List.h"
 #include "PGShaderSources.h"
-#include "PGMesh.h"
-#include "PGFont.h"
-#include "PGTexture.h"
+#include "Mesh.h"
+#include "Font.h"
+#include "Texture.h"
 
 
 using namespace PG::Engine;
 
 
 
-	class PGLineMesh : public PGMesh {
+	class PGLineMesh : public Mesh {
 	private:
 		GLuint Unif_P1;
 		GLuint Unif_P2;
 		GLuint Unif_Frag_Color;
 	public:
 		PGLineMesh() : 
-			PGMesh(new PGShader(axis_vertex_shader, FragShaderColor4fIn)){
+			Mesh(new PGShader(axis_vertex_shader, FragShaderColor4fIn)){
 			
 		}
 		~PGLineMesh() {
@@ -36,13 +36,13 @@ using namespace PG::Engine;
 
 		}
 	};
-	class PGAxisMesh :public PGMesh {
+	class PGAxisMesh :public Mesh {
 		private:
 			GLuint Unif_Translate;
 			GLuint Unif_Frag_Color;
 		public:
 			PGAxisMesh() :
-				PGMesh(new PGShader(axis_vertex_shader, FragShaderColor4fIn)) {
+				Mesh(new PGShader(axis_vertex_shader, FragShaderColor4fIn)) {
 			}
 			~PGAxisMesh() {
 
@@ -84,14 +84,14 @@ using namespace PG::Engine;
 		}
 	};
 
-	class PGSquareMesh :public PGMesh {
+	class PGSquareMesh :public Mesh {
 		private:
 			GLuint Unif_Translate;
 			GLuint Unif_Scale;
 			GLuint Unif_Frag_Color;
 		public:	
 			PGSquareMesh() :
-				PGMesh(new PGShader(simple_vertex_shader, FragShaderColor4fUnif)) {
+				Mesh(new PGShader(simple_vertex_shader, FragShaderColor4fUnif)) {
 				this->Unif_Scale = 0;
 				this->Unif_Translate = 0;
 			}
@@ -135,14 +135,14 @@ using namespace PG::Engine;
 			glBindVertexArray(0);
 		}
 	};
-	class PGCubeMesh :public PGMesh {
+	class PGCubeMesh :public Mesh {
 		private:
 			GLuint Unif_Translate;
 			GLuint Unif_Scale;
 			GLuint Unif_Frag_Color;
 		public:
 			PGCubeMesh() :
-				PGMesh(new PGShader(simple_vertex_shader, FragShaderColor4fUnif)) {
+				Mesh(new PGShader(simple_vertex_shader, FragShaderColor4fUnif)) {
 				this->Unif_Scale = 0;
 				this->Unif_Translate = 0;
 			}
@@ -187,14 +187,14 @@ using namespace PG::Engine;
 			}
 		};
 
-	class PGLightedCubeMesh :public PGMesh {
+	class PGLightedCubeMesh :public Mesh {
 		private:
 			GLuint Unif_Translate;
 			GLuint Unif_Scale;
 			GLuint Unif_Object_Color;
 		public:
 			PGLightedCubeMesh() :
-				PGMesh(new PGShader(light_vertex_shader, FragShaderBasicLight)) {
+				Mesh(new PGShader(light_vertex_shader, FragShaderBasicLight)) {
 
 
 			}
@@ -211,7 +211,7 @@ using namespace PG::Engine;
 
 			}
 			void PGLightedCubeMesh::Build() {
-				PGBuildableObject::StartBuilding();
+				BuildableObject::StartBuilding();
 
 					glUniformBlockBinding(this->Shader->ShaderID, glGetUniformBlockIndex(this->Shader->ShaderID, "Renderer_UBO"), 1);
 					glUniformBlockBinding(this->Shader->ShaderID, glGetUniformBlockIndex(this->Shader->ShaderID, "SceneLightData_UBO"), 2);
@@ -232,10 +232,10 @@ using namespace PG::Engine;
 					glEnableVertexAttribArray(1);
 					glBindVertexArray(0);
 
-				PGBuildableObject::EndBuilding();
+				BuildableObject::EndBuilding();
 			}
 		};
-	class PGLightedHexagoneMesh :public PGMesh {
+	class PGLightedHexagoneMesh :public Mesh {
 		private:
 			GLuint Unif_Translate;
 			GLuint Unif_Scale;
@@ -253,7 +253,7 @@ using namespace PG::Engine;
 				return vec;
 			}
 			PGLightedHexagoneMesh() :
-				PGMesh(new PGShader(light_vertex_shader, FragShaderBasicLight)) {
+				Mesh(new PGShader(light_vertex_shader, FragShaderBasicLight)) {
 			}
 			~PGLightedHexagoneMesh() {
 			}
@@ -268,7 +268,7 @@ using namespace PG::Engine;
 				glDrawArrays(GL_TRIANGLES, 0, 60);
 			}
 			void PGLightedHexagoneMesh::Build() {
-			PGBuildableObject::StartBuilding();
+			BuildableObject::StartBuilding();
 			int face_count = 20;
 			int vertex_per_face = 3;
 
@@ -315,10 +315,10 @@ using namespace PG::Engine;
 			glEnableVertexAttribArray(1);
 			glBindVertexArray(0);
 
-			PGBuildableObject::EndBuilding();
+			BuildableObject::EndBuilding();
 		}
 	};
-	class PGSolidHexagoneMesh :public PGMesh {
+	class PGSolidHexagoneMesh :public Mesh {
 		private:
 			GLuint EBO;
 			GLuint Unif_Translate;
@@ -326,14 +326,14 @@ using namespace PG::Engine;
 			GLuint Unif_Color;
 		public:
 			PGSolidHexagoneMesh() :
-				PGMesh(new PGShader(hexagone_vertex_shader, FragShaderColor4fUnif)) {
+				Mesh(new PGShader(hexagone_vertex_shader, FragShaderColor4fUnif)) {
 				glGenBuffers(1, &this->EBO);
 			}
 			~PGSolidHexagoneMesh() {
 				glDeleteBuffers(1, &this->EBO);
 			}
 		void PGSolidHexagoneMesh::Render(v3 possition, v3 size, v4 color) {
-			if (this->PGMesh::IsBuild() == true) {
+			if (this->Mesh::IsBuild() == true) {
 				this->Shader->Use();
 				glBindVertexArray(this->VAO);
 
@@ -345,7 +345,7 @@ using namespace PG::Engine;
 			}
 		}
 		void PGSolidHexagoneMesh::Build() {
-			PGBuildableObject::StartBuilding();
+			BuildableObject::StartBuilding();
 
 			glUniformBlockBinding(this->Shader->ShaderID, glGetUniformBlockIndex(this->Shader->ShaderID, "Renderer_UBO"), 1);
 
@@ -366,10 +366,10 @@ using namespace PG::Engine;
 			glEnableVertexAttribArray(0);
 			glBindVertexArray(0);
 
-			PGBuildableObject::EndBuilding();
+			BuildableObject::EndBuilding();
 		}
 	};
-	class PGMaterielHexagoneMesh :public PGMesh {
+	class PGMaterielHexagoneMesh :public Mesh {
 		private:
 			GLuint EBO;
 			GLuint Unif_Translate;
@@ -381,7 +381,7 @@ using namespace PG::Engine;
 			GLuint Unif_Mat_Shinniness;
 		public:
 			PGMaterielHexagoneMesh() :
-				PGMesh(new PGShader(light_vertex_shader, FragShaderMaterializeLight)) {
+				Mesh(new PGShader(light_vertex_shader, FragShaderMaterializeLight)) {
 				glGenBuffers(1, &this->EBO);
 			}
 			~PGMaterielHexagoneMesh() {
@@ -398,7 +398,7 @@ using namespace PG::Engine;
 				return vec;
 			}
 			void PGMaterielHexagoneMesh::Render(v3 possition, v3 size, const PGMaterial* material) {
-				if (this->PGMesh::IsBuild() == true) {
+				if (this->Mesh::IsBuild() == true) {
 					this->Shader->Use();
 					glBindVertexArray(this->VAO);
 
@@ -416,7 +416,7 @@ using namespace PG::Engine;
 				}
 			}
 			void PGMaterielHexagoneMesh::Build() {
-				PGBuildableObject::StartBuilding();
+				BuildableObject::StartBuilding();
 					int face_count = 20;
 					int vertex_per_face = 3;
 
@@ -466,10 +466,10 @@ using namespace PG::Engine;
 					glEnableVertexAttribArray(1);
 					glBindVertexArray(0);
 
-				PGBuildableObject::EndBuilding();
+				BuildableObject::EndBuilding();
 		}
 	};
-	class PGUIPanelMesh :public PGMesh {
+	class PGUIPanelMesh :public Mesh {
 		private:
 			GLuint EBO;
 			GLuint Unif_Translate;
@@ -477,7 +477,7 @@ using namespace PG::Engine;
 			GLuint Unif_Color;
 		public:
 			PGUIPanelMesh() :
-				PGMesh(new PGShader(ui_panel_vertex_shader, FragShaderColor4fUnif)) {
+				Mesh(new PGShader(ui_panel_vertex_shader, FragShaderColor4fUnif)) {
 				glGenBuffers(1, &this->EBO);
 			
 			}
@@ -485,7 +485,7 @@ using namespace PG::Engine;
 				glDeleteBuffers(1, &this->EBO);
 			}
 			void PGUIPanelMesh::Render(v3 possition,v2 size,v4 color) {
-				if (this->PGMesh::IsBuild() == true) {
+				if (this->Mesh::IsBuild() == true) {
 					this->Shader->Use();
 					glBindVertexArray(this->VAO);
 
@@ -497,7 +497,7 @@ using namespace PG::Engine;
 				}
 			}
 			void PGUIPanelMesh::Build() {
-				PGBuildableObject::StartBuilding();
+				BuildableObject::StartBuilding();
 				// .:: Bind UBO ::. 
 				glUniformBlockBinding(this->Shader->ShaderID, glGetUniformBlockIndex(this->Shader->ShaderID, "Renderer_UBO"), 1);
 
@@ -517,10 +517,10 @@ using namespace PG::Engine;
 				glEnableVertexAttribArray(0);
 				glBindVertexArray(0);
 
-				PGBuildableObject::EndBuilding();
+				BuildableObject::EndBuilding();
 			}
 	};
-	class PGUIImageMesh :public PGMesh {
+	class PGUIImageMesh :public Mesh {
 		private:
 			GLuint EBO;
 			GLuint Unif_Translate;
@@ -529,13 +529,13 @@ using namespace PG::Engine;
 			GLuint Unif_Color_Channel;
 		public:
 			PGUIImageMesh() :
-				PGMesh(new PGShader(texture_vertex_shader, texture_fragment_shader)) {
+				Mesh(new PGShader(texture_vertex_shader, texture_fragment_shader)) {
 				glGenBuffers(1, &this->EBO);
 			}
 			~PGUIImageMesh() {
 				glDeleteBuffers(1, &this->EBO);
 			}
-			void PGUIImageMesh::Render(v3 possition, v2 size, PGTexture* texture = nullptr,v4 color_chanel = v4(1.f),r32 orientation = 0.f) {
+			void PGUIImageMesh::Render(v3 possition, v2 size, Texture* texture = nullptr,v4 color_chanel = v4(1.f),r32 orientation = 0.f) {
 					this->Shader->Use();
 					glBindVertexArray(this->VAO);
 					glBindTexture(GL_TEXTURE_2D, texture->OpenGL_Id);
@@ -571,11 +571,11 @@ using namespace PG::Engine;
 			glBindVertexArray(0);
 		}
 	};
-	class PGTileMesh : public PGMesh {
+	class PGTileMesh : public Mesh {
 	private:
 	public:
 		PGTileMesh(): 
-			PGMesh(new PGShader(tile_vertex_shader, tile_fragment_shader)) {
+			Mesh(new PGShader(tile_vertex_shader, tile_fragment_shader)) {
 		}
 		~PGTileMesh() {
 		}
@@ -586,7 +586,7 @@ using namespace PG::Engine;
 
 		}
 	};
-	class PGTextMesh :public PGMesh {
+	class PGTextMesh :public Mesh {
 		private:
 			GLuint EBO;
 			GLuint Unif_Translate;	
@@ -606,15 +606,15 @@ using namespace PG::Engine;
 			}
 		public:
 			PGTextMesh() :
-				PGMesh(new PGShader(text_vertex_shader, text_fragment_shader)) {
+				Mesh(new PGShader(text_vertex_shader, text_fragment_shader)) {
 				glGenBuffers(1, &this->EBO);
 			}
 			~PGTextMesh() {
 				glDeleteBuffers(1, &this->EBO);
 			}			
-			v2 PGTextMesh::Render(char *text_string, v3 possition, v4 color, r32 scale, PGFont *font) {
+			v2 PGTextMesh::Render(char *text_string, v3 possition, v4 color, r32 scale, Font *font) {
 				v2 text_bounding_box = v2(0.f);
-				if (this->PGMesh::IsBuild() == true) {
+				if (this->Mesh::IsBuild() == true) {
 					this->Shader->Use();
 					glBindVertexArray(this->VAO);
 					glUniform4fv(this->Unif_Text_Color, 1, &color[0]);
@@ -663,7 +663,7 @@ using namespace PG::Engine;
 			}
 
 			void  PGTextMesh::Build() override {
-				PGBuildableObject::StartBuilding();
+				BuildableObject::StartBuilding();
 
 
 				glUniformBlockBinding(this->Shader->ShaderID, glGetUniformBlockIndex(this->Shader->ShaderID, "Renderer_UBO"), 1);
@@ -687,26 +687,26 @@ using namespace PG::Engine;
 				glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)(4 * sizeof(GLfloat)));
 				glEnableVertexAttribArray(1);
 
-				PGBuildableObject::EndBuilding();
+				BuildableObject::EndBuilding();
 			}
 		};
 
 
 
-		class PGMModelMesh :public PGMesh {
+		class PGMModelMesh :public Mesh {
 		private:
 			GLuint Unif_Translate;
 			GLuint Unif_Scale;
 
 		public:
 			PGMModelMesh() :
-				PGMesh(new PGShader(model_vertex_shader, Model_FragShader)) {
+				Mesh(new PGShader(model_vertex_shader, Model_FragShader)) {
 			}
 			~PGMModelMesh() {
 				
 			}
 			void PGMModelMesh::Render(RawModelData* model, v3 possition, v3 size/*, const PGMaterial* material*/) {
-				if (this->PGMesh::IsBuild() == true) {
+				if (this->Mesh::IsBuild() == true) {
 					this->Shader->Use();
 					glBindVertexArray(model->VAO);
 
@@ -724,7 +724,7 @@ using namespace PG::Engine;
 				}
 			}
 			void PGMModelMesh::Build() {
-				PGBuildableObject::StartBuilding();
+				BuildableObject::StartBuilding();
 				glUniformBlockBinding(this->Shader->ShaderID, glGetUniformBlockIndex(this->Shader->ShaderID, "Renderer_UBO"), 1);
 				glUniformBlockBinding(this->Shader->ShaderID, glGetUniformBlockIndex(this->Shader->ShaderID, "SceneAdvanceLightData_UBO"), 3);
 
@@ -733,7 +733,7 @@ using namespace PG::Engine;
 				this->Unif_Scale = glGetUniformLocation(this->Shader->ShaderID, "Scale");
 
 
-				PGBuildableObject::EndBuilding();
+				BuildableObject::EndBuilding();
 			}
 		};
 

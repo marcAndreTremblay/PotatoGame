@@ -3,16 +3,16 @@
 
 #include "stdafx.h"
 
-#include "PGCore.h"
-#include "PGBaseRenderer.h"	
-#include "PGBaseScene.h"
-#include "PGControler.h"
-#include "PGEntity.h"
-#include "PGString.h"
-#include "PGBaseScene.h"
-#include "PGBuildableObject.h"
+#include "Core.h"
+#include "BaseRenderer.h"	
+#include "Scene.h"
+#include "Controler.h"
+#include "Entity.h"
+#include "String.h"
+#include "Scene.h"
+#include "BuildableObject.h"
 #include "PGMapGrid.h"
-#include "PGMousePicker.h"
+#include "MousePicker.h"
 
 #include "PGBackgroundMapGridMesh.h"
 #include "PGMapAtlas.h"
@@ -20,7 +20,7 @@
 using namespace PG::Core;
 using namespace PG::Engine;
 
-class PGTerrainEditorScene : public PGBaseScene {
+class PGTerrainEditorScene : public Scene {
 	protected:
 	private:
 		PGMapAtlas * test_atlas;
@@ -34,7 +34,7 @@ class PGTerrainEditorScene : public PGBaseScene {
 		double tempo_var;
 		PGMapMesh* test_mesh;
 	public:
-		PGTerrainEditorScene()	: PGBaseScene() {
+		PGTerrainEditorScene()	: Scene() {
 			this->time = 0.1f;
 			this->tempo_var = 0.1f;
 			this->scene_light = PGLight();
@@ -50,11 +50,11 @@ class PGTerrainEditorScene : public PGBaseScene {
 			delete(test_mesh);
 			delete(test_atlas);
 		}
-		void PGTerrainEditorScene::Update(PGControler *controler, double timeElapse) override {
-			PGBaseScene::Update(controler, timeElapse);
+		void PGTerrainEditorScene::Update(Controler *controler, double timeElapse) override {
+			Scene::Update(controler, timeElapse);
 		}
-		void PGTerrainEditorScene::Render(PGBaseRenderer *renderer) override {
-			PGBaseScene::Render(renderer);
+		void PGTerrainEditorScene::Render(BaseRenderer *renderer) override {
+			Scene::Render(renderer);
 	
 			renderer->PushLightPossition(&scene_light.position);;
 			renderer->PushLightData(&scene_light);
@@ -115,8 +115,8 @@ class PGTerrainEditorScene : public PGBaseScene {
 			}
 		}
 
-		void PGTerrainEditorScene::Build(PGMousePicker* mouse_picker)  {
-			PGBaseScene::Build(mouse_picker);
+		void PGTerrainEditorScene::Build(MousePicker* mouse_picker) {
+			Scene::Build(mouse_picker);
 
 			this->Set_Name("GridEditorScene");			
 			
@@ -159,8 +159,8 @@ class PGTerrainEditorScene : public PGBaseScene {
 
 			this->ShouldRender = true;
 		}
-		void PGTerrainEditorScene::HandleControler(PGControler *controler) override {
-			PGBaseScene::HandleControler(controler);
+		void PGTerrainEditorScene::HandleControler(Controler *controler) override {
+			Scene::HandleControler(controler);
 			float speed = 0.15f;
 			
 
@@ -250,7 +250,7 @@ class PGTerrainEditorScene : public PGBaseScene {
 				v3 plane_normal = v3(0.f, 0.f, 1.f);
 				r32 offset = 0.f;
 				v3 result_point = v3(0.f);
-				world_ray = MousePicker->CastRay(controler, &this->Projection_Matrice, this->scene_camera->GetViewMatrice());
+				world_ray = Mouse_Picker->CastRay(controler, &this->Projection_Matrice, this->scene_camera->GetViewMatrice());
 				for (int grid_index = 0;
 					grid_index < grid_data->Grid_size.x*grid_data->Grid_size.y;
 					grid_index++) 

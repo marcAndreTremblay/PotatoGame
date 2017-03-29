@@ -4,30 +4,30 @@
 namespace PG {
 	namespace Engine {
 
-		class PGBuildableObject {
+		class BuildableObject {
 		protected:
 			bool IsObjectBuild;
 			bool IsObjLock;
 			//Note(Marc): Maybe we should make those method call StartAsycBuild and EndAsycBuild and only be call by the thread building the object? 
-			void PGBuildableObject::StartBuilding() {
+			void BuildableObject::StartBuilding() {
 				this->IsObjLock = true;
 			}
-			void PGBuildableObject::EndBuilding() {
+			void BuildableObject::EndBuilding() {
 				this->IsObjectBuild = true;
 				this->IsObjLock = false;
 			}
 		private:
 		public:
-			PGBuildableObject() {
+			BuildableObject() {
 				this->IsObjectBuild = false;
 				this->IsObjLock = false;
 			}
-			~PGBuildableObject() {
+			~BuildableObject() {
 
 			}
-			bool PGBuildableObject::IsBuild() { return this->IsObjectBuild; }
-			bool PGBuildableObject::IsLock() { return this->IsObjLock; }
-			virtual void PGBuildableObject::Build() {};
+			bool BuildableObject::IsBuild() { return this->IsObjectBuild; }
+			bool BuildableObject::IsLock() { return this->IsObjLock; }
+			virtual void BuildableObject::Build() {};
 		};
 
 	}

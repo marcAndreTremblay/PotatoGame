@@ -44,10 +44,10 @@ namespace PG {
 		class PGEventEmiter {
 		protected:
 		private:
-			PGList<PGEventListener> *listener_list;
+			List<PGEventListener> *listener_list;
 		public:
 			PGEventEmiter() {
-				this->listener_list = new PGList<PGEventListener>(false);
+				this->listener_list = new List<PGEventListener>(false);
 			}
 			~PGEventEmiter() {
 				delete(this->listener_list);
@@ -58,7 +58,7 @@ namespace PG {
 				}
 			}
 			void PGEventEmiter::EmiteEvent(PGUIEvent* new_event) {
-				for (PGListNode<PGEventListener> *c_node = listener_list->GetHead(); c_node != nullptr; c_node = c_node->GetNext()) {
+				for (ListNode<PGEventListener> *c_node = listener_list->GetHead(); c_node != nullptr; c_node = c_node->GetNext()) {
 					PGEventListener* current_ui_listener = c_node->GetData();
 					current_ui_listener->OnEvent(new_event);
 				}

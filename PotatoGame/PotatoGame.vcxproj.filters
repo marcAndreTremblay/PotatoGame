@@ -13,23 +13,38 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Header Files\PGGui">
-      <UniqueIdentifier>{bae6f3b4-74f4-4527-9c9d-4dd39312b907}</UniqueIdentifier>
+    <Filter Include="Header Files\PG">
+      <UniqueIdentifier>{fd01ecdf-464c-4c0b-bed2-a29bb95807bc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\PGGameEditor">
-      <UniqueIdentifier>{42b202fa-9c3f-4431-af9f-8c8e719f198e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\PGEngine">
+    <Filter Include="Header Files\PG\Engine">
       <UniqueIdentifier>{556ca62f-f9b0-4ad0-8b0d-4eaf0f7fa5fe}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\PGGui\UIElement">
+    <Filter Include="Header Files\PG\Engine\Asset">
+      <UniqueIdentifier>{36d17203-4fb1-4cd3-a1c0-1398130957c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\PG\Engine\Scene">
+      <UniqueIdentifier>{6bd2a178-0234-4cb8-bf0e-b5578e4c7da3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\PG\Gui">
+      <UniqueIdentifier>{bae6f3b4-74f4-4527-9c9d-4dd39312b907}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\PG\Gui\UIElement">
       <UniqueIdentifier>{ab25fff7-c81c-4b5f-ae70-85634104da8a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\PGGameEditor\Mesh">
+    <Filter Include="Header Files\PG\Core">
+      <UniqueIdentifier>{efb77372-d6d4-486e-b8b2-a537352d7f7d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\GameEditor">
+      <UniqueIdentifier>{42b202fa-9c3f-4431-af9f-8c8e719f198e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\GameEditor\Mesh">
       <UniqueIdentifier>{186ee313-c315-4b81-8b91-41444038fee1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\PGCore">
-      <UniqueIdentifier>{efb77372-d6d4-486e-b8b2-a537352d7f7d}</UniqueIdentifier>
+    <Filter Include="Header Files\PG\Engine\Container">
+      <UniqueIdentifier>{11117768-d307-43b0-ac52-64933820979c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\PG\Engine\Renderer">
+      <UniqueIdentifier>{aaef036d-69f7-4a13-9f7a-c43eb2f10e5f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -39,107 +54,110 @@
     <ClInclude Include="targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="PGString.h">
-      <Filter>Header Files\PGCore</Filter>
-    </ClInclude>
-    <ClInclude Include="PGBuildableObject.h">
-      <Filter>Header Files\PGEngine</Filter>
-    </ClInclude>
-    <ClInclude Include="PGBaseObject.h">
-      <Filter>Header Files\PGEngine</Filter>
-    </ClInclude>
-    <ClInclude Include="PGMesh.h">
-      <Filter>Header Files\PGEngine</Filter>
-    </ClInclude>
     <ClInclude Include="PGMeshInstance.h">
-      <Filter>Header Files\PGGameEditor</Filter>
-    </ClInclude>
-    <ClInclude Include="PGBaseScene.h">
-      <Filter>Header Files\PGEngine</Filter>
-    </ClInclude>
-    <ClInclude Include="PGCore.h">
-      <Filter>Header Files\PGCore</Filter>
-    </ClInclude>
-    <ClInclude Include="PGBaseRenderer.h">
-      <Filter>Header Files\PGEngine</Filter>
-    </ClInclude>
-    <ClInclude Include="PGControler.h">
-      <Filter>Header Files\PGEngine</Filter>
-    </ClInclude>
-    <ClInclude Include="PGGameWindow.h">
-      <Filter>Header Files\PGEngine</Filter>
-    </ClInclude>
-    <ClInclude Include="PGTexture.h">
-      <Filter>Header Files\PGEngine</Filter>
-    </ClInclude>
-    <ClInclude Include="PGFont.h">
-      <Filter>Header Files\PGEngine</Filter>
-    </ClInclude>
-    <ClInclude Include="PGBaseObjectList.h">
-      <Filter>Header Files\PGEngine</Filter>
+      <Filter>Header Files\GameEditor</Filter>
     </ClInclude>
     <ClInclude Include="PGUICanvas.h">
-      <Filter>Header Files\PGGui</Filter>
+      <Filter>Header Files\PG\Gui</Filter>
     </ClInclude>
     <ClInclude Include="stdafx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="PGShaderSources.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PGMousePicker.h">
-      <Filter>Header Files\PGEngine</Filter>
-    </ClInclude>
-    <ClInclude Include="PG3DPrimitive.h">
-      <Filter>Header Files\PGCore</Filter>
-    </ClInclude>
     <ClInclude Include="PGEditorInstance.h">
-      <Filter>Header Files\PGGameEditor</Filter>
+      <Filter>Header Files\GameEditor</Filter>
     </ClInclude>
     <ClInclude Include="PGEditorScene.h">
-      <Filter>Header Files\PGGameEditor</Filter>
-    </ClInclude>
-    <ClInclude Include="PGList.h">
-      <Filter>Header Files\PGCore</Filter>
-    </ClInclude>
-    <ClInclude Include="PGEntity.h">
-      <Filter>Header Files\PGEngine</Filter>
+      <Filter>Header Files\GameEditor</Filter>
     </ClInclude>
     <ClInclude Include="PGUICore.h">
-      <Filter>Header Files\PGGui</Filter>
+      <Filter>Header Files\PG\Gui</Filter>
     </ClInclude>
     <ClInclude Include="PGMapGrid.h">
-      <Filter>Header Files\PGGameEditor</Filter>
-    </ClInclude>
-    <ClInclude Include="PGTree.h">
-      <Filter>Header Files\PGCore</Filter>
-    </ClInclude>
-    <ClInclude Include="PGGameModel.h">
-      <Filter>Header Files\PGEngine</Filter>
+      <Filter>Header Files\GameEditor</Filter>
     </ClInclude>
     <ClInclude Include="PGUITreeList.h">
-      <Filter>Header Files\PGGui\UIElement</Filter>
+      <Filter>Header Files\PG\Gui\UIElement</Filter>
     </ClInclude>
     <ClInclude Include="PGUISelectList.h">
-      <Filter>Header Files\PGGui\UIElement</Filter>
+      <Filter>Header Files\PG\Gui\UIElement</Filter>
     </ClInclude>
     <ClInclude Include="PGBackgroundMapGridMesh.h">
-      <Filter>Header Files\PGGameEditor\Mesh</Filter>
+      <Filter>Header Files\GameEditor\Mesh</Filter>
     </ClInclude>
     <ClInclude Include="PGMapAtlas.h">
-      <Filter>Header Files\PGGameEditor</Filter>
+      <Filter>Header Files\GameEditor</Filter>
     </ClInclude>
     <ClInclude Include="PGUIBaseElement.h">
-      <Filter>Header Files\PGGui</Filter>
-    </ClInclude>
-    <ClInclude Include="AssetManager.h">
-      <Filter>Header Files\PGEngine</Filter>
-    </ClInclude>
-    <ClInclude Include="Camera.h">
-      <Filter>Header Files\PGEngine</Filter>
+      <Filter>Header Files\PG\Gui</Filter>
     </ClInclude>
     <ClInclude Include="EngineInstance.h">
-      <Filter>Header Files\PGEngine</Filter>
+      <Filter>Header Files\PG\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="AssetManager.h">
+      <Filter>Header Files\PG\Engine\Asset</Filter>
+    </ClInclude>
+    <ClInclude Include="Font.h">
+      <Filter>Header Files\PG\Engine\Asset</Filter>
+    </ClInclude>
+    <ClInclude Include="Entity.h">
+      <Filter>Header Files\PG\Engine\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Header Files\PG\Engine\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>Header Files\PG\Engine\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Controler.h">
+      <Filter>Header Files\PG\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="MousePicker.h">
+      <Filter>Header Files\PG\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="PGShaderSources.h">
+      <Filter>Header Files\PG</Filter>
+    </ClInclude>
+    <ClInclude Include="Core.h">
+      <Filter>Header Files\PG\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="String.h">
+      <Filter>Header Files\PG\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="List.h">
+      <Filter>Header Files\PG\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Tree.h">
+      <Filter>Header Files\PG\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Primitive.h">
+      <Filter>Header Files\PG\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseObject.h">
+      <Filter>Header Files\PG\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectList.h">
+      <Filter>Header Files\PG\Engine\Container</Filter>
+    </ClInclude>
+    <ClInclude Include="GameWindow.h">
+      <Filter>Header Files\PG\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="BuildableObject.h">
+      <Filter>Header Files\PG\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseRenderer.h">
+      <Filter>Header Files\PG\Engine\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader.h">
+      <Filter>Header Files\PG\Engine\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>Header Files\PG\Engine\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="GameModel.h">
+      <Filter>Header Files\PG\Engine\Asset</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>Header Files\PG\Engine\Asset</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

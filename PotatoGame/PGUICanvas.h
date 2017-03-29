@@ -4,17 +4,17 @@
 #include "PGUIBaseElement.h"
 
 
-#include "PGCore.h"
-#include "PGList.h"
+#include "Core.h"
+#include "List.h"
 
 
-#include "PGBaseObject.h"
-#include "PGBaseObjectList.h"
-#include "PGBuildableObject.h"
-#include "PGControler.h"
-#include "PGBaseRenderer.h"	
-#include "PGTexture.h"
-#include "PGMousePicker.h"
+#include "BaseObject.h"
+#include "ObjectList.h"
+#include "BuildableObject.h"
+#include "Controler.h"
+#include "BaseRenderer.h"	
+#include "Texture.h"
+#include "MousePicker.h"
 using namespace PG::Engine;
 
 #include "PGUIBaseElement.h"
@@ -23,7 +23,7 @@ using namespace PG::Engine;
 
 namespace PG {
 	namespace GUI {
-		class PGUICanvas : public PGBuildableObject {
+		class PGUICanvas : public BuildableObject {
 		protected:
 			unsigned int PGUICanvas::GetNextFreeId() {
 				this->NextElementId += 1;
@@ -31,22 +31,22 @@ namespace PG {
 			}
 		private:
 			unsigned int NextElementId;
-			PGMousePicker* MousePicker;
-			PGGameWindow* GameWindow;
-			PGBaseObjList<PGBaseUIElement>* element_list;
+			MousePicker* Mouse_Picker;
+			GameWindow* Game_Window;
+			ObjectList<PGBaseUIElement>* element_list;
 		public:
 			PGUICanvas() {
 				this->NextElementId = 1;
-				this->element_list = new PGBaseObjList<PGBaseUIElement>(true);
+				this->element_list = new ObjectList<PGBaseUIElement>(true);
 
 			}
 			~PGUICanvas() {
 				delete(this->element_list);
 			}
-			virtual void PGUICanvas::Build(PGGameWindow* game_window, PGMousePicker* _mouse_picker, AssetManager* asset_manager) {
+			virtual void PGUICanvas::Build(GameWindow* game_window, MousePicker* _mouse_picker, AssetManager* asset_manager) {
 				this->StartBuilding();
-				this->MousePicker = _mouse_picker;
-				this->GameWindow = game_window;
+				this->Mouse_Picker = _mouse_picker;
+				this->Game_Window = game_window;
 
 				PGUIMenuWindow *menu_window = new PGUIMenuWindow();
 				menu_window->SetSize(v2(300.f, 900.f));
@@ -125,20 +125,20 @@ namespace PG {
 				//this->element_list->Add(select_view_test);
 				this->EndBuilding();
 			}
-			void PGUICanvas::Render(PGBaseRenderer *renderer) {
+			void PGUICanvas::Render(BaseRenderer *renderer) {
 				if (this->IsLock() == false && this->IsBuild() == true) {
 
-					renderer->SetUIProjection(this->GameWindow->GetOrtho());
+					renderer->SetUIProjection(this->Game_Window->GetOrtho());
 
-					for (PGListNode<PGBaseUIElement> *c_node = element_list->GetHead(); c_node != nullptr; c_node = c_node->GetNext()) {
+					for (ListNode<PGBaseUIElement> *c_node = element_list->GetHead(); c_node != nullptr; c_node = c_node->GetNext()) {
 						PGBaseUIElement* current_ui_element = c_node->GetData();
 						current_ui_element->Render(renderer);
 					}
 				}
 			}
-			void PGUICanvas::Update(PGControler *controler, double timeElapse) {
-				v3 mouse_ui_space = this->MousePicker->TranformWindowStoUIS(controler, this->GameWindow->GetOrtho());
-				for (PGListNode<PGBaseUIElement> *c_node = element_list->GetHead(); c_node != nullptr; c_node = c_node->GetNext()) {
+			void PGUICanvas::Update(Controler *controler, double timeElapse) {
+				v3 mouse_ui_space = this->Mouse_Picker->TranformWindowStoUIS(controler, this->Game_Window->GetOrtho());
+				for (ListNode<PGBaseUIElement> *c_node = element_list->GetHead(); c_node != nullptr; c_node = c_node->GetNext()) {
 					PGBaseUIElement* current_ui_element = c_node->GetData();
 					current_ui_element->Update(controler, timeElapse, &mouse_ui_space);
 				}

@@ -1,17 +1,17 @@
 #if !defined(PG_TREE_H)
 #define PG_TREE_H
 
-#include "PGList.h"
+#include "List.h"
 namespace PG {
 	namespace Core {
 
 		template <class TreeNode>
 		class TreeNode {
 		protected:
-			PGList<TreeNode> *child;
+			List<TreeNode> *child;
 		public:
 			TreeNode() {
-				child = new PGList<TreeNode>(true);
+				child = new List<TreeNode>(true);
 			}
 			~TreeNode() {
 				delete(child);
@@ -25,7 +25,7 @@ namespace PG {
 				if (location >= child->element_count || location < 0) {
 					return nullptr;
 				}
-				for (PGListNode<TreeNode> *c_node = child->GetHead(); c_node != nullptr; c_node = c_node->GetNext()) {
+				for (ListNode<TreeNode> *c_node = child->GetHead(); c_node != nullptr; c_node = c_node->GetNext()) {
 					if (location == 0) {
 						return c_node->GetData();
 					}
@@ -43,9 +43,9 @@ namespace PG {
 		protected:
 
 		public:
-			PGList<TreeNode> *roots;
+			List<TreeNode> *roots;
 			Tree() {
-				roots = new PGList<TreeNode>(true);
+				roots = new List<TreeNode>(true);
 			}
 			~Tree() {
 				delete(roots);

@@ -3,9 +3,9 @@
 
 
 #include "stdafx.h"
-#include "PGString.h"
+#include "String.h"
 #include "PGMapGrid.h"
-#include "PGList.h"
+#include "List.h"
 
 class PGAtlasRegion {
 	int Grid_Index; 
@@ -30,7 +30,7 @@ class PGMapAtlas {
 public:
 	int size_X, size_Y;
 	
-	PGList<PGAtlasRegion> *Regions;
+	List<PGAtlasRegion> *Regions;
 	Str *regions_file_folder;
 	Str *Atlas_File_Path;
 
@@ -38,7 +38,7 @@ public:
 		Atlas_File_Path = new Str(file_path);
 		regions_file_folder = Str::ExtractFolderPath(Atlas_File_Path);
 
-		Regions = new PGList<PGAtlasRegion>(true);
+		Regions = new List<PGAtlasRegion>(true);
 		printf("Loading Atlas : %s \n", Atlas_File_Path->CharAt());
 		FILE * file = fopen(Atlas_File_Path->CharAt(), "rb");
 		if (file != nullptr) {

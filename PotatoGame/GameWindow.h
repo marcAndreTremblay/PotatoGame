@@ -1,7 +1,8 @@
 	#if !defined(PG_GAME_WINDOW_H)
 #define PG_GAME_WINDOW_H
 
-#include "stdafx.h"
+#include "Core.h"
+using namespace PG::Core;
 
 static void glfw_error_callback(int error, const char* description) {
 	fprintf(stderr, description);
@@ -9,7 +10,7 @@ static void glfw_error_callback(int error, const char* description) {
 
 namespace PG {
 	namespace Engine {
-		class PGGameWindow {
+		class GameWindow {
 		protected:
 		private:
 			int WindowWidth;
@@ -18,7 +19,7 @@ namespace PG {
 		public:
 			GLFWwindow* Gl_Window;
 			GLFWmonitor *GL_Monitor;
-			PGGameWindow(bool _IsFullScreen = true, int _WindowWidth = 0, int _WindowHeight = 0) {
+			GameWindow(bool _IsFullScreen = true, int _WindowWidth = 0, int _WindowHeight = 0) {
 				if (glfwInit() != GL_FALSE) {
 					glfwSetErrorCallback(glfw_error_callback);
 
@@ -60,19 +61,19 @@ namespace PG {
 					//Todo(Marc): debugg.... 
 				}
 			}
-			~PGGameWindow() {
+			~GameWindow() {
 				glfwTerminate();
 			}
-			m4* PGGameWindow::GetOrtho() {
+			m4* GameWindow::GetOrtho() {
 				return &ortho;
 			}
-			int PGGameWindow::GetHeight() {
+			int GameWindow::GetHeight() {
 				return this->WindowHeight;
 			}
-			int PGGameWindow::GetWidth() {
+			int GameWindow::GetWidth() {
 				return this->WindowWidth;
 			}
-			void PGGameWindow::SetWindowSize(int width, int height) {
+			void GameWindow::SetWindowSize(int width, int height) {
 				this->WindowWidth = width;
 				this->WindowHeight = height;
 				const GLFWvidmode* mode = glfwGetVideoMode(this->GL_Monitor);

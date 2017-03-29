@@ -1,7 +1,7 @@
 #if !defined(PG_3D_PRIMITIVE_H)
 #define PG_3D_PRIMITIVE_H
 
-#include "PGCore.h"
+#include "Core.h"
 
 
 namespace PG {

@@ -3,45 +3,46 @@
 
 #include "stdafx.h"
 
-#include "PGCore.h"
-#include "PGList.h"
-#include "PGString.h"
+#include "Core.h"
+#include "List.h"
+#include "String.h"
 using namespace PG::Core;
 
-#include "PGBaseRenderer.h"
-#include "PGGameWindow.h"
-#include "PGBaseScene.h"
+#include "BaseRenderer.h"
+#include "GameWindow.h"
+#include "Scene.h"
 #include "AssetManager.h"
 #include "PGUICanvas.h"
 #include "PGEditorScene.h"
-#include "PGMousePicker.h"
-
+#include "MousePicker.h"
+#include "ObjectList.h"
+using namespace PG::Engine;
 namespace PG {
 	namespace Engine {
-		class EngineInstance : public PGBuildableObject {
+		class EngineInstance : public BuildableObject {
 		protected:
-			PGFont *Default_Engine_Font; //Note(Marc): Unmanaged ptr
+			Font *Default_Engine_Font; //Note(Marc): Unmanaged ptr
 			char fps_info_buffer[40];
 			char frame_cpt_buffer[40];
 
-			PGBaseScene* CurrentViewedScene;
-			PGBaseObjList<PGBaseScene>* LoadedScenes;
-			PGControler* Controlers;
-			PGGameWindow* GameWindow;
-			PGBaseRenderer* GameRenderer;
+			Scene* CurrentViewedScene;
+			ObjectList<Scene>* LoadedScenes;
+			Controler* Controlers;
+			GameWindow* Game_Window;
+			BaseRenderer* GameRenderer;
 			AssetManager* Asset_Manager;
 
-			PGMousePicker* MousePicker;
+			MousePicker* Mouse_Picker;
 
 
 			virtual void EngineInstance::HandlerEvents() {
-				if (glfwWindowShouldClose(this->GameWindow->Gl_Window) == 1) {
+				if (glfwWindowShouldClose(this->Game_Window->Gl_Window) == 1) {
 					this->ShouldGameClose = true;
 				}
 
 			}
 			virtual void EngineInstance::HandleControler() {
-				if (glfwGetKey(this->GameWindow->Gl_Window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+				if (glfwGetKey(this->Game_Window->Gl_Window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
 					this->ShouldGameClose = true;
 				}
 
@@ -72,20 +73,20 @@ namespace PG {
 				this->ShouldGameClose = false;
 				this->IsBuild = false;
 				this->CurrentViewedScene = nullptr;
-				this->LoadedScenes = new PGBaseObjList<PGBaseScene>(true);
-				this->Controlers = new PGControler();
-				this->GameWindow = new PGGameWindow(false, 1024, 768);
-				this->GameRenderer = new PGBaseRenderer();
+				this->LoadedScenes = new ObjectList<Scene>(true);
+				this->Controlers = new Controler();
+				this->Game_Window = new GameWindow(false, 1024, 768);
+				this->GameRenderer = new BaseRenderer();
 				this->Asset_Manager = new AssetManager();
-				this->MousePicker = new PGMousePicker(this->GameWindow);
+				this->Mouse_Picker = new MousePicker(this->Game_Window);
 			}
 			virtual ~EngineInstance() {
 				delete(this->LoadedScenes);
 				delete(this->Controlers);
 				delete(this->GameRenderer);
-				delete(this->GameWindow);
+				delete(this->Game_Window);
 				delete(this->Asset_Manager);
-				delete(this->MousePicker);
+				delete(this->Mouse_Picker);
 			}
 			void EngineInstance::Start() {
 				unsigned int FrameRenderGlobalCount = 0;
@@ -117,7 +118,7 @@ namespace PG {
 						double deltaTimeForUpdate = (glfwGetTime() - last_update_pass_stamp);
 						last_update_pass_stamp = glfwGetTime();
 
-						this->Controlers->Update(this->GameWindow);
+						this->Controlers->Update(this->Game_Window);
 						this->Update(deltaTimeForUpdate);
 
 						updateFctCallCpt++;
@@ -138,17 +139,17 @@ namespace PG {
 						generalFctTime -= 1.f;
 					}
 
-					glfwSwapBuffers(this->GameWindow->Gl_Window);
+					glfwSwapBuffers(this->Game_Window->Gl_Window);
 					glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 					FrameRenderGlobalCount++;
 				}
 			}
 			virtual void EngineInstance::Build() override {
-				PGBuildableObject::StartBuilding();
+				BuildableObject::StartBuilding();
 
 
 
-				PGBuildableObject::EndBuilding();
+				BuildableObject::EndBuilding();
 			}
 		};
 	}

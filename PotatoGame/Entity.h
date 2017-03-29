@@ -3,29 +3,29 @@
 
 #include "stdafx.h"
 
-#include "PGCore.h"
-#include "PGBaseObject.h"
+#include "Core.h"
+#include "BaseObject.h"
 using namespace PG::Core;
 
 namespace PG {
 	namespace Engine {
-		class PGEntity : public PGBaseObject {
+		class Entity : public BaseObject {
 		protected:
 			v3 World_Possition;
 		private:
 		public:
-			PGEntity() :
-				PGBaseObject() {
+			Entity() :
+				BaseObject() {
 
 			}
-			virtual ~PGEntity() {
+			virtual ~Entity() {
 
 			}
 
-			virtual void PGEntity::Render() {
+			virtual void Entity::Render() {
 
 			}
-			virtual void PGEntity::Update() {
+			virtual void Entity::Update() {
 
 			}
 		};

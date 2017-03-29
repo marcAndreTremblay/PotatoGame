@@ -5,19 +5,19 @@
 
 #include "stdafx.h"
  
-#include "PGString.h"
-#include "PGBaseObject.h"
-#include "PGBuildableObject.h"
+#include "String.h"
+#include "BaseObject.h"
+#include "BuildableObject.h"
 
 using namespace PG::Core;
 
 namespace PG {
 	namespace Engine {
-		enum PGTexFormat {
+		enum TextureFormat {
 			PG_PNG = 0,
 			PG_BMP = 1
 		};
-		class PGTexture : public PGBaseObject, PGBuildableObject {
+		class Texture : public BaseObject, BuildableObject {
 		protected:
 		private:
 			GLuint GenGlTex(FIBITMAP *bitmap) {
@@ -57,22 +57,22 @@ namespace PG {
 				return new_tex_id;
 			}
 		public:
-			PGTexFormat Format;
+			TextureFormat Format;
 			Str *File_Path;
 			GLuint OpenGL_Id;
 
-			PGTexture(PGTexFormat format, char* file_path, char * texture_ref_name)
-				:PGBaseObject() {
+			Texture(TextureFormat format, char* file_path, char * texture_ref_name)
+				:BaseObject() {
 				this->Set_Name(texture_ref_name);
 				this->Format = format;
 				this->File_Path = new Str(file_path);
 			}
-			~PGTexture() {
+			~Texture() {
 				glDeleteTextures(1, &OpenGL_Id);
 				delete(File_Path);
 			}
-			void PGTexture::Build() override {
-				PGBuildableObject::StartBuilding();
+			void Texture::Build() override {
+				BuildableObject::StartBuilding();
 				switch (this->Format) {
 				case PG_PNG:{
 								this->OpenGL_Id = GenGlTex(FreeImage_Load(FIF_PNG, File_Path->CharAt(), 0));
@@ -84,7 +84,7 @@ namespace PG {
 				default:
 					break;
 				}
-				PGBuildableObject::EndBuilding();
+				BuildableObject::EndBuilding();
 			}
 		};
 	}

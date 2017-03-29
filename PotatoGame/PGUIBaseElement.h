@@ -4,14 +4,15 @@
 
 #include "PGUICore.h"
 
+using namespace PG::Engine;
 using namespace PG::GUI;
 namespace PG {
 	namespace GUI {
-		class PGBaseUIElement : public PGBaseObject, public PGEventEmiter, public PGEventListener {
+		class PGBaseUIElement : public BaseObject, public PGEventEmiter, public PGEventListener {
 		protected:
 			UIElementState State;
 			PGBaseUIElement* Parent;//Un-managed resource
-			PGBaseObjList<PGBaseUIElement>* Child_list;
+			ObjectList<PGBaseUIElement>* Child_list;
 			bool PGBaseUIElement::IsIntersection(v3* mouse_location) {
 				v2 rel_possition = this->GetRelativePossition();
 				if ((mouse_location->x > rel_possition.x) && //Left
@@ -43,7 +44,7 @@ namespace PG {
 			r32 Opacity;
 			PGBaseUIElement() {
 
-				this->Child_list = new PGBaseObjList<PGBaseUIElement>(true);
+				this->Child_list = new ObjectList<PGBaseUIElement>(true);
 				this->IsVisible = true;
 				this->Parent = nullptr;
 				this->State = UIState_Idle;
@@ -65,18 +66,18 @@ namespace PG {
 			virtual void PGBaseUIElement::SetSize(v2 size) {
 				this->Size = size;
 			}
-			virtual void PGBaseUIElement::Render(PGBaseRenderer *renderer) {
+			virtual void PGBaseUIElement::Render(BaseRenderer *renderer) {
 				if (this->IsVisible == true) {
-					for (PGListNode<PGBaseUIElement> *c_node = Child_list->GetHead(); c_node != nullptr; c_node = c_node->GetNext()) {
+					for (ListNode<PGBaseUIElement> *c_node = Child_list->GetHead(); c_node != nullptr; c_node = c_node->GetNext()) {
 						PGBaseUIElement* current_ui_element = c_node->GetData();
 						current_ui_element->Render(renderer);
 					}
 				}
 			}
-			virtual bool PGBaseUIElement::Update(PGControler *controler, double timeElapse, v3* mouse_ui_possition) {
+			virtual bool PGBaseUIElement::Update(Controler *controler, double timeElapse, v3* mouse_ui_possition) {
 				if (this->IsVisible == true) {
 					bool isChildActive = false;
-					for (PGListNode<PGBaseUIElement> *c_node = Child_list->GetHead(); c_node != nullptr; c_node = c_node->GetNext()) {
+					for (ListNode<PGBaseUIElement> *c_node = Child_list->GetHead(); c_node != nullptr; c_node = c_node->GetNext()) {
 						PGBaseUIElement* current_ui_element = c_node->GetData();
 						if (current_ui_element->Update(controler, timeElapse, mouse_ui_possition) == true) {
 							isChildActive = true;
@@ -124,13 +125,13 @@ namespace PG {
 		protected:
 		private:
 			Str* Text;
-			PGFont* Font; //Un-managed resource
+			Font* _Font; //Un-managed resource
 		public:
 			v3 Text_Color;
 			r32 Text_Size;
 			PGUILabel() {
 				this->Text = nullptr;
-				this->Font = nullptr;
+				this->_Font = nullptr;
 				this->Text_Color = v3(1.f);
 				this->Text_Size = 1.f;
 			}
@@ -143,20 +144,20 @@ namespace PG {
 				}
 				this->Text = new Str(text);
 			}
-			void PGUILabel::SetFont(PGFont* font) {
-				this->Font = font;
+			void PGUILabel::SetFont(Font* font) {
+				this->_Font = font;
 			}
 
-			virtual void PGUILabel::Render(PGBaseRenderer *renderer) override {
-				if (this->IsVisible == true && this->Text != nullptr && this->Font != nullptr) {
+			virtual void PGUILabel::Render(BaseRenderer *renderer) override {
+				if (this->IsVisible == true && this->Text != nullptr && this->_Font != nullptr) {
 					v2 box = v2();
-					Font->GetFontBondingBox(this->Text->CharAt(), Text_Size, &box);
+					_Font->GetFontBondingBox(this->Text->CharAt(), Text_Size, &box);
 
-					renderer->RenderUIText(this->Text->CharAt(), v3(this->GetRelativePossition(), this->GetRelativeZ()), v4(this->Text_Color, this->GetRelativeOpacity()), this->Text_Size, this->Font);
+					renderer->RenderUIText(this->Text->CharAt(), v3(this->GetRelativePossition(), this->GetRelativeZ()), v4(this->Text_Color, this->GetRelativeOpacity()), this->Text_Size, this->_Font);
 					//renderer->ui_panel_Mesh->Render(v3(this->GetRelativePossition(), this->GetRelativeZ()), box, v4(1.f, 1.f, 0.f, 1.f));
 				}
 			}
-			virtual bool PGUILabel::Update(PGControler *controler, double timeElapse, v3 *mouse_ui_possition) {
+			virtual bool PGUILabel::Update(Controler *controler, double timeElapse, v3 *mouse_ui_possition) {
 				return PGBaseUIElement::Update(controler, timeElapse, mouse_ui_possition);
 			}
 			virtual bool PGUILabel::IsActif() override {
@@ -167,7 +168,7 @@ namespace PG {
 		protected:
 		private:
 		public:
-			PGTexture* Image;
+			Texture* Image;
 			v3 Color_Channel;
 			PGUIImageBox() {
 				this->Color_Channel = v3(1.f);
@@ -177,12 +178,12 @@ namespace PG {
 			~PGUIImageBox() {
 
 			}
-			virtual void PGUIImageBox::Render(PGBaseRenderer *renderer) override {
+			virtual void PGUIImageBox::Render(BaseRenderer *renderer) override {
 				if (this->IsVisible == true) {
 					renderer->ui_image_mesh->Render(v3(this->GetRelativePossition(), this->GetRelativeZ()), this->Size, this->Image, v4(this->Color_Channel, this->GetRelativeOpacity()));
 				}
 			}
-			virtual bool PGUIImageBox::Update(PGControler *controler, double timeElapse, v3 *mouse_ui_possition) {
+			virtual bool PGUIImageBox::Update(Controler *controler, double timeElapse, v3 *mouse_ui_possition) {
 				bool isChildActive = PGBaseUIElement::Update(controler, timeElapse, mouse_ui_possition);
 
 				return isChildActive;
@@ -207,7 +208,7 @@ namespace PG {
 			virtual bool PGUIPanel::IsActif() override {
 				return false;
 			}
-			virtual void PGUIPanel::Render(PGBaseRenderer *renderer) override {
+			virtual void PGUIPanel::Render(BaseRenderer *renderer) override {
 				if (this->IsVisible == true) {
 					if (this->State == UIState_Idle) {
 						this->Opacity = 0.4f;
@@ -222,7 +223,7 @@ namespace PG {
 				}
 				PGBaseUIElement::Render(renderer);
 			}
-			virtual bool PGUIPanel::Update(PGControler *controler, double timeElapse, v3 *mouse_ui_possition) {
+			virtual bool PGUIPanel::Update(Controler *controler, double timeElapse, v3 *mouse_ui_possition) {
 				bool isChildActive = PGBaseUIElement::Update(controler, timeElapse, mouse_ui_possition);
 				if (isChildActive == false) {
 
@@ -236,7 +237,7 @@ namespace PG {
 		protected:
 		private:
 			Str* Text;
-			PGFont* Font; //Un-managed resource
+			Font* Font; //Un-managed resource
 		public:
 			v3 Text_color;
 			r32 Text_size;
@@ -246,7 +247,7 @@ namespace PG {
 				}
 				this->Text = new Str(text);
 			}
-			void PGUIButton::SetFont(PGFont* font) {
+			void PGUIButton::SetFont(PG::Engine::Font* font) {
 				this->Font = font;
 			}
 
@@ -264,7 +265,7 @@ namespace PG {
 				if (this->State != UIState_Idle) return true;
 				return false;
 			}
-			virtual void PGUIButton::Render(PGBaseRenderer *renderer) override {
+			virtual void PGUIButton::Render(BaseRenderer *renderer) override {
 				if (this->IsVisible == true) {
 					if (this->State == UIState_Idle) {
 						renderer->ui_panel_Mesh->Render(v3(this->GetRelativePossition(), this->GetRelativeZ()), this->Size, v4(1.f, 0.4f, 0.2f, this->GetRelativeOpacity()));
@@ -284,7 +285,7 @@ namespace PG {
 				}
 				PGBaseUIElement::Render(renderer);
 			}
-			virtual bool PGUIButton::Update(PGControler *controler, double timeElapse, v3* mouse_ui_possition) {
+			virtual bool PGUIButton::Update(Controler *controler, double timeElapse, v3* mouse_ui_possition) {
 				bool isChildActive = PGBaseUIElement::Update(controler, timeElapse, mouse_ui_possition);
 				if (isChildActive == false) {
 					switch (this->State) {
@@ -332,13 +333,13 @@ namespace PG {
 		class PGUISelectBox : public PGBaseUIElement {
 		protected:
 		private:
-			PGList<PGBaseObject> *element_list;
+			List<BaseObject> *element_list;
 			int selected_index = 1; //Note(Marc): -1 for no selection
 			int hot_index = -1;
 
 
 			//Fix property
-			PGFont *font;
+			Font *font;
 			v2 element_size;
 			r32 element_offset = 2.0f;
 			float font_size = 0.7f;
@@ -346,12 +347,12 @@ namespace PG {
 			v4 text_color = v4(0.8f, 0.8f, 0.8f, 1.f);
 		public:
 			PGUISelectBox() {
-				element_list = new PGList<PGBaseObject>(false);
+				element_list = new List<BaseObject>(false);
 			}
 			~PGUISelectBox() {
 				delete(element_list);
 			}
-			void PGUISelectBox::SetFont(PGFont *_font) {
+			void PGUISelectBox::SetFont(Font *_font) {
 				this->font = _font;
 			}
 			void PGUISelectBox::SetSize(v2 size) {
@@ -359,7 +360,7 @@ namespace PG {
 				element_size.y = size.y;
 				PGBaseUIElement::SetSize(size);
 			}
-			void PGUISelectBox::AddListElement(PGBaseObject *new_obj) {
+			void PGUISelectBox::AddListElement(BaseObject *new_obj) {
 				element_list->Add(new_obj);
 			}
 			virtual bool PGUISelectBox::IsActif() override {
@@ -367,7 +368,7 @@ namespace PG {
 				if (this->State == UIState_Hot) return true;
 				return false;
 			}
-			virtual void PGUISelectBox::Render(PGBaseRenderer *renderer) override {
+			virtual void PGUISelectBox::Render(BaseRenderer *renderer) override {
 				if (this->IsVisible == true) {
 
 					v3 pos_offset = v3(this->GetRelativePossition(), this->GetRelativeZ());
@@ -388,8 +389,8 @@ namespace PG {
 						pos_offset.y += this->element_size.y + element_offset;
 
 						int cpt = 0;
-						for (PGListNode<PGBaseObject> *c_node = element_list->GetHead(); c_node != nullptr; c_node = c_node->GetNext()) {
-							PGBaseObject* current_ui_element = c_node->GetData();
+						for (ListNode<BaseObject> *c_node = element_list->GetHead(); c_node != nullptr; c_node = c_node->GetNext()) {
+							BaseObject* current_ui_element = c_node->GetData();
 
 							if (selected_index == cpt) {
 								renderer->ui_panel_Mesh->Render(pos_offset, this->Size, v4(0.1f, 0.4f, 0.0f, rel_alpha));
@@ -407,7 +408,7 @@ namespace PG {
 					}
 				}
 			}
-			virtual bool PGUISelectBox::Update(PGControler *controler, double timeElapse, v3* mouse_ui_possition) {
+			virtual bool PGUISelectBox::Update(Controler *controler, double timeElapse, v3* mouse_ui_possition) {
 				bool isChildActive = PGBaseUIElement::Update(controler, timeElapse, mouse_ui_possition);
 				if (isChildActive == false) {
 					switch (this->State) {
@@ -479,7 +480,7 @@ namespace PG {
 				delete(Title_Label);
 				delete(Menu_Margin);
 			}
-			virtual void PGUIMenuWindow::Render(PGBaseRenderer *renderer) override {
+			virtual void PGUIMenuWindow::Render(BaseRenderer *renderer) override {
 				if (this->IsVisible == true) {
 
 					if (this->State != UIState_Idle) {
@@ -493,7 +494,7 @@ namespace PG {
 				}
 
 			}
-			virtual bool PGUIMenuWindow::Update(PGControler *controler, double timeElapse, v3 *mouse_ui_possition) {
+			virtual bool PGUIMenuWindow::Update(Controler *controler, double timeElapse, v3 *mouse_ui_possition) {
 				bool isChildActive = false;
 				if (this->State != UIState_Moving) {
 					isChildActive = PGBaseUIElement::Update(controler, timeElapse, mouse_ui_possition);
@@ -530,7 +531,7 @@ namespace PG {
 
 				this->Hide_Button->SetPossition(v2(size.x - menu_button_default_size - this->Menu_Margin->Right, this->Menu_Margin->Top / 2.f - menu_button_default_size / 2.f));
 			}
-			void PGUIMenuWindow::SetMenuTitle(char* title, PGFont* title_font, v3 title_color) {
+			void PGUIMenuWindow::SetMenuTitle(char* title, Font* title_font, v3 title_color) {
 				this->Title_Label->SetText(title);
 				this->Title_Label->SetFont(title_font);
 				this->Title_Label->Text_Color = title_color;

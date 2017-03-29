@@ -2,19 +2,19 @@
 #define PG_MOUSE_PICKER_H
 
 
-#include "PGGameWindow.h"
-#include "PGControler.h"
+#include "GameWindow.h"
+#include "Controler.h"
 
 
 namespace PG {
 	namespace Engine {
 
-		class PGMousePicker {
+		class MousePicker {
 		private:
-			PGGameWindow* GamewWindow; //Ref 
+			GameWindow* GamewWindow; //Ref 
 		protected:
 		public:
-			v3 PGMousePicker::TranformWindowStoUIS(PGControler* controler, m4* projection_matrix) {
+			v3 MousePicker::TranformWindowStoUIS(Controler* controler, m4* projection_matrix) {
 				float x = (2.0f * (float)controler->xpos) / this->GamewWindow->GetWidth() - 1.0f;
 				float y = 1.0f - (2.0f * (float)controler->ypos) / this->GamewWindow->GetHeight();
 				v3 ray_nds = v3(x, y, -1.f);
@@ -24,7 +24,7 @@ namespace PG {
 
 				return v3(ray_eye.x, ray_eye.y, 0);
 			}
-			v3 PGMousePicker::CastRay(PGControler* controler, m4* projection_matrix, m4* view_matrix) {
+			v3 MousePicker::CastRay(Controler* controler, m4* projection_matrix, m4* view_matrix) {
 				float x_nds((2.0f * (float)controler->xpos) / this->GamewWindow->GetWidth() - 1.f);
 				float y_nds = 1.0f - ((2.0f * (float)controler->ypos) / this->GamewWindow->GetHeight());
 
@@ -37,10 +37,10 @@ namespace PG {
 				v3 ray_wor = glm::normalize(v3(inverse(*view_matrix) * ray_eye));
 				return ray_wor;
 			}
-			PGMousePicker(PGGameWindow* target_game_window) {
+			MousePicker(GameWindow* target_game_window) {
 				GamewWindow = target_game_window;
 			}
-			~PGMousePicker() {
+			~MousePicker() {
 
 			}
 		};

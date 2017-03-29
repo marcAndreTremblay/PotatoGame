@@ -38,7 +38,7 @@ public:
 	}
 	virtual void PGEditorInstance::Build() {
 		EngineInstance::Build();
-		PGBuildableObject::StartBuilding();
+		BuildableObject::StartBuilding();
 
 			//Build a work group for the game and active scenes
 		
@@ -62,13 +62,13 @@ public:
 			
 			//Build the needed UI for the game
 			this->game_canvas = new PGUICanvas();
-			this->game_canvas->Build(this->GameWindow, this->MousePicker, this->Asset_Manager);
+			this->game_canvas->Build(this->Game_Window, this->Mouse_Picker, this->Asset_Manager);
 			
 			
 			//Build the first scene
 			PGTerrainEditorScene* terrain_editor_scene = new PGTerrainEditorScene();
 				terrain_editor_scene->Set_Id(1);
-				terrain_editor_scene->Build(this->MousePicker);
+				terrain_editor_scene->Build(this->Mouse_Picker);
 			this->LoadedScenes->Add(terrain_editor_scene);
 
 			this->CurrentViewedScene = terrain_editor_scene;
@@ -77,7 +77,7 @@ public:
 
 
 
-		PGBuildableObject::EndBuilding();
+		BuildableObject::EndBuilding();
 	}
 };
 

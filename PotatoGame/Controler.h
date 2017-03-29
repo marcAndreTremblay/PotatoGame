@@ -3,22 +3,22 @@
 
 #include "stdafx.h"
 
-#include "PGCore.h"
-#include "PGGameWindow.h"
-#include "PGString.h"
-#include "PGList.h"		
+#include "Core.h"
+#include "GameWindow.h"
+#include "String.h"
+#include "List.h"		
 
 using namespace PG::Core;
 namespace PG {
 	namespace Engine {
-		class PGControlerKey {
+		class ControlerKey {
 		public:
 			int  KeyCode;
 			bool IsPress;
 			bool WasPress;
 			Str *Ref_Name;
 
-			PGControlerKey(int _KeyCode, char* _Ref_Name = nullptr) {
+			ControlerKey(int _KeyCode, char* _Ref_Name = nullptr) {
 				this->WasPress = false;
 				this->IsPress = false;
 				this->KeyCode = _KeyCode;
@@ -27,7 +27,7 @@ namespace PG {
 				}
 
 			}
-			~PGControlerKey() {
+			~ControlerKey() {
 				delete(this->Ref_Name);
 			}
 		};
@@ -65,27 +65,27 @@ namespace PG {
 			PGKey_Right_Ctrl = GLFW_KEY_RIGHT_CONTROL
 		};
 
-		class PGControler {
+		class Controler {
 		protected:
 		private:
-			PGList<PGControlerKey>* Keyboard_Keys;
-			PGList<PGControlerKey>* Mouse_Keys;
-			void PGControler::AddMouseKey(PGMouseKey new_key_id, char* _Ref_Name = nullptr) {
-				Mouse_Keys->Add(new PGControlerKey(new_key_id, _Ref_Name));
+			List<ControlerKey>* Keyboard_Keys;
+			List<ControlerKey>* Mouse_Keys;
+			void Controler::AddMouseKey(PGMouseKey new_key_id, char* _Ref_Name = nullptr) {
+				Mouse_Keys->Add(new ControlerKey(new_key_id, _Ref_Name));
 			}
-			void PGControler::AddKeyboardKey(PGKey new_key_id, char* _Ref_Name = nullptr) {
-				Keyboard_Keys->Add(new PGControlerKey(new_key_id, _Ref_Name));
+			void Controler::AddKeyboardKey(PGKey new_key_id, char* _Ref_Name = nullptr) {
+				Keyboard_Keys->Add(new ControlerKey(new_key_id, _Ref_Name));
 			}
 		public:
 			double xpos, ypos;
 			v2 DeltaPossition;
-			PGControler() {
-				this->Mouse_Keys = new PGList<PGControlerKey>();
+			Controler() {
+				this->Mouse_Keys = new List<ControlerKey>();
 				this->AddMouseKey(PGMouse_Left, "Space bar");
 				this->AddMouseKey(PGMouse_Center, "Space bar");
 				this->AddMouseKey(PGMouse_Right, "Space bar");
 
-				this->Keyboard_Keys = new PGList<PGControlerKey>();
+				this->Keyboard_Keys = new List<ControlerKey>();
 				DeltaPossition = {};
 				this->AddKeyboardKey(PGKey_Space, "Space bar");
 				this->AddKeyboardKey(PGKey_Up, "Up_Key");
@@ -116,35 +116,35 @@ namespace PG {
 
 
 			}
-			~PGControler() {
+			~Controler() {
 				delete(this->Keyboard_Keys);
 			}
-			PGControlerKey* PGControler::GetKey(PGKey key) {
-				for (PGListNode<PGControlerKey> *c_node = Keyboard_Keys->GetHead(); c_node != nullptr; c_node = c_node->GetNext()) {
-					PGControlerKey * current_key = c_node->GetData();
+			ControlerKey* Controler::GetKey(PGKey key) {
+				for (ListNode<ControlerKey> *c_node = Keyboard_Keys->GetHead(); c_node != nullptr; c_node = c_node->GetNext()) {
+					ControlerKey * current_key = c_node->GetData();
 					if (current_key->KeyCode == key) {
 						return current_key;
 					}
 				}
 				return nullptr;
 			}
-			PGControlerKey* PGControler::GetKey(PGMouseKey key) {
-				for (PGListNode<PGControlerKey> *c_node = Mouse_Keys->GetHead(); c_node != nullptr; c_node = c_node->GetNext()) {
-					PGControlerKey * current_key = c_node->GetData();
+			ControlerKey* Controler::GetKey(PGMouseKey key) {
+				for (ListNode<ControlerKey> *c_node = Mouse_Keys->GetHead(); c_node != nullptr; c_node = c_node->GetNext()) {
+					ControlerKey * current_key = c_node->GetData();
 					if (current_key->KeyCode == key) {
 						return current_key;
 					}
 				}
 				return nullptr;
 			}
-			void PGControler::Update(PGGameWindow* _GameWindow) {
+			void Controler::Update(GameWindow* _GameWindow) {
 				v2 last_possition = v2(this->xpos, this->ypos);
 				glfwGetCursorPos(_GameWindow->Gl_Window, &this->xpos, &this->ypos);
 				v2 current_possition = v2(this->xpos, this->ypos);
 				DeltaPossition = (current_possition - last_possition);
 
-				for (PGListNode<PGControlerKey> *c_node = Mouse_Keys->GetHead(); c_node != nullptr; c_node = c_node->GetNext()) {
-					PGControlerKey* current_key = c_node->GetData();
+				for (ListNode<ControlerKey> *c_node = Mouse_Keys->GetHead(); c_node != nullptr; c_node = c_node->GetNext()) {
+					ControlerKey* current_key = c_node->GetData();
 					current_key->WasPress = current_key->IsPress;
 					if (glfwGetMouseButton(_GameWindow->Gl_Window, current_key->KeyCode) == GLFW_PRESS) {
 						current_key->IsPress = true;
@@ -154,8 +154,8 @@ namespace PG {
 					}
 				}
 
-				for (PGListNode<PGControlerKey> *c_node = Keyboard_Keys->GetHead(); c_node != nullptr; c_node = c_node->GetNext()) {
-					PGControlerKey* current_key = c_node->GetData();
+				for (ListNode<ControlerKey> *c_node = Keyboard_Keys->GetHead(); c_node != nullptr; c_node = c_node->GetNext()) {
+					ControlerKey* current_key = c_node->GetData();
 					current_key->WasPress = current_key->IsPress;
 					if (glfwGetKey(_GameWindow->Gl_Window, current_key->KeyCode) == GLFW_PRESS) {
 						current_key->IsPress = true;
@@ -166,9 +166,9 @@ namespace PG {
 				}
 
 			}
-			bool PGControler::IsRelease(PGKey key) {
-				for (PGListNode<PGControlerKey> *c_node = Keyboard_Keys->GetHead(); c_node != nullptr; c_node = c_node->GetNext()) {
-					PGControlerKey * current_key = c_node->GetData();
+			bool Controler::IsRelease(PGKey key) {
+				for (ListNode<ControlerKey> *c_node = Keyboard_Keys->GetHead(); c_node != nullptr; c_node = c_node->GetNext()) {
+					ControlerKey * current_key = c_node->GetData();
 					if (current_key->KeyCode == key) {
 						if (current_key->IsPress == false && current_key->WasPress == true) {
 							return true;
@@ -180,9 +180,9 @@ namespace PG {
 				}
 				return  false;
 			}
-			bool PGControler::IsRelease(PGMouseKey key) {
-				for (PGListNode<PGControlerKey> *c_node = Mouse_Keys->GetHead(); c_node != nullptr; c_node = c_node->GetNext()) {
-					PGControlerKey * current_key = c_node->GetData();
+			bool Controler::IsRelease(PGMouseKey key) {
+				for (ListNode<ControlerKey> *c_node = Mouse_Keys->GetHead(); c_node != nullptr; c_node = c_node->GetNext()) {
+					ControlerKey * current_key = c_node->GetData();
 					if (current_key->KeyCode == key) {
 						if (current_key->IsPress == false && current_key->WasPress == true) {
 							return true;
@@ -194,9 +194,9 @@ namespace PG {
 				}
 				return  false;
 			}
-			bool PGControler::IsPressed(PGKey key) {
-				for (PGListNode<PGControlerKey> *c_node = Keyboard_Keys->GetHead(); c_node != nullptr; c_node = c_node->GetNext()) {
-					PGControlerKey * current_key = c_node->GetData();
+			bool Controler::IsPressed(PGKey key) {
+				for (ListNode<ControlerKey> *c_node = Keyboard_Keys->GetHead(); c_node != nullptr; c_node = c_node->GetNext()) {
+					ControlerKey * current_key = c_node->GetData();
 					if (current_key->KeyCode == key) {
 						if (current_key->IsPress == true && current_key->WasPress == false) {
 							return true;
@@ -208,9 +208,9 @@ namespace PG {
 				}
 				return  false;
 			}
-			bool PGControler::IsPressed(PGMouseKey key) {
-				for (PGListNode<PGControlerKey> *c_node = Mouse_Keys->GetHead(); c_node != nullptr; c_node = c_node->GetNext()) {
-					PGControlerKey * current_key = c_node->GetData();
+			bool Controler::IsPressed(PGMouseKey key) {
+				for (ListNode<ControlerKey> *c_node = Mouse_Keys->GetHead(); c_node != nullptr; c_node = c_node->GetNext()) {
+					ControlerKey * current_key = c_node->GetData();
 					if (current_key->KeyCode == key) {
 						if (current_key->IsPress == true && current_key->WasPress == false) {
 							return true;

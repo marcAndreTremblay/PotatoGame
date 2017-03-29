@@ -3,7 +3,7 @@
 
 
 #include "stdafx.h"
-#include "PGCore.h"
+#include "Core.h"
 
 using namespace PG::Core;
 namespace PG {

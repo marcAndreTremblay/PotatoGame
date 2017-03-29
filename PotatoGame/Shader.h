@@ -1,15 +1,9 @@
-#if !defined(PG_MESH_H)
-#define PG_MESH_H
+#if !defined(PG_SHADER_H)
+#define PG_SHADER_H
 
+#include "Core.h"
 
-#include "stdafx.h"
-
-#include "PGCore.h"
-#include "PGList.h"
-#include "PGString.h"
-#include "PGBuildableObject.h"
-
-
+using namespace PG::Core;
 namespace PG {
 	namespace Engine {
 		class PGShader {
@@ -110,29 +104,6 @@ namespace PG {
 				glUseProgram(this->ShaderID);
 			}
 		};
-
-		class PGMesh : public PGBuildableObject {
-		protected:
-			PGShader* Shader;
-			GLuint VAO;
-			GLuint VBO;
-		private:
-		public:
-			PGMesh(PGShader* shader)
-				:PGBuildableObject() {
-				this->Shader = shader;
-				glGenVertexArrays(1, &this->VAO);
-				glGenBuffers(1, &this->VBO);
-			}
-			~PGMesh() {
-				delete(this->Shader);
-				glDeleteVertexArrays(1, &this->VAO);
-				glDeleteBuffers(1, &this->VBO);
-			}
-			void PGMesh::Build() override = 0;
-			void PGMesh::Render();
-		};
 	}
-
 }
 #endif

@@ -4,11 +4,11 @@
 
 #include "stdafx.h"
 #include "AssetManager.h"
-#include "PGCore.h"
-#include "PGList.h"
+#include "Core.h"
+#include "List.h"
 #include "PGShaderSources.h"
-#include "PGMesh.h"
-#include "PGFont.h"
+#include "Mesh.h"
+#include "Font.h"
 
 #include "PGMapGrid.h"
 
@@ -110,14 +110,14 @@ using namespace PG::Engine;
 		}
 	));
 #endif
-	class PGMapMesh : public PGMesh {
+	class PGMapMesh : public Mesh {
 	private:
 	public:
 		int vertix_count;
 		GLuint Unif_Translate;
 		PGGridRawData *grid_data;
 		PGMapMesh(PGGridRawData *_grid_data) :
-			PGMesh(new PGShader(map_hexa_vertex_shader, map_hexa_FragShader)) {
+			Mesh(new PGShader(map_hexa_vertex_shader, map_hexa_FragShader)) {
 			grid_data = _grid_data;
 			Unif_Translate = 0;
 		}
@@ -125,7 +125,7 @@ using namespace PG::Engine;
 
 		}
 		virtual void PGMapMesh::Render(v3 possition)  {
-			if (this->PGMesh::IsBuild() == true) {
+			if (this->Mesh::IsBuild() == true) {
 				this->Shader->Use();
 				glBindVertexArray(this->VAO);
 				//Vertex shader uniform variable
@@ -145,7 +145,7 @@ using namespace PG::Engine;
 			return vec;
 		}
 		virtual void PGMapMesh::Build()  {
-			PGBuildableObject::StartBuilding();
+			BuildableObject::StartBuilding();
 
 			glUniformBlockBinding(this->Shader->ShaderID, glGetUniformBlockIndex(this->Shader->ShaderID, "Renderer_UBO"), 1);
 			glUniformBlockBinding(this->Shader->ShaderID, glGetUniformBlockIndex(this->Shader->ShaderID, "SceneAdvanceLightData_UBO"), 3);
@@ -230,7 +230,7 @@ using namespace PG::Engine;
 			glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, per_vertex_data_lenght, (GLvoid*)(sizeof(v4)+4 * sizeof(v3)));
 			glEnableVertexAttribArray(5);
 			glBindVertexArray(0);
-			PGBuildableObject::EndBuilding();
+			BuildableObject::EndBuilding();
 		}
 	};
 

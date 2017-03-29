@@ -3,16 +3,19 @@
 
 #include "stdafx.h"
 
-#include "PGString.h"
-#include "PGBaseObject.h"
-#include "PGBuildableObject.h"
-
+#include "Core.h"
+#include "String.h"
 using namespace PG::Core;
+
+#include "BaseObject.h"
+#include "BuildableObject.h"
+
+
 
 namespace PG {
 	namespace Engine {
 
-#define TOG_Font_Loaded_Character_Cpt 128
+	#define TOG_Font_Loaded_Character_Cpt 128
 
 		struct PGCharacter {
 			GLuint     TextureID;  // ID handle of the glyph texture
@@ -21,26 +24,26 @@ namespace PG {
 			GLuint     Advance;    // Offset to advance to next glyph
 		};
 
-		class PGFont : public PGBaseObject, PGBuildableObject {
+		class Font : public BaseObject, BuildableObject {
 			bool IsErrorWithFace;
 			FT_Face Ft_face;
 		public:
 			PGCharacter CharacterCollection[128];
-			PGFont(FT_Library *ft_lib, char* file_path, char* font_name)
-				:PGBaseObject() {
+			Font(FT_Library *ft_lib, char* file_path, char* font_name)
+				:BaseObject() {
 				this->Set_Name(font_name);
 				this->IsErrorWithFace = true;
 				this->IsErrorWithFace = FT_New_Face(*ft_lib, file_path, 0, &this->Ft_face);
 
 			}
-			~PGFont() {
+			~Font() {
 				FT_Done_Face(this->Ft_face);
 				for (GLubyte c = 0; c < TOG_Font_Loaded_Character_Cpt; c++) {
 					glDeleteTextures(1, &this->CharacterCollection[c].TextureID);
 				}
 			}
-			void  PGFont::Build() override {
-				PGBuildableObject::StartBuilding();
+			void  Font::Build() override {
+				BuildableObject::StartBuilding();
 				if (this->IsErrorWithFace == false) {
 
 					//FT_Set_Pixel_Sizes(this->Ft_face, 0, 48);
@@ -80,9 +83,9 @@ namespace PG {
 						};
 					}
 				}
-				PGBuildableObject::EndBuilding();
+				BuildableObject::EndBuilding();
 			}
-			void PGFont::GetFontBondingBox(char* text_in, r32 scale_in, v2 *box_out) {
+			void Font::GetFontBondingBox(char* text_in, r32 scale_in, v2 *box_out) {
 				float lower_bearing_y = 0;
 				float upper_bering_y = 0.f;
 				for (char *current_char = text_in; *current_char != ENDSTR; current_char++) {

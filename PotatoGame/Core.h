@@ -1,6 +1,8 @@
 #if !defined(PG_CORE_H)
 #define PG_CORE_H
 
+#include "stdafx.h"
+
 namespace PG {
 	namespace Core {
 

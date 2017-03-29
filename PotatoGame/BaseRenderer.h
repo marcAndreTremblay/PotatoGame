@@ -3,28 +3,18 @@
 
 #include "stdafx.h"
 
-#include "PGCore.h"
+#include "Core.h"
 
-#include "PGList.h"
-#include "PGString.h"
-#include "PGMesh.h"
+#include "List.h"
+#include "String.h"
+#include "Mesh.h"
 #include "PGMeshInstance.h"
-#include "PGBackgroundMapGridMesh.h"
 
 namespace PG {
 	namespace Engine {
 
-		class PGRenderer {
-		public:
-			PGRenderer() {
 
-			}
-			~PGRenderer() {
-
-			}
-		};
-
-		class PGBaseRenderer {
+		class BaseRenderer {
 		protected:
 			GLuint Renderer_UBO_Ref_Id; //ubo binding point 1
 			GLuint SceneLight_UBO_Ref_Id; //ubo binding point 2  //Todo(Marc): Remove thi from renderer
@@ -45,7 +35,7 @@ namespace PG {
 
 
 
-			PGBaseRenderer() {
+			BaseRenderer() {
 				glewExperimental = true; // Needed for core profile
 				if (glewInit() == GLEW_OK) // Initialize GLEW
 				{
@@ -68,7 +58,7 @@ namespace PG {
 				}
 				this->Build();//todo(marc): make this be call from elsewhere
 			}
-			~PGBaseRenderer() {
+			~BaseRenderer() {
 
 				glDeleteBuffers(1, &this->Renderer_UBO_Ref_Id);
 				glDeleteBuffers(1, &this->SceneLight_UBO_Ref_Id);
@@ -85,41 +75,41 @@ namespace PG {
 				delete(this->ui_panel_Mesh);
 				delete(this->ui_image_mesh);
 			}
-			void PGBaseRenderer::SetWorldView(m4 *_matrix) {
+			void BaseRenderer::SetWorldView(m4 *_matrix) {
 				glBindBuffer(GL_UNIFORM_BUFFER, this->Renderer_UBO_Ref_Id);
 				glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), sizeof(glm::mat4), _matrix);
 				glBindBuffer(GL_UNIFORM_BUFFER, 0);
 			}
-			void PGBaseRenderer::SetWorldProjection(m4 *_matrix) {
+			void BaseRenderer::SetWorldProjection(m4 *_matrix) {
 				glBindBuffer(GL_UNIFORM_BUFFER, this->Renderer_UBO_Ref_Id);
 				glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), _matrix);
 				glBindBuffer(GL_UNIFORM_BUFFER, 0);
 			}
-			void PGBaseRenderer::SetUIProjection(m4 *_matrix) {
+			void BaseRenderer::SetUIProjection(m4 *_matrix) {
 				glBindBuffer(GL_UNIFORM_BUFFER, this->Renderer_UBO_Ref_Id);
 				glBufferSubData(GL_UNIFORM_BUFFER, 2 * sizeof(glm::mat4), sizeof(glm::mat4), _matrix);
 				glBindBuffer(GL_UNIFORM_BUFFER, 0);
 			}
 
 
-			void PGBaseRenderer::PushLightPossition(v4 *_vector) {
+			void BaseRenderer::PushLightPossition(v4 *_vector) {
 				glBindBuffer(GL_UNIFORM_BUFFER, this->SceneLight_UBO_Ref_Id);
 				glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(v4), _vector);
 				glBindBuffer(GL_UNIFORM_BUFFER, 0);
 			}
-			void PGBaseRenderer::PushLightColor(v3 *_color_vector) {
+			void BaseRenderer::PushLightColor(v3 *_color_vector) {
 				glBindBuffer(GL_UNIFORM_BUFFER, this->SceneLight_UBO_Ref_Id);
 				glBufferSubData(GL_UNIFORM_BUFFER, sizeof(v4), sizeof(v3), _color_vector);
 				glBindBuffer(GL_UNIFORM_BUFFER, 0);
 			}
 
-			void PGBaseRenderer::PushLightData(PGLight* _light) {
+			void BaseRenderer::PushLightData(PGLight* _light) {
 				glBindBuffer(GL_UNIFORM_BUFFER, this->SceneAdvanceLight_UBO_Ref_Id);
 				glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(PGLight), _light);
 				glBindBuffer(GL_UNIFORM_BUFFER, 0);
 			}
 
-			virtual void PGBaseRenderer::Build() {
+			virtual void BaseRenderer::Build() {
 				//Gen the UBO Buffer and get ID
 				glGenBuffers(1, &this->Renderer_UBO_Ref_Id);
 				glGenBuffers(1, &this->SceneLight_UBO_Ref_Id);
@@ -175,7 +165,7 @@ namespace PG {
 
 
 			//Note(Marc): Move all mes as private a
-			void PGBaseRenderer::RenderUIText(char *text_string, v3 possition, v4 color, r32 scale, PGFont *font) {
+			void BaseRenderer::RenderUIText(char *text_string, v3 possition, v4 color, r32 scale, Font *font) {
 				this->textMesh->Render(text_string, possition, color, scale, font);
 			}
 

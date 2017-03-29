@@ -1,10 +1,10 @@
 #if !defined(PG_GAME_MODEL_H)
 #define PG_GAME_MODEL_H
 
-#include "PGList.h"
-#include "PGBaseObjectList.h"
-#include "PGFont.h"
-#include "PGTexture.h"
+#include "List.h"
+#include "ObjectList.h"
+#include "Font.h"
+#include "Texture.h"
 
 using namespace PG::Core;
 
@@ -32,9 +32,9 @@ namespace PG {
 		class RawMaterielData {
 			int count;
 		public:
-			PGList<RawMateriel> *RawMateriels;
+			List<RawMateriel> *RawMateriels;
 			RawMateriel* RawMaterielData::FindByNameRef(char* name) {
-				for (PGListNode<RawMateriel> *c_node = this->RawMateriels->GetHead(); c_node != nullptr; c_node = c_node->GetNext()) {
+				for (ListNode<RawMateriel> *c_node = this->RawMateriels->GetHead(); c_node != nullptr; c_node = c_node->GetNext()) {
 					RawMateriel* current_element = c_node->GetData();
 					if (current_element->Name->Compare(new Str(name)) == true) {
 						return current_element;
@@ -43,7 +43,7 @@ namespace PG {
 				return nullptr;
 			}
 			RawMateriel* RawMaterielData::FindByNameId(int target_id) {
-				for (PGListNode<RawMateriel> *c_node = this->RawMateriels->GetHead(); c_node != nullptr; c_node = c_node->GetNext()) {
+				for (ListNode<RawMateriel> *c_node = this->RawMateriels->GetHead(); c_node != nullptr; c_node = c_node->GetNext()) {
 					RawMateriel* current_element = c_node->GetData();
 					if (current_element->Id == target_id) {
 						return current_element;
@@ -53,7 +53,7 @@ namespace PG {
 			}
 
 			RawMaterielData(char * FILE_PATH) {
-				RawMateriels = new PGList<RawMateriel>(true);
+				RawMateriels = new List<RawMateriel>(true);
 				RawMateriel *last_new_mat;
 				int id = 0;
 				FILE * file = fopen(FILE_PATH, "r");

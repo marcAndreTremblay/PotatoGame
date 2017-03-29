@@ -1,11 +1,11 @@
 #if !defined(PG_ASSET_MANAGER_H)
 #define PG_ASSET_MANAGER_H
 
-#include "PGList.h"
-#include "PGBaseObjectList.h"
-#include "PGFont.h"
-#include "PGTexture.h"
-#include "PGGameModel.h"
+#include "List.h"
+#include "ObjectList.h"
+#include "Font.h"
+#include "Texture.h"
+#include "GameModel.h"
 
 using namespace PG::Core;
 namespace PG {
@@ -18,9 +18,9 @@ namespace PG {
 			bool IsFontLoadingEnable;
 			FT_Library* Ft_lib_Intance;
 
-			PGBaseObjList<PGFont>* Fonts_List;
-			PGBaseObjList<RawModelData>* Obj_Model_List;
-			PGBaseObjList<PGTexture>* Textures_List;
+			ObjectList<Font>* Fonts_List;
+			ObjectList<RawModelData>* Obj_Model_List;
+			ObjectList<Texture>* Textures_List;
 
 			static void FreeImageErrorHandler(FREE_IMAGE_FORMAT fif, const char *message) {
 				//Todo(Marc):Log error
@@ -36,13 +36,13 @@ namespace PG {
 				this->IsFontLoadingEnable = false;
 
 				/* Init Texture loading */
-				this->Textures_List = new PGBaseObjList<PGTexture>(true);
+				this->Textures_List = new ObjectList<Texture>(true);
 				FreeImage_Initialise(false);
 				FreeImage_SetOutputMessage(FreeImageErrorHandler);
 
 
 				/* Init Font loading */
-				this->Fonts_List = new PGBaseObjList<PGFont>(true);
+				this->Fonts_List = new ObjectList<Font>(true);
 				this->Ft_lib_Intance = new FT_Library();
 				FT_Error result_error = FT_Init_FreeType(this->Ft_lib_Intance);
 				if (result_error != false) {
@@ -52,7 +52,7 @@ namespace PG {
 					this->IsFontLoadingEnable = true;
 				}
 
-				this->Obj_Model_List = new PGBaseObjList<RawModelData>(true);
+				this->Obj_Model_List = new ObjectList<RawModelData>(true);
 			}
 			~AssetManager() {
 				delete(this->Fonts_List);
@@ -65,9 +65,9 @@ namespace PG {
 				FreeImage_DeInitialise();
 
 			}
-			PGFont* AssetManager::LoadFont(char *path, char* ref_Name) {
+			Font* AssetManager::LoadFont(char *path, char* ref_Name) {
 				if (IsFontLoadingEnable == true) {
-					PGFont* new_font = new PGFont(this->Ft_lib_Intance, path, ref_Name);
+					Font* new_font = new Font(this->Ft_lib_Intance, path, ref_Name);
 					new_font->Build();
 					this->Fonts_List->Add(new_font);
 
@@ -75,16 +75,16 @@ namespace PG {
 				}
 				return nullptr;
 			}
-			PGTexture*  AssetManager::LoadTexture(PGTexFormat format, char *path, char* ref_Name) {
-				PGTexture* new_texture = new PGTexture(format, path, ref_Name);
+			Texture*  AssetManager::LoadTexture(TextureFormat format, char *path, char* ref_Name) {
+				Texture* new_texture = new Texture(format, path, ref_Name);
 				new_texture->Build();
 				this->Textures_List->Add(new_texture);
 				return new_texture;
 			}
-			PGTexture* AssetManager::SeachForTexture(char* ref_Texture_Name) {
+			Texture* AssetManager::SeachForTexture(char* ref_Texture_Name) {
 				return Textures_List->FindByName(ref_Texture_Name);
 			}
-			PGFont* AssetManager::SeachForFont(char* ref_Font_Name) {
+			Font* AssetManager::SeachForFont(char* ref_Font_Name) {
 				return Fonts_List->FindByName(ref_Font_Name);
 			}
 		};
