@@ -44,11 +44,15 @@ namespace PG {
 				ListNode<T>* next_node = head;
 				while (next_node != nullptr) {
 					ListNode<T>* current_node = next_node;
+					if (current_node != nullptr) {
 					next_node = current_node->GetNext();
-					if (this->managing_object == true) {
-						delete(current_node->GetData());
-					}
+						if (this->managing_object == true) {
+							T* t = current_node->GetData();
+							delete(t);
+						}
+										
 					delete(current_node);
+					}
 				}
 			}
 			/* Functions */

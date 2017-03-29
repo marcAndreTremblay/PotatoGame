@@ -37,27 +37,6 @@ namespace PG {
 		#define PG_Pi32  3.14159265359f
 
 
-
-		template <class T>
-		class Buffer {
-		public:
-			T* data;
-			int count;
-			Buffer(int element_count) {
-				data = (T*)malloc(sizeof(T)*element_count);
-				count = element_count;
-			}
-			Buffer() {
-				data = nullptr;
-				count = 0;
-			}
-			~Buffer() {
-				free(data);
-			}
-			T* Buffer::At(int i) {
-				return &data[i];
-			}
-		};
 	}
 }
 #endif

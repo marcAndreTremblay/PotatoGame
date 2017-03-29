@@ -9,7 +9,7 @@
 #include "Entity.h"
 
 #include "String.h"
-#include "ObjectList.h"
+#include "EngineObjectList.h"
 #include "MousePicker.h"
 #include "Camera.h"
 
@@ -17,7 +17,7 @@
 using namespace PG::Engine;
 namespace PG {
 	namespace Engine {
-		class Scene : public BaseObject, BuildableObject {
+		class Scene : public EngineObject, BuildableObject {
 		protected:
 			Camera * scene_camera;
 			m4 Projection_Matrice;
@@ -25,7 +25,7 @@ namespace PG {
 
 			}
 
-			ObjectList<Entity>* Entities;
+			EngineObjectList<Entity>* Entities;
 			MousePicker* Mouse_Picker; //Note(marc): <- Unmanaged resources
 		private:
 		public:
@@ -33,11 +33,11 @@ namespace PG {
 			bool ShouldHandleControler;
 			bool ShouldRender;
 			Scene() :
-				BaseObject() {
+				EngineObject() {
 				this->ShouldUpdate = true;
 				this->ShouldRender = true;
 				this->ShouldHandleControler = true;
-				this->Entities = new ObjectList<Entity>(true);
+				this->Entities = new EngineObjectList<Entity>(true);
 			}
 			virtual ~Scene() {
 				delete(this->Entities);

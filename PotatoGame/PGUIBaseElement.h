@@ -2,17 +2,16 @@
 #define PG_UI_BASE_ELEMENT_H
 
 
-#include "PGUICore.h"
+#include "GUICore.h"
 
 using namespace PG::Engine;
-using namespace PG::GUI;
 namespace PG {
 	namespace GUI {
-		class PGBaseUIElement : public BaseObject, public PGEventEmiter, public PGEventListener {
+		class PGBaseUIElement : public EngineObject, public EventEmiter, public EventListener {
 		protected:
-			UIElementState State;
+			GUIElementState State;
 			PGBaseUIElement* Parent;//Un-managed resource
-			ObjectList<PGBaseUIElement>* Child_list;
+			EngineObjectList<PGBaseUIElement>* Child_list;
 			bool PGBaseUIElement::IsIntersection(v3* mouse_location) {
 				v2 rel_possition = this->GetRelativePossition();
 				if ((mouse_location->x > rel_possition.x) && //Left
@@ -44,7 +43,7 @@ namespace PG {
 			r32 Opacity;
 			PGBaseUIElement() {
 
-				this->Child_list = new ObjectList<PGBaseUIElement>(true);
+				this->Child_list = new EngineObjectList<PGBaseUIElement>(true);
 				this->IsVisible = true;
 				this->Parent = nullptr;
 				this->State = UIState_Idle;
@@ -52,7 +51,7 @@ namespace PG {
 				this->Opacity = 1.f;
 				this->Size = v2(1.f, 1.f);
 			}
-			~PGBaseUIElement() {
+			virtual ~PGBaseUIElement() {
 				delete(this->Child_list);
 				this->Parent = nullptr;
 			}
@@ -292,11 +291,11 @@ namespace PG {
 					case UIState_Hot:{
 										 if (controler->IsPressed(PGMouse_Left) == true) {
 											 this->State = UIState_Left_Press;
-											 this->EmiteEvent(new PGUIEvent(this, UIEvent_Button_Press));
+											 this->EmiteEvent(new GUIEvent(this, GUIEvent_Button_Press));
 										 }
 										 if (controler->IsPressed(PGMouse_Right) == true) {
 											 this->State = UIState_Right_Press;
-											 this->EmiteEvent(new PGUIEvent(this, UIEvent_Button_Press));
+											 this->EmiteEvent(new GUIEvent(this, GUIEvent_Button_Press));
 										 }
 										 break; }
 					case UIState_Left_Press:{
@@ -307,7 +306,7 @@ namespace PG {
 													else {
 														this->State = UIState_Idle;
 													}
-													this->EmiteEvent(new PGUIEvent(this, UIEvent_Button_Release));
+													this->EmiteEvent(new GUIEvent(this, GUIEvent_Button_Release));
 												}
 												break; }
 					case UIState_Right_Press:{
@@ -318,7 +317,7 @@ namespace PG {
 													 else {
 														 this->State = UIState_Idle;
 													 }
-													 this->EmiteEvent(new PGUIEvent(this, UIEvent_Button_Release));
+													 this->EmiteEvent(new GUIEvent(this, GUIEvent_Button_Release));
 												 }
 												 break; }
 
@@ -333,7 +332,7 @@ namespace PG {
 		class PGUISelectBox : public PGBaseUIElement {
 		protected:
 		private:
-			List<BaseObject> *element_list;
+			List<EngineObject> *Element_list;
 			int selected_index = 1; //Note(Marc): -1 for no selection
 			int hot_index = -1;
 
@@ -347,10 +346,10 @@ namespace PG {
 			v4 text_color = v4(0.8f, 0.8f, 0.8f, 1.f);
 		public:
 			PGUISelectBox() {
-				element_list = new List<BaseObject>(false);
+				Element_list = new List<EngineObject>(false);
 			}
 			~PGUISelectBox() {
-				delete(element_list);
+				delete(Element_list);
 			}
 			void PGUISelectBox::SetFont(Font *_font) {
 				this->font = _font;
@@ -360,8 +359,8 @@ namespace PG {
 				element_size.y = size.y;
 				PGBaseUIElement::SetSize(size);
 			}
-			void PGUISelectBox::AddListElement(BaseObject *new_obj) {
-				element_list->Add(new_obj);
+			void PGUISelectBox::AddListElement(EngineObject *new_obj) {
+				Element_list->Add(new_obj);
 			}
 			virtual bool PGUISelectBox::IsActif() override {
 				if (this->State == UIState_Selecting) return true;
@@ -382,15 +381,15 @@ namespace PG {
 					renderer->ui_panel_Mesh->Render(pos_offset, this->Size, back_color);
 
 					if (selected_index > -1) {
-						selected_string = element_list->GetAt(selected_index)->Get_Name()->CharAt();
+						selected_string = Element_list->GetAt(selected_index)->Get_Name()->CharAt();
 						renderer->RenderUIText(selected_string, pos_offset + v3(0.f, 0.f, 0.1f), text_color, font_size, font);
 					}
 					if (this->State == UIState_Selecting) {
 						pos_offset.y += this->element_size.y + element_offset;
 
 						int cpt = 0;
-						for (ListNode<BaseObject> *c_node = element_list->GetHead(); c_node != nullptr; c_node = c_node->GetNext()) {
-							BaseObject* current_ui_element = c_node->GetData();
+						for (ListNode<EngineObject> *c_node = Element_list->GetHead(); c_node != nullptr; c_node = c_node->GetNext()) {
+							EngineObject* current_ui_element = c_node->GetData();
 
 							if (selected_index == cpt) {
 								renderer->ui_panel_Mesh->Render(pos_offset, this->Size, v4(0.1f, 0.4f, 0.0f, rel_alpha));
@@ -426,7 +425,7 @@ namespace PG {
 												   else {
 													   this->State = UIState_Idle;
 												   }
-												   this->EmiteEvent(new PGUIEvent(this, UIEvent_Button_Press));
+												   this->EmiteEvent(new GUIEvent(this, GUIEvent_Button_Press));
 											   }
 											   break;
 					}
@@ -444,7 +443,7 @@ namespace PG {
 		protected:
 			r32 menu_button_default_size = 16.f;
 		private:
-			PGUIMargin* Menu_Margin;
+			GUIMargin* Menu_Margin;
 			PGUIPanel* Main_Panel;
 			PGUIButton * Hide_Button;
 			PGUILabel * Title_Label;
@@ -455,7 +454,7 @@ namespace PG {
 				this->IsMovable = true;
 				this->IsResizable = true;
 
-				this->Menu_Margin = new PGUIMargin(5.f, 5.f, 32.f, 5.f);
+				this->Menu_Margin = new GUIMargin(5.f, 5.f, 32.f, 5.f);
 
 				this->Main_Panel = new PGUIPanel();
 				this->Main_Panel->SetPossition(v2(0.f, 0.f));
@@ -475,9 +474,6 @@ namespace PG {
 				PGBaseUIElement::AddChild(Title_Label);
 			}
 			~PGUIMenuWindow() {
-				delete(Main_Panel);
-				delete(Hide_Button);
-				delete(Title_Label);
 				delete(Menu_Margin);
 			}
 			virtual void PGUIMenuWindow::Render(BaseRenderer *renderer) override {
@@ -539,10 +535,10 @@ namespace PG {
 			void PGUIMenuWindow::AddChild(PGBaseUIElement* child_element) override {
 				Main_Panel->AddChild(child_element);
 			}
-			virtual void PGUIMenuWindow::OnEvent(PGUIEvent *event) {
-				PGEventListener::OnEvent(event);
+			virtual void PGUIMenuWindow::OnEvent(GUIEvent *event) {
+				EventListener::OnEvent(event);
 				if (event->sender == this->Hide_Button) {
-					if (event->code == UIEvent_Button_Release) {
+					if (event->code == GUIEvent_Button_Release) {
 						this->IsVisible = false;
 					}
 				}

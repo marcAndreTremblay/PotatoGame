@@ -15,7 +15,7 @@ using namespace PG::Core;
 #include "PGUICanvas.h"
 #include "PGEditorScene.h"
 #include "MousePicker.h"
-#include "ObjectList.h"
+#include "EngineObjectList.h"
 using namespace PG::Engine;
 namespace PG {
 	namespace Engine {
@@ -26,7 +26,7 @@ namespace PG {
 			char frame_cpt_buffer[40];
 
 			Scene* CurrentViewedScene;
-			ObjectList<Scene>* LoadedScenes;
+			EngineObjectList<Scene>* LoadedScenes;
 			Controler* Controlers;
 			GameWindow* Game_Window;
 			BaseRenderer* GameRenderer;
@@ -73,14 +73,14 @@ namespace PG {
 				this->ShouldGameClose = false;
 				this->IsBuild = false;
 				this->CurrentViewedScene = nullptr;
-				this->LoadedScenes = new ObjectList<Scene>(true);
+				this->LoadedScenes = new EngineObjectList<Scene>(true);
 				this->Controlers = new Controler();
 				this->Game_Window = new GameWindow(false, 1024, 768);
 				this->GameRenderer = new BaseRenderer();
 				this->Asset_Manager = new AssetManager();
 				this->Mouse_Picker = new MousePicker(this->Game_Window);
 			}
-			virtual ~EngineInstance() {
+			 ~EngineInstance() {
 				delete(this->LoadedScenes);
 				delete(this->Controlers);
 				delete(this->GameRenderer);

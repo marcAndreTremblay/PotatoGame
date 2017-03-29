@@ -7,7 +7,7 @@
 #include "String.h"
 using namespace PG::Core;
 
-#include "BaseObject.h"
+#include "EngineObject.h"
 #include "BuildableObject.h"
 
 
@@ -24,13 +24,13 @@ namespace PG {
 			GLuint     Advance;    // Offset to advance to next glyph
 		};
 
-		class Font : public BaseObject, BuildableObject {
+		class Font : public EngineObject, BuildableObject {
 			bool IsErrorWithFace;
 			FT_Face Ft_face;
 		public:
 			PGCharacter CharacterCollection[128];
 			Font(FT_Library *ft_lib, char* file_path, char* font_name)
-				:BaseObject() {
+				:EngineObject() {
 				this->Set_Name(font_name);
 				this->IsErrorWithFace = true;
 				this->IsErrorWithFace = FT_New_Face(*ft_lib, file_path, 0, &this->Ft_face);

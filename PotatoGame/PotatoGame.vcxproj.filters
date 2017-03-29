@@ -69,17 +69,8 @@
     <ClInclude Include="PGEditorScene.h">
       <Filter>Header Files\GameEditor</Filter>
     </ClInclude>
-    <ClInclude Include="PGUICore.h">
-      <Filter>Header Files\PG\Gui</Filter>
-    </ClInclude>
     <ClInclude Include="PGMapGrid.h">
       <Filter>Header Files\GameEditor</Filter>
-    </ClInclude>
-    <ClInclude Include="PGUITreeList.h">
-      <Filter>Header Files\PG\Gui\UIElement</Filter>
-    </ClInclude>
-    <ClInclude Include="PGUISelectList.h">
-      <Filter>Header Files\PG\Gui\UIElement</Filter>
     </ClInclude>
     <ClInclude Include="PGBackgroundMapGridMesh.h">
       <Filter>Header Files\GameEditor\Mesh</Filter>
@@ -132,12 +123,6 @@
     <ClInclude Include="Primitive.h">
       <Filter>Header Files\PG\Core</Filter>
     </ClInclude>
-    <ClInclude Include="BaseObject.h">
-      <Filter>Header Files\PG\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="ObjectList.h">
-      <Filter>Header Files\PG\Engine\Container</Filter>
-    </ClInclude>
     <ClInclude Include="GameWindow.h">
       <Filter>Header Files\PG\Engine</Filter>
     </ClInclude>
@@ -158,6 +143,24 @@
     </ClInclude>
     <ClInclude Include="Texture.h">
       <Filter>Header Files\PG\Engine\Asset</Filter>
+    </ClInclude>
+    <ClInclude Include="GUICore.h">
+      <Filter>Header Files\PG\Gui</Filter>
+    </ClInclude>
+    <ClInclude Include="Buffer.h">
+      <Filter>Header Files\PG\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineObject.h">
+      <Filter>Header Files\PG\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineObjectList.h">
+      <Filter>Header Files\PG\Engine\Container</Filter>
+    </ClInclude>
+    <ClInclude Include="GUISelectView.h">
+      <Filter>Header Files\PG\Gui\UIElement</Filter>
+    </ClInclude>
+    <ClInclude Include="GUITreeList.h">
+      <Filter>Header Files\PG\Gui\UIElement</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -6,7 +6,7 @@
 #include "stdafx.h"
  
 #include "String.h"
-#include "BaseObject.h"
+#include "EngineObject.h"
 #include "BuildableObject.h"
 
 using namespace PG::Core;
@@ -17,7 +17,7 @@ namespace PG {
 			PG_PNG = 0,
 			PG_BMP = 1
 		};
-		class Texture : public BaseObject, BuildableObject {
+		class Texture : public EngineObject, BuildableObject {
 		protected:
 		private:
 			GLuint GenGlTex(FIBITMAP *bitmap) {
@@ -62,7 +62,7 @@ namespace PG {
 			GLuint OpenGL_Id;
 
 			Texture(TextureFormat format, char* file_path, char * texture_ref_name)
-				:BaseObject() {
+				:EngineObject() {
 				this->Set_Name(texture_ref_name);
 				this->Format = format;
 				this->File_Path = new Str(file_path);

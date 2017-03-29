@@ -3,7 +3,6 @@
 
 #include "Core.h"
 
-
 namespace PG {
 	namespace Core {
 		class PGPlane {

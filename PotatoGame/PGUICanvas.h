@@ -1,25 +1,25 @@
 #if !defined(PG_UI_CANVAS_H)
 #define PG_UI_CANVAS_H
 
-#include "PGUIBaseElement.h"
+
 
 
 #include "Core.h"
 #include "List.h"
+using namespace PG::Core;
 
-
-#include "BaseObject.h"
-#include "ObjectList.h"
+#include "BaseRenderer.h"	
 #include "BuildableObject.h"
 #include "Controler.h"
-#include "BaseRenderer.h"	
-#include "Texture.h"
+#include "EngineObject.h"
+#include "EngineObjectList.h"
 #include "MousePicker.h"
+#include "Texture.h"
 using namespace PG::Engine;
 
 #include "PGUIBaseElement.h"
-#include "PGUITreeList.h"
-#include "PGUISelectList.h"
+#include "GUITreeList.h"
+#include "GUISelectView.h"
 
 namespace PG {
 	namespace GUI {
@@ -33,15 +33,15 @@ namespace PG {
 			unsigned int NextElementId;
 			MousePicker* Mouse_Picker;
 			GameWindow* Game_Window;
-			ObjectList<PGBaseUIElement>* element_list;
+			EngineObjectList<PGBaseUIElement>* Element_list;
 		public:
 			PGUICanvas() {
 				this->NextElementId = 1;
-				this->element_list = new ObjectList<PGBaseUIElement>(true);
+				this->Element_list = new EngineObjectList<PGBaseUIElement>(true);
 
 			}
 			~PGUICanvas() {
-				delete(this->element_list);
+				delete(this->Element_list);
 			}
 			virtual void PGUICanvas::Build(GameWindow* game_window, MousePicker* _mouse_picker, AssetManager* asset_manager) {
 				this->StartBuilding();
@@ -55,74 +55,74 @@ namespace PG {
 
 
 
-				PGUIImageBox* picture_1 = new PGUIImageBox();
-				picture_1->Set_Id(this->GetNextFreeId());
-				picture_1->SetSize(v2(32.f, 32.f));
-				picture_1->SetPossition(v2(10.f, 10.f));
-				picture_1->Image = asset_manager->SeachForTexture("UV_Template");
-				menu_window->AddChild(picture_1);
+				//PGUIImageBox* picture_1 = new PGUIImageBox();
+				//picture_1->Set_Id(this->GetNextFreeId());
+				//picture_1->SetSize(v2(32.f, 32.f));
+				//picture_1->SetPossition(v2(10.f, 10.f));
+				//picture_1->Image = asset_manager->SeachForTexture("UV_Template");
+				//menu_window->AddChild(picture_1);
 
-				PGUIImageBox* picture_2 = new PGUIImageBox();
-				picture_2->Set_Id(this->GetNextFreeId());
-				picture_2->SetSize(v2(32.f, 32.f));
-				picture_2->SetPossition(v2(10.f, 84.f));
-				picture_2->Image = asset_manager->SeachForTexture("Asteroid_1");
-				menu_window->AddChild(picture_2);
+				//PGUIImageBox* picture_2 = new PGUIImageBox();
+				//picture_2->Set_Id(this->GetNextFreeId());
+				//picture_2->SetSize(v2(32.f, 32.f));
+				//picture_2->SetPossition(v2(10.f, 84.f));
+				//picture_2->Image = asset_manager->SeachForTexture("Asteroid_1");
+				//menu_window->AddChild(picture_2);
 
-				PGUIImageBox* picture_3 = new PGUIImageBox();
-				picture_3->Set_Id(this->GetNextFreeId());
-				picture_3->SetSize(v2(32.f, 32.f));
-				picture_3->SetPossition(v2(10.f, 148.f));
-				picture_3->Image = asset_manager->SeachForTexture("SolarPanel");
-				menu_window->AddChild(picture_3);
+				//PGUIImageBox* picture_3 = new PGUIImageBox();
+				//picture_3->Set_Id(this->GetNextFreeId());
+				//picture_3->SetSize(v2(32.f, 32.f));
+				//picture_3->SetPossition(v2(10.f, 148.f));
+				//picture_3->Image = asset_manager->SeachForTexture("SolarPanel");
+				//menu_window->AddChild(picture_3);
 
-				PGUIButton *child_button_1 = new PGUIButton();
-				child_button_1->Set_Id(this->GetNextFreeId());
-				child_button_1->SetSize(v2(200.f, 64.f));
-				child_button_1->SetPossition(v2(60.f, 84));
-				child_button_1->SetText("lButton 1");
-				child_button_1->SetFont(asset_manager->SeachForFont("Hammersmith_Regular"));
-				menu_window->AddChild(child_button_1);
+				//PGUIButton *child_button_1 = new PGUIButton();
+				//child_button_1->Set_Id(this->GetNextFreeId());
+				//child_button_1->SetSize(v2(200.f, 64.f));
+				//child_button_1->SetPossition(v2(60.f, 84));
+				//child_button_1->SetText("lButton 1");
+				//child_button_1->SetFont(asset_manager->SeachForFont("Hammersmith_Regular"));
+				//menu_window->AddChild(child_button_1);
 
-				PGUIButton *child_button_2 = new PGUIButton();
-				child_button_2->Set_Name("Best Button");
-				child_button_2->Set_Id(this->GetNextFreeId());
-				child_button_2->SetSize(v2(200.f, 64.f));
-				child_button_2->SetPossition(v2(60.f, 10.f));
-				child_button_2->SetText("aHome");
-				child_button_2->SetFont(asset_manager->SeachForFont("Roboto-Light"));
-				menu_window->AddChild(child_button_2);
+				//PGUIButton *child_button_2 = new PGUIButton();
+				//child_button_2->Set_Name("Best Button");
+				//child_button_2->Set_Id(this->GetNextFreeId());
+				//child_button_2->SetSize(v2(200.f, 64.f));
+				//child_button_2->SetPossition(v2(60.f, 10.f));
+				//child_button_2->SetText("aHome");
+				//child_button_2->SetFont(asset_manager->SeachForFont("Roboto-Light"));
+				//menu_window->AddChild(child_button_2);
 
-				PGUILabel *label_1 = new PGUILabel();
-				label_1->Set_Name("Best label");
-				label_1->Set_Id(this->GetNextFreeId());
-				label_1->SetSize(v2(100.f, 64.f));
-				label_1->SetPossition(v2(60.f, 150.f));
-				label_1->SetText("Label test");
-				label_1->SetFont(asset_manager->SeachForFont("Roboto_Bold"));
-				menu_window->AddChild(label_1);
+				//PGUILabel *label_1 = new PGUILabel();
+				//label_1->Set_Name("Best label");
+				//label_1->Set_Id(this->GetNextFreeId());
+				//label_1->SetSize(v2(100.f, 64.f));
+				//label_1->SetPossition(v2(60.f, 150.f));
+				//label_1->SetText("Label test");
+				//label_1->SetFont(asset_manager->SeachForFont("Roboto_Bold"));
+				//menu_window->AddChild(label_1);
 
-				//	PGUISelectBox* selected_box_test = new PGUISelectBox();
-				//		selected_box_test->Set_Id(this->GetNextFreeId());
-				//		selected_box_test->SetSize(v2(230.f, 35.f));
-				//		selected_box_test->SetPossition(v2(10.f, 200.f));
-				//		selected_box_test->SetFont(asset_manager->SeachForFont("Roboto-Light\n"));
-				//	selected_box_test->AddListElement(label_1);
-				//	selected_box_test->AddListElement(child_button_2);
-				//menu_window->AddChild(selected_box_test);
+				////	PGUISelectBox* selected_box_test = new PGUISelectBox();
+				////		selected_box_test->Set_Id(this->GetNextFreeId());
+				////		selected_box_test->SetSize(v2(230.f, 35.f));
+				////		selected_box_test->SetPossition(v2(10.f, 200.f));
+				////		selected_box_test->SetFont(asset_manager->SeachForFont("Roboto-Light\n"));
+				////	selected_box_test->AddListElement(label_1);
+				////	selected_box_test->AddListElement(child_button_2);
+				////menu_window->AddChild(selected_box_test);
 
-				PGUISelectView* select_view_test = new PGUISelectView(asset_manager->SeachForFont("Hammersmith_Regular"));
-				select_view_test->SetSize(v2(200, 30));
-				select_view_test->SetPossition(v2(0.f, 200.f));
+				//GUISelectView* select_view_test = new GUISelectView(asset_manager->SeachForFont("Hammersmith_Regular"));
+				//select_view_test->SetSize(v2(200, 30));
+				//select_view_test->SetPossition(v2(0.f, 200.f));
 
-				PGUITreeView* tree_list_test = new PGUITreeView(asset_manager->SeachForFont("Hammersmith_Regular"));
-				tree_list_test->SetSize(v2(240, 300));
-				tree_list_test->SetPossition(v2(0.f, 400.f));
+				//GUITreeView* tree_list_test = new GUITreeView(asset_manager->SeachForFont("Hammersmith_Regular"));
+				//tree_list_test->SetSize(v2(240, 300));
+				//tree_list_test->SetPossition(v2(0.f, 400.f));
 
-				menu_window->AddChild(tree_list_test);
-				menu_window->AddChild(select_view_test);
-				this->element_list->Add(menu_window);
-				//this->element_list->Add(select_view_test);
+				//menu_window->AddChild(tree_list_test);
+				//menu_window->AddChild(select_view_test);
+				this->Element_list->Add(menu_window);
+				//this->Element_list->Add(select_view_test);
 				this->EndBuilding();
 			}
 			void PGUICanvas::Render(BaseRenderer *renderer) {
@@ -130,7 +130,7 @@ namespace PG {
 
 					renderer->SetUIProjection(this->Game_Window->GetOrtho());
 
-					for (ListNode<PGBaseUIElement> *c_node = element_list->GetHead(); c_node != nullptr; c_node = c_node->GetNext()) {
+					for (ListNode<PGBaseUIElement> *c_node = Element_list->GetHead(); c_node != nullptr; c_node = c_node->GetNext()) {
 						PGBaseUIElement* current_ui_element = c_node->GetData();
 						current_ui_element->Render(renderer);
 					}
@@ -138,7 +138,7 @@ namespace PG {
 			}
 			void PGUICanvas::Update(Controler *controler, double timeElapse) {
 				v3 mouse_ui_space = this->Mouse_Picker->TranformWindowStoUIS(controler, this->Game_Window->GetOrtho());
-				for (ListNode<PGBaseUIElement> *c_node = element_list->GetHead(); c_node != nullptr; c_node = c_node->GetNext()) {
+				for (ListNode<PGBaseUIElement> *c_node = Element_list->GetHead(); c_node != nullptr; c_node = c_node->GetNext()) {
 					PGBaseUIElement* current_ui_element = c_node->GetData();
 					current_ui_element->Update(controler, timeElapse, &mouse_ui_space);
 				}

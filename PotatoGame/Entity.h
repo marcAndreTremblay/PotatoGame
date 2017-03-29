@@ -4,18 +4,18 @@
 #include "stdafx.h"
 
 #include "Core.h"
-#include "BaseObject.h"
+#include "EngineObject.h"
 using namespace PG::Core;
 
 namespace PG {
 	namespace Engine {
-		class Entity : public BaseObject {
+		class Entity : public EngineObject {
 		protected:
 			v3 World_Possition;
 		private:
 		public:
 			Entity() :
-				BaseObject() {
+				EngineObject() {
 
 			}
 			virtual ~Entity() {

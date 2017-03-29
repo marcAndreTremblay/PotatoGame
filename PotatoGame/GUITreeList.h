@@ -2,44 +2,46 @@
 #define PG_UI_TREE_LIST_H
 
 #include "Core.h"
+#include "Tree.h"
+using namespace PG::Core;
 
-#include "PGUICore.h"
-#include "PGUIBaseElement.h"
 
 #include "BaseRenderer.h"
 #include "Controler.h"
 #include "Font.h"
-#include "Tree.h"
-
 using namespace PG::Engine;
-using namespace PG::Core;
+
+
+#include "GUICore.h"
+#include "PGUIBaseElement.h"
+
 namespace PG {
 	namespace GUI {
-		class TreeListElement : public Core::TreeNode<TreeListElement> {
+		class TreeListElement : public PG::Core::TreeNode<TreeListElement> {
 			public:
 				bool IsSelected;
-				UIElementState State;
+				GUIElementState State;
 				Str* Text;
-				Font * Font;
+				Font * _Font;
 				r32 scale;
 				TreeListElement() :
 					TreeNode() {
 					this->State = UIState_Idle;
 					this->IsSelected = false;
 					this->Text = nullptr;
-					this->Font = nullptr;
+					this->_Font = nullptr;
 					this->scale = 0.5f;
 				}
-				TreeListElement(char* text, PG::Engine::Font * font) :
+				TreeListElement(char* text, Font * font) :
 					TreeNode() {
 					this->Text = new Str(text);
-					this->Font = font;
+					this->_Font = font;
 					this->State = UIState_Idle;
 					this->IsSelected = false;
 					this->scale = 0.5f;
 				}
 				virtual ~TreeListElement() {
-
+					delete(Text);
 				}
 				bool IsIntersection(v3* mouse_location, v2 size, v2 rel_possition) {
 					if ((mouse_location->x > rel_possition.x) && //Left
@@ -56,24 +58,24 @@ namespace PG {
 				void TreeListElement::Render(BaseRenderer *renderer, v2* render_possition, r32 child_x_offset, r32 sibling_y_offset, r32 z_layer, r32 rel_opa) {
 
 
-					if (Font != nullptr && Text != nullptr) {
+					if (_Font != nullptr && Text != nullptr) {
 						v2 size = v2(0.f);
-						Font->GetFontBondingBox(Text->CharAt(), 0.5f, &size);
+						_Font->GetFontBondingBox(Text->CharAt(), 0.5f, &size);
 						if (State == UIState_Hot) {
-							renderer->RenderUIText(Text->CharAt(), v3(*render_possition, z_layer + 0.1f), v4(0.95f, 0.95f, 0.95f, 1.f), scale, Font);
+							renderer->RenderUIText(Text->CharAt(), v3(*render_possition, z_layer + 0.1f), v4(0.95f, 0.95f, 0.95f, 1.f), scale, _Font);
 						}
 						else {
-							renderer->RenderUIText(Text->CharAt(), v3(*render_possition, z_layer + 0.1f), v4(0.8f, 0.8f, 0.8f, 1.f), scale, Font);
+							renderer->RenderUIText(Text->CharAt(), v3(*render_possition, z_layer + 0.1f), v4(0.8f, 0.8f, 0.8f, 1.f), scale, _Font);
 						}
 
 						if (this->child->element_count > 0) {
 							render_possition->x += size.x;
 							render_possition->y += size.y / 4.f;
 							if (IsSelected == true) {
-								renderer->RenderUIText(" +\n", v3(*render_possition, z_layer + 0.2f), v4(0.01f, 0.01f, 0.01f, 1.f), scale, Font);
+								renderer->RenderUIText(" +\n", v3(*render_possition, z_layer + 0.2f), v4(0.01f, 0.01f, 0.01f, 1.f), scale, _Font);
 							}
 							else {
-								renderer->RenderUIText(" +\n", v3(*render_possition, z_layer + 0.2f), v4(0.1f, 0.1f, 0.1f, 1.f), scale, Font);
+								renderer->RenderUIText(" +\n", v3(*render_possition, z_layer + 0.2f), v4(0.1f, 0.1f, 0.1f, 1.f), scale, _Font);
 							}
 							render_possition->y -= size.y / 4.f;
 							render_possition->x -= size.x;
@@ -97,7 +99,7 @@ namespace PG {
 				void TreeListElement::Update(Controler *controler, double timeElapse, v3* mouse_ui_possition, v2 * render_possition, r32 child_x_offset, r32 sibling_y_offset) {
 
 				v2 size = v2(0.f);
-				Font->GetFontBondingBox(Text->CharAt(), scale, &size);
+				_Font->GetFontBondingBox(Text->CharAt(), scale, &size);
 
 
 				switch (this->State) {
@@ -135,7 +137,7 @@ namespace PG {
 				}
 			}
 		};
-		class PGUITreeView : public PGBaseUIElement {
+		class GUITreeView  : public PGBaseUIElement {
 			protected:
 			private:
 			public:
@@ -144,7 +146,7 @@ namespace PG {
 				v2 element_margin;
 				r32 child_x_offset;
 				r32 sibling_y_offset;
-				PGUITreeView(Font * font = nullptr) {
+				GUITreeView(Font * font = nullptr) {
 					this->element_margin = v2(3.f, 3.f);
 					this->child_x_offset = 12.f;
 					this->sibling_y_offset = 3.f;
@@ -182,10 +184,10 @@ namespace PG {
 					elements->roots->Add(r2);
 					elements->roots->Add(r3);
 				}
-				~PGUITreeView() {
+				~GUITreeView() {
 					delete(this->elements);
 				}
-				virtual void PGUITreeView::Render(BaseRenderer *renderer) override {
+				virtual void GUITreeView::Render(BaseRenderer *renderer) override {
 					if (this->IsVisible == true) {
 						v2 render_possition = this->GetRelativePossition();
 						r32 z_layer = this->GetRelativeZ();
@@ -199,7 +201,7 @@ namespace PG {
 					}
 					PGBaseUIElement::Render(renderer);
 				}
-				virtual bool PGUITreeView::Update(Controler *controler, double timeElapse, v3 *mouse_ui_possition) {
+				virtual bool GUITreeView::Update(Controler *controler, double timeElapse, v3 *mouse_ui_possition) {
 					bool isChildActive = PGBaseUIElement::Update(controler, timeElapse, mouse_ui_possition);
 
 					if (isChildActive == false && this->State == UIState_Hot) {
@@ -214,7 +216,7 @@ namespace PG {
 					}
 					return isChildActive;
 				}
-				virtual bool PGUITreeView::IsActif() override {
+				virtual bool GUITreeView::IsActif() override {
 				if (this->State == UIState_Hot) return true;
 				return false;
 			}

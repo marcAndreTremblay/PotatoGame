@@ -80,13 +80,14 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Buffer.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Primitive.h" />
     <ClInclude Include="AssetManager.h" />
     <ClInclude Include="PGBackgroundMapGridMesh.h" />
     <ClInclude Include="Camera.h" />
-    <ClInclude Include="BaseObject.h" />
-    <ClInclude Include="ObjectList.h" />
+    <ClInclude Include="EngineObject.h" />
+    <ClInclude Include="EngineObjectList.h" />
     <ClInclude Include="BuildableObject.h" />
     <ClInclude Include="Font.h" />
     <ClInclude Include="PGEditorInstance.h" />
@@ -111,9 +112,9 @@
     <ClInclude Include="Tree.h" />
     <ClInclude Include="PGUIBaseElement.h" />
     <ClInclude Include="PGUICanvas.h" />
-    <ClInclude Include="PGUICore.h" />
-    <ClInclude Include="PGUISelectList.h" />
-    <ClInclude Include="PGUITreeList.h" />
+    <ClInclude Include="GUICore.h" />
+    <ClInclude Include="GUISelectView.h" />
+    <ClInclude Include="GUITreeList.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>

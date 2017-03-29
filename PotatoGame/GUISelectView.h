@@ -3,27 +3,30 @@
 
 
 
-#include "PGUICore.h"
+
+#include "List.h"
+using namespace PG::Core;
 
 
 #include "BaseRenderer.h"
 #include "Controler.h"
 #include "Font.h"
+using namespace PG::Engine;
 
-#include "List.h"
+#include "GUICore.h"
+#include "PGUIBaseElement.h"
 
-using namespace PG::GUI;
 namespace PG {
 	namespace GUI {
-		class PGUISelectNode : public PGEventEmiter {
+		class GUISelectNode : public EventEmiter {
 		protected:
 		private:
 		public:
-			UIElementState State;
-			PGUISelectNode() : PGEventEmiter() {
+			GUIElementState State;
+			GUISelectNode() : EventEmiter() {
 				State = UIState_Idle;
 			}
-			virtual ~PGUISelectNode() {
+			virtual ~GUISelectNode() {
 
 			}
 			bool IsIntersection(v3* mouse_location, v2 size, v2 rel_possition) {
@@ -35,7 +38,7 @@ namespace PG {
 				}
 				return false;
 			}
-			virtual void PGUISelectNode::Render(BaseRenderer *renderer, v2 * possition, r32 layer, r32 opacity, v2 *size) {
+			virtual void GUISelectNode::Render(BaseRenderer *renderer, v2 * possition, r32 layer, r32 opacity, v2 *size) {
 				if (this->State == UIState_Idle) {
 					renderer->ui_panel_Mesh->Render(v3(*possition, layer), *size, v4(0.3f, 0.2f, 0.5f, opacity));
 				}
@@ -43,7 +46,7 @@ namespace PG {
 					renderer->ui_panel_Mesh->Render(v3(*possition, layer), *size, v4(0.4f, 0.7f, 0.1f, opacity));
 				}
 			}
-			virtual void PGUISelectNode::Update(Controler *controler, double timeElapse, v3 *mouse_ui_possition, v2 * render_possition, v2 *size) {
+			virtual void GUISelectNode::Update(Controler *controler, double timeElapse, v3 *mouse_ui_possition, v2 * render_possition, v2 *size) {
 
 				switch (this->State) {
 				case UIState_Idle:
@@ -55,7 +58,7 @@ namespace PG {
 
 					ControlerKey *left_mouse_key = controler->GetKey(PGMouse_Left);
 					if (left_mouse_key->WasPress == true && left_mouse_key->IsPress == false) {
-						PGUIEvent *evet = new PGUIEvent(this, UIEvent_Element_Select);
+						GUIEvent *evet = new GUIEvent(this, GUIEvent_Element_Select);
 						this->EmiteEvent(evet);
 						delete(evet);
 					}
@@ -69,59 +72,59 @@ namespace PG {
 				}
 			}
 		};
-		class PGUIStringNode : public PGUISelectNode {
+		class GUIStringNode : public GUISelectNode {
 		public:
 			Str * Text;
 			Font * Font;
-			PGUIStringNode() {
+			GUIStringNode() {
 				Text = nullptr;
 				Font = nullptr;
 			}
-			PGUIStringNode(char *text, PG::Engine::Font * font) : PGUISelectNode() {
+			GUIStringNode(char *text, PG::Engine::Font * font) : GUISelectNode() {
 				Text = new Str(text);
 				Font = font;
 			}
-			~PGUIStringNode() {
+			~GUIStringNode() {
 				delete(Text);
 			}
-			virtual void PGUIStringNode::Render(BaseRenderer *renderer, v2 * possition, r32 layer, r32 opacity, v2 *size) override {
-				PGUISelectNode::Render(renderer, possition, layer, opacity, size);
+			virtual void GUIStringNode::Render(BaseRenderer *renderer, v2 * possition, r32 layer, r32 opacity, v2 *size) override {
+				GUISelectNode::Render(renderer, possition, layer, opacity, size);
 				if (Font != nullptr && Text != nullptr) {
 					renderer->RenderUIText(Text->CharAt(), v3(*possition, layer + 0.2f), v4(0.01f, 0.01f, 0.01f, 1.f), 0.5f, Font);
 				}
 			}
 		};
-		class PGUISelectView : public PGBaseUIElement {
+		class GUISelectView : public PGBaseUIElement {
 		protected:
 		private:
 			r32 element_y_offest;
 			v2 element_margin;
 			v2 element_size;
-			Font * Font;
-			List<PGUISelectNode> *element_list;
+			Font * _Font;
+			List<GUISelectNode> *Element_list;
 		public:
 
-			PGUISelectNode *selected;
-			PGUISelectView(PG::Engine::Font * font = nullptr) {
+			GUISelectNode *selected;
+			GUISelectView(Font * font = nullptr) {
 				this->element_margin = v2(5.f, 5.f);
 				this->element_y_offest = 0.f;
-				this->element_list = new List<PGUISelectNode>(true);
+				this->Element_list = new List<GUISelectNode>(true);
 				this->selected = nullptr;
 				element_size = v2(190, 20);
-				PGUISelectNode *element_1 = new PGUISelectNode();
+				GUISelectNode *element_1 = new GUISelectNode();
 				selected = element_1;
-				Font = font;
+				_Font = font;
 
 				this->AddElement(element_1);
-				this->AddElement(new PGUIStringNode("Test 1\n", font));
-				this->AddElement(new PGUIStringNode("Test 2\n", font));
-				this->AddElement(new PGUIStringNode("Test 3\n", font));
-				this->AddElement(new PGUIStringNode("Test 4\n", font));
+				this->AddElement(new GUIStringNode("Test 1\n", font));
+				this->AddElement(new GUIStringNode("Test 2\n", font));
+				this->AddElement(new GUIStringNode("Test 3\n", font));
+				this->AddElement(new GUIStringNode("Test 4\n", font));
 			}
-			~PGUISelectView() {
-				delete(element_list);
+			~GUISelectView() {
+				delete(Element_list);
 			}
-			virtual void PGUISelectView::Render(BaseRenderer *renderer) override {
+			virtual void GUISelectView::Render(BaseRenderer *renderer) override {
 				if (this->IsVisible == true) {
 					v2 render_possition = this->GetRelativePossition();
 					r32 z_layer = this->GetRelativeZ();
@@ -140,8 +143,8 @@ namespace PG {
 					render_possition.y += element_y_offest;
 					render_possition.y += 2.f;
 					if (this->State == UIState_Selecting) {
-						for (ListNode<PGUISelectNode> *c_node = this->element_list->GetHead(); c_node != nullptr; c_node = c_node->GetNext()) {
-							PGUISelectNode* current_root_element = (PGUISelectNode*)c_node->GetData();
+						for (ListNode<GUISelectNode> *c_node = this->Element_list->GetHead(); c_node != nullptr; c_node = c_node->GetNext()) {
+							GUISelectNode* current_root_element = (GUISelectNode*)c_node->GetData();
 							current_root_element->Render(renderer, &render_possition, z_layer + 0.1f, rel__opa, &this->element_size);
 							render_possition.y += element_size.y;
 							render_possition.y += element_y_offest;
@@ -150,7 +153,7 @@ namespace PG {
 				}
 				PGBaseUIElement::Render(renderer);
 			}
-			virtual bool PGUISelectView::Update(Controler *controler, double timeElapse, v3 *mouse_ui_possition) {
+			virtual bool GUISelectView::Update(Controler *controler, double timeElapse, v3 *mouse_ui_possition) {
 				bool isChildActive = PGBaseUIElement::Update(controler, timeElapse, mouse_ui_possition);
 				if (isChildActive != true) {
 					switch (this->State) {
@@ -168,8 +171,8 @@ namespace PG {
 											   render_possition.y += element_y_offest;
 
 											   //Update node
-											   for (ListNode<PGUISelectNode> *c_node = this->element_list->GetHead(); c_node != nullptr; c_node = c_node->GetNext()) {
-												   PGUISelectNode* current_root_element = (PGUISelectNode*)c_node->GetData();
+											   for (ListNode<GUISelectNode> *c_node = this->Element_list->GetHead(); c_node != nullptr; c_node = c_node->GetNext()) {
+												   GUISelectNode* current_root_element = (GUISelectNode*)c_node->GetData();
 												   current_root_element->Update(controler, timeElapse, mouse_ui_possition, &render_possition, &this->element_size);
 												   render_possition.y += element_size.y;
 												   render_possition.y += element_y_offest;
@@ -191,19 +194,19 @@ namespace PG {
 				}
 				return isChildActive;
 			}
-			virtual bool PGUISelectView::IsActif() override {
+			virtual bool GUISelectView::IsActif() override {
 				if (this->State == UIState_Selecting) return true;
 				if (this->State == UIState_Hot) return true;
 				return false;
 			}
-			void PGUISelectView::AddElement(PGUISelectNode * element) {
+			void GUISelectView::AddElement(GUISelectNode * element) {
 				element->AddListener(this);
-				element_list->Add(element);
+				Element_list->Add(element);
 			}
 
-			virtual void PGUISelectView::OnEvent(PGUIEvent *event) override {
-				if (event->code == UIEvent_Element_Select) {
-					selected = (PGUISelectNode*)event->sender;
+			virtual void GUISelectView::OnEvent(GUIEvent *event) override {
+				if (event->code == GUIEvent_Element_Select) {
+					selected = (GUISelectNode*)event->sender;
 					EmiteEvent(event);
 				}
 

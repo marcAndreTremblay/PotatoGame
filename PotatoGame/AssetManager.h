@@ -2,7 +2,7 @@
 #define PG_ASSET_MANAGER_H
 
 #include "List.h"
-#include "ObjectList.h"
+#include "EngineObjectList.h"
 #include "Font.h"
 #include "Texture.h"
 #include "GameModel.h"
@@ -18,9 +18,9 @@ namespace PG {
 			bool IsFontLoadingEnable;
 			FT_Library* Ft_lib_Intance;
 
-			ObjectList<Font>* Fonts_List;
-			ObjectList<RawModelData>* Obj_Model_List;
-			ObjectList<Texture>* Textures_List;
+			EngineObjectList<Font>* Fonts_List;
+			EngineObjectList<RawModelData>* Obj_Model_List;
+			EngineObjectList<Texture>* Textures_List;
 
 			static void FreeImageErrorHandler(FREE_IMAGE_FORMAT fif, const char *message) {
 				//Todo(Marc):Log error
@@ -36,13 +36,13 @@ namespace PG {
 				this->IsFontLoadingEnable = false;
 
 				/* Init Texture loading */
-				this->Textures_List = new ObjectList<Texture>(true);
+				this->Textures_List = new EngineObjectList<Texture>(true);
 				FreeImage_Initialise(false);
 				FreeImage_SetOutputMessage(FreeImageErrorHandler);
 
 
 				/* Init Font loading */
-				this->Fonts_List = new ObjectList<Font>(true);
+				this->Fonts_List = new EngineObjectList<Font>(true);
 				this->Ft_lib_Intance = new FT_Library();
 				FT_Error result_error = FT_Init_FreeType(this->Ft_lib_Intance);
 				if (result_error != false) {
@@ -52,7 +52,7 @@ namespace PG {
 					this->IsFontLoadingEnable = true;
 				}
 
-				this->Obj_Model_List = new ObjectList<RawModelData>(true);
+				this->Obj_Model_List = new EngineObjectList<RawModelData>(true);
 			}
 			~AssetManager() {
 				delete(this->Fonts_List);
