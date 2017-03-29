@@ -7,38 +7,39 @@
 #include "PGBaseObject.h"
 #include "PGBuildableObject.h"
 
-using namespace PGCore;
+using namespace PG::Core;
 
-namespace PGEngine {
-	
-	#define TOG_Font_Loaded_Character_Cpt 128
-	
-	struct PGCharacter {
-		GLuint     TextureID;  // ID handle of the glyph texture
-		glm::ivec2 Size;       // Size of glyph
-		glm::ivec2 Bearing;    // Offset from baseline to left/top of glyph
-		GLuint     Advance;    // Offset to advance to next glyph
-	};
+namespace PG {
+	namespace Engine {
 
-	class PGFont : public PGBaseObject , PGBuildableObject{
+#define TOG_Font_Loaded_Character_Cpt 128
+
+		struct PGCharacter {
+			GLuint     TextureID;  // ID handle of the glyph texture
+			glm::ivec2 Size;       // Size of glyph
+			glm::ivec2 Bearing;    // Offset from baseline to left/top of glyph
+			GLuint     Advance;    // Offset to advance to next glyph
+		};
+
+		class PGFont : public PGBaseObject, PGBuildableObject {
 			bool IsErrorWithFace;
 			FT_Face Ft_face;
 		public:
 			PGCharacter CharacterCollection[128];
 			PGFont(FT_Library *ft_lib, char* file_path, char* font_name)
-				:PGBaseObject(){
-					this->Set_Name(font_name);
-					this->IsErrorWithFace = true;
-					this->IsErrorWithFace = FT_New_Face(*ft_lib, file_path, 0, &this->Ft_face);
-				
+				:PGBaseObject() {
+				this->Set_Name(font_name);
+				this->IsErrorWithFace = true;
+				this->IsErrorWithFace = FT_New_Face(*ft_lib, file_path, 0, &this->Ft_face);
+
 			}
 			~PGFont() {
 				FT_Done_Face(this->Ft_face);
 				for (GLubyte c = 0; c < TOG_Font_Loaded_Character_Cpt; c++) {
 					glDeleteTextures(1, &this->CharacterCollection[c].TextureID);
 				}
-			}			
-			void  PGFont::Build() override{
+			}
+			void  PGFont::Build() override {
 				PGBuildableObject::StartBuilding();
 				if (this->IsErrorWithFace == false) {
 
@@ -55,7 +56,7 @@ namespace PGEngine {
 						GLuint texture_ref_id;
 						glGenTextures(1, &texture_ref_id);
 						glBindTexture(GL_TEXTURE_2D, texture_ref_id);
-						
+
 						// Set texture options
 						glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 						glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
@@ -84,7 +85,7 @@ namespace PGEngine {
 			void PGFont::GetFontBondingBox(char* text_in, r32 scale_in, v2 *box_out) {
 				float lower_bearing_y = 0;
 				float upper_bering_y = 0.f;
-				for (char *current_char = text_in; *current_char != '\n'; current_char++) {
+				for (char *current_char = text_in; *current_char != ENDSTR; current_char++) {
 					PGCharacter * ch = &CharacterCollection[*current_char];
 					if ((ch->Size.y - ch->Bearing.y) > lower_bearing_y) {
 						lower_bearing_y = ch->Size.y - ch->Bearing.y;
@@ -97,10 +98,10 @@ namespace PGEngine {
 				box_out->y = lower_bearing_y + upper_bering_y;
 
 				box_out->x *= scale_in;
-				box_out->y *=  scale_in;
+				box_out->y *= scale_in;
 
-			}	
-	};
+			}
+		};
+	}
 }
-
 #endif

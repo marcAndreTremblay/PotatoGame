@@ -5,18 +5,19 @@
 #include "PGList.h"
 #include "PGBaseObject.h"
 
-using namespace PGCore;
+using namespace PG::Core;
 
-namespace PGEngine {
-	template <class PGBaseObject>
-	class PGBaseObjList :public PGList<PGBaseObject> {
+namespace PG {
+	namespace Engine {
+		template <class PGBaseObject>
+		class PGBaseObjList :public PGList<PGBaseObject> {
 		public:
 			PGBaseObjList(bool managing = false) : PGList(managing) {
 
 			}
 			~PGBaseObjList() {
-				
-			}	
+
+			}
 
 			void Add(PGBaseObject* element) override {
 				PGList::Add(element);
@@ -32,8 +33,8 @@ namespace PGEngine {
 				return nullptr;
 			}
 			PGBaseObject* PGBaseObjList::FindByName(char *name) {
-				PGString* new_string = new PGString(name);
-				for (PGListNode<PGBaseObject> *c_node = this->GetHead(); c_node != nullptr; c_node = c_node->GetNext()) {				
+				Str* new_string = new Str(name);
+				for (PGListNode<PGBaseObject> *c_node = this->GetHead(); c_node != nullptr; c_node = c_node->GetNext()) {
 					if (c_node->GetData()->Compare_Name(new_string) == true) {
 						delete(new_string);
 						return c_node->GetData();
@@ -43,6 +44,8 @@ namespace PGEngine {
 				delete(new_string);
 				return nullptr;
 			}
-	};
+		};
+	}
 }
+
 #endif

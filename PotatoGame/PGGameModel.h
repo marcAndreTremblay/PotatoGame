@@ -6,50 +6,51 @@
 #include "PGFont.h"
 #include "PGTexture.h"
 
-using namespace PGCore;
+using namespace PG::Core;
 
 
-namespace PGEngine {
+namespace PG {
+	namespace Engine {
 
-	class RawMateriel {
-	public:
-		int Id;
-		PGString *Name;
-		r32 Shininess;
-		v3 Ambient;
-		v3 Diffuse;
-		v3 Specular;
-		RawMateriel(char* name, int id) {
-			Name = new PGString(name);
-			Id = id;
-		}
-		~RawMateriel() {
-			delete(Name);
-		}
-
-	};
-	class RawMaterielData {
-		int count;
-	public:
-		PGList<RawMateriel> *RawMateriels;
-		RawMateriel* RawMaterielData::FindByNameRef(char* name) {
-			for (PGListNode<RawMateriel> *c_node = this->RawMateriels->GetHead(); c_node != nullptr; c_node = c_node->GetNext()) {
-				RawMateriel* current_element = c_node->GetData();
-				if (current_element->Name->Compare(new PGString(name)) == true) {
-					return current_element;
-				}
+		class RawMateriel {
+		public:
+			int Id;
+			Str *Name;
+			r32 Shininess;
+			v3 Ambient;
+			v3 Diffuse;
+			v3 Specular;
+			RawMateriel(char* name, int id) {
+				Name = new Str(name);
+				Id = id;
 			}
-			return nullptr;
-		}
-		RawMateriel* RawMaterielData::FindByNameId(int target_id) {
-			for (PGListNode<RawMateriel> *c_node = this->RawMateriels->GetHead(); c_node != nullptr; c_node = c_node->GetNext()) {
-				RawMateriel* current_element = c_node->GetData();
-				if (current_element->Id == target_id) {
-					return current_element;
-				}
+			~RawMateriel() {
+				delete(Name);
 			}
-			return nullptr;
-		}
+
+		};
+		class RawMaterielData {
+			int count;
+		public:
+			PGList<RawMateriel> *RawMateriels;
+			RawMateriel* RawMaterielData::FindByNameRef(char* name) {
+				for (PGListNode<RawMateriel> *c_node = this->RawMateriels->GetHead(); c_node != nullptr; c_node = c_node->GetNext()) {
+					RawMateriel* current_element = c_node->GetData();
+					if (current_element->Name->Compare(new Str(name)) == true) {
+						return current_element;
+					}
+				}
+				return nullptr;
+			}
+			RawMateriel* RawMaterielData::FindByNameId(int target_id) {
+				for (PGListNode<RawMateriel> *c_node = this->RawMateriels->GetHead(); c_node != nullptr; c_node = c_node->GetNext()) {
+					RawMateriel* current_element = c_node->GetData();
+					if (current_element->Id == target_id) {
+						return current_element;
+					}
+				}
+				return nullptr;
+			}
 
 			RawMaterielData(char * FILE_PATH) {
 				RawMateriels = new PGList<RawMateriel>(true);
@@ -72,7 +73,7 @@ namespace PGEngine {
 
 							last_new_mat = nullptr;
 							last_new_mat = new RawMateriel(path, id);
-							id = id +1;
+							id = id + 1;
 							RawMateriels->Add(last_new_mat);
 							if (match_cpt != 1) {
 								printf("Error reading mat name |\n");
@@ -92,7 +93,7 @@ namespace PGEngine {
 						}
 						else if (strcmp(lineHeader, "Ke") == 0) {
 							v3 *c_data = &last_new_mat->Ambient;
-								int match_cpt = fscanf_s(file, " %f %f %f \n", &c_data->x, &c_data->y, &c_data->z);
+							int match_cpt = fscanf_s(file, " %f %f %f \n", &c_data->x, &c_data->y, &c_data->z);
 							if (match_cpt != 3) {
 								printf("Error reading ka |\n");
 							}
@@ -101,7 +102,7 @@ namespace PGEngine {
 							v3 *c_data = &last_new_mat->Diffuse;
 							int match_cpt = fscanf_s(file, " %f %f %f \n", &c_data->x, &c_data->y, &c_data->z);
 
-							
+
 							if (match_cpt != 3) {
 								printf("Error reading kd |\n");
 							}
@@ -149,7 +150,8 @@ namespace PGEngine {
 				delete(normal_array);
 				delete(faces_array);
 			}
-			RawModelData(char * FILE_PATH, char* MAT_PATH) {
+			//Todo(Marc): Make this load from file function into a fct and it more solidify it
+			RawModelData(char * FILE_PATH) {
 				v_count = 0;
 				vn_count = 0;
 				vt_count = 0;
@@ -163,8 +165,13 @@ namespace PGEngine {
 
 
 
+				Str * file_path = new Str(FILE_PATH);
+				Str * forlder_path = Str::ExtractFolderPath(file_path);
 
 				FILE * file1 = fopen(FILE_PATH, "r");
+				printf("Loading | Model | :\n");
+				printf("\tFile path %s \n", file_path->CharAt());
+				printf("\tFolder path %s \n", forlder_path->CharAt());
 
 				if (file1 != nullptr) {
 					char lineHeader[128]; //Note(Marc): We assume that a word wont be longer than 128 char, this is a silly assumtion
@@ -191,9 +198,9 @@ namespace PGEngine {
 							int name_l = strlen(lineHeader);
 							char *path = new char[254];
 
-							sprintf(&path[0], "%s%s", MAT_PATH, lineHeader);
+							sprintf(&path[0], "%s%s", forlder_path->CharAt(), lineHeader);
 							material_data = new RawMaterielData(path);
-							printf("%s", &path[0]);
+
 						}
 						else if (strcmp(lineHeader, "usemtl") == 0) {
 							int res = fscanf(file1, "%s", lineHeader);
@@ -240,7 +247,6 @@ namespace PGEngine {
 							if (match_cpt != 3) {
 								printf("Error reading vertices Num:|%i|\n", v_c_index);
 							}
-							//	printf("- Verticles : %f %f %f\n", c_v_data->x, c_v_data->y, c_v_data->z);
 							v_c_index++;
 						}
 						else if (strcmp(lineHeader, "vn") == 0) {
@@ -259,7 +265,6 @@ namespace PGEngine {
 								printf("Error reading Tex coords Num:|%i|\n", vt_c_index);
 							}
 							vt_c_index++;
-							//	printf("- Tex coord  #:|%i|: %f %f\n", c_vt_data->x, c_vt_data->y);
 						}
 						else if (strcmp(lineHeader, "f") == 0) {
 							unsigned int *face_data = &faces_array[f_c_index];
@@ -314,7 +319,7 @@ namespace PGEngine {
 				glBindBuffer(GL_ARRAY_BUFFER, VBO);
 				int per_vertex_data_lenght = 0;
 				if (this->IsMaterialize == true) {
-					per_vertex_data_lenght = 
+					per_vertex_data_lenght =
 						sizeof(v4)+ //LOC (0)
 						sizeof(v3)+ //LOC (1)
 						sizeof(v3)+ //LOC (2)
@@ -323,7 +328,7 @@ namespace PGEngine {
 						sizeof(v4); //LOC (5)
 				}
 				else {
-					per_vertex_data_lenght = 
+					per_vertex_data_lenght =
 						sizeof(v4)+ //LOC (0)
 						sizeof(v3); //LOC (0)
 
@@ -345,19 +350,19 @@ namespace PGEngine {
 						buffer_offet += sizeof(v3);
 
 						//Material data added here	
-	
+
 						RawMateriel* current_mat = material_data->FindByNameId(*faces_array_ptr);
-								
-									glBufferSubData(GL_ARRAY_BUFFER, buffer_offet, sizeof(v3), &current_mat->Ambient); //Note dont know bender
-									buffer_offet += sizeof(v3);
-									glBufferSubData(GL_ARRAY_BUFFER, buffer_offet, sizeof(v3), &current_mat->Diffuse);
-									buffer_offet += sizeof(v3);
-									glBufferSubData(GL_ARRAY_BUFFER, buffer_offet, sizeof(v3), &current_mat->Specular);
-									buffer_offet += sizeof(v3);
-									glBufferSubData(GL_ARRAY_BUFFER, buffer_offet, sizeof(v4), &v4(current_mat->Shininess, 1.f, 1.f, 1.f));
-									buffer_offet += sizeof(v4);
-						
-									
+
+						glBufferSubData(GL_ARRAY_BUFFER, buffer_offet, sizeof(v3), &current_mat->Ambient); //Note dont know bender
+						buffer_offet += sizeof(v3);
+						glBufferSubData(GL_ARRAY_BUFFER, buffer_offet, sizeof(v3), &current_mat->Diffuse);
+						buffer_offet += sizeof(v3);
+						glBufferSubData(GL_ARRAY_BUFFER, buffer_offet, sizeof(v3), &current_mat->Specular);
+						buffer_offet += sizeof(v3);
+						glBufferSubData(GL_ARRAY_BUFFER, buffer_offet, sizeof(v4), &v4(current_mat->Shininess, 1.f, 1.f, 1.f));
+						buffer_offet += sizeof(v4);
+
+
 						faces_array_ptr++;
 					}
 					if (this->IsMaterialize == false) {
@@ -378,7 +383,7 @@ namespace PGEngine {
 					glEnableVertexAttribArray(0);
 					glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, per_vertex_data_lenght, (GLvoid*)(sizeof(v4)));
 					glEnableVertexAttribArray(1);
-					glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, per_vertex_data_lenght, (GLvoid*)(sizeof(v4)+ sizeof(v3)));
+					glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, per_vertex_data_lenght, (GLvoid*)(sizeof(v4)+sizeof(v3)));
 					glEnableVertexAttribArray(2);
 					glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, per_vertex_data_lenght, (GLvoid*)(sizeof(v4)+2 * sizeof(v3)));
 					glEnableVertexAttribArray(3);
@@ -402,5 +407,5 @@ namespace PGEngine {
 			}
 		};
 	}
-
+}
 #endif

@@ -9,14 +9,15 @@
 #include "PGBaseObject.h"
 #include "PGBuildableObject.h"
 
-using namespace PGCore;
+using namespace PG::Core;
 
-namespace PGEngine {
-	enum PGTexFormat {
-		PG_PNG = 0,
-		PG_BMP = 1
-	};
-	class PGTexture : public PGBaseObject	, PGBuildableObject {
+namespace PG {
+	namespace Engine {
+		enum PGTexFormat {
+			PG_PNG = 0,
+			PG_BMP = 1
+		};
+		class PGTexture : public PGBaseObject, PGBuildableObject {
 		protected:
 		private:
 			GLuint GenGlTex(FIBITMAP *bitmap) {
@@ -37,7 +38,7 @@ namespace PGEngine {
 						// Set texture filtering parameters
 						glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 						glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-						
+
 						//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 						//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
@@ -57,34 +58,35 @@ namespace PGEngine {
 			}
 		public:
 			PGTexFormat Format;
-			PGString *File_Path;
+			Str *File_Path;
 			GLuint OpenGL_Id;
 
-			PGTexture(PGTexFormat format, char* file_path, char * texture_ref_name) 
-				:PGBaseObject(){
-					this->Set_Name(texture_ref_name);
-					this->Format = format;
-					this->File_Path = new PGString(file_path);
+			PGTexture(PGTexFormat format, char* file_path, char * texture_ref_name)
+				:PGBaseObject() {
+				this->Set_Name(texture_ref_name);
+				this->Format = format;
+				this->File_Path = new Str(file_path);
 			}
 			~PGTexture() {
 				glDeleteTextures(1, &OpenGL_Id);
 				delete(File_Path);
 			}
-			void PGTexture::Build() override{
+			void PGTexture::Build() override {
 				PGBuildableObject::StartBuilding();
 				switch (this->Format) {
-					case PG_PNG:{
-						this->OpenGL_Id = GenGlTex(FreeImage_Load(FIF_PNG, File_Path->GetCharPtr(), 0));
-						break;
-					}
-					case PG_BMP:{
-						this->OpenGL_Id = GenGlTex(FreeImage_Load(FIF_BMP, File_Path->GetCharPtr(), 0));
-						break; }
-					default:
+				case PG_PNG:{
+								this->OpenGL_Id = GenGlTex(FreeImage_Load(FIF_PNG, File_Path->CharAt(), 0));
+								break;
+				}
+				case PG_BMP:{
+								this->OpenGL_Id = GenGlTex(FreeImage_Load(FIF_BMP, File_Path->CharAt(), 0));
+								break; }
+				default:
 					break;
 				}
 				PGBuildableObject::EndBuilding();
 			}
-	};
+		};
+	}
 }
 #endif

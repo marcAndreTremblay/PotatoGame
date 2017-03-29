@@ -5,28 +5,30 @@
 
 #include "PGCore.h"
 #include "PGBaseObject.h"
-using namespace PGCore;
+using namespace PG::Core;
 
-namespace PGEngine{
-	class PGEntity : public PGBaseObject{
-	protected:
-		v3 World_Possition;
-	private:
-	public:
-		PGEntity() :
-			PGBaseObject(){
-			
-		}
-		~PGEntity() {
+namespace PG {
+	namespace Engine {
+		class PGEntity : public PGBaseObject {
+		protected:
+			v3 World_Possition;
+		private:
+		public:
+			PGEntity() :
+				PGBaseObject() {
 
-		}
+			}
+			virtual ~PGEntity() {
 
-		virtual void PGEntity::Render() {
-		
-		}
-		virtual void PGEntity::Update() {
+			}
 
-		}
-	};
+			virtual void PGEntity::Render() {
+
+			}
+			virtual void PGEntity::Update() {
+
+			}
+		};
+	}
 }
 #endif

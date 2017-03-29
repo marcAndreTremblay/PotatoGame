@@ -28,6 +28,9 @@
     <Filter Include="Header Files\PGGui\UIElement">
       <UniqueIdentifier>{ab25fff7-c81c-4b5f-ae70-85634104da8a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\PGGameEditor\Mesh">
+      <UniqueIdentifier>{186ee313-c315-4b81-8b91-41444038fee1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -67,12 +70,6 @@
       <Filter>Header Files\PGEngine</Filter>
     </ClInclude>
     <ClInclude Include="PGTexture.h">
-      <Filter>Header Files\PGEngine</Filter>
-    </ClInclude>
-    <ClInclude Include="PGBaseGame.h">
-      <Filter>Header Files\PGEngine</Filter>
-    </ClInclude>
-    <ClInclude Include="PGBaseEvent.h">
       <Filter>Header Files\PGEngine</Filter>
     </ClInclude>
     <ClInclude Include="PGAssetManager.h">
@@ -120,9 +117,6 @@
     <ClInclude Include="PGMapGrid.h">
       <Filter>Header Files\PGGameEditor</Filter>
     </ClInclude>
-    <ClInclude Include="PGUIBaseElement.h">
-      <Filter>Header Files\PGGui</Filter>
-    </ClInclude>
     <ClInclude Include="PGTree.h">
       <Filter>Header Files\PGUtil</Filter>
     </ClInclude>
@@ -134,6 +128,18 @@
     </ClInclude>
     <ClInclude Include="PGUISelectList.h">
       <Filter>Header Files\PGGui\UIElement</Filter>
+    </ClInclude>
+    <ClInclude Include="PGBackgroundMapGridMesh.h">
+      <Filter>Header Files\PGGameEditor\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="PGMapAtlas.h">
+      <Filter>Header Files\PGGameEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="PGEngineInstance.h">
+      <Filter>Header Files\PGEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="PGUIBaseElement.h">
+      <Filter>Header Files\PGGui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

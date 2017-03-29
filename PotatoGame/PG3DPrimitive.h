@@ -4,8 +4,9 @@
 #include "PGCore.h"
 
 
-namespace PGCore {
-	class PGPlane {
+namespace PG {
+	namespace Core {
+		class PGPlane {
 		private:
 		protected:
 		public:
@@ -17,9 +18,9 @@ namespace PGCore {
 			}
 			~PGPlane() {
 
-		}
-	};
-	class PGRay {
+			}
+		};
+		class PGRay {
 		private:
 		protected:
 		public:
@@ -31,8 +32,8 @@ namespace PGCore {
 			}
 			~PGRay() {
 
-		}
-	};
+			}
+		};
+	}
 }
-
 #endif

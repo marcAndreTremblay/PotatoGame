@@ -7,22 +7,23 @@
 #include "PGTexture.h"
 #include "PGGameModel.h"
 
-using namespace PGCore;
+using namespace PG::Core;
 
 
-namespace PGEngine {
+namespace PG {
+	namespace Engine {
 
-	class PGAssetManager {
+		class PGAssetManager {
 		protected:
 
 		private:
-			bool IsFontLoadingEnable;			
+			bool IsFontLoadingEnable;
 			FT_Library* Ft_lib_Intance;
-			
+
 			PGBaseObjList<PGFont>* Fonts_List;
 			PGBaseObjList<RawModelData>* Obj_Model_List;
 			PGBaseObjList<PGTexture>* Textures_List;
- 
+
 			static void FreeImageErrorHandler(FREE_IMAGE_FORMAT fif, const char *message) {
 				//Todo(Marc):Log error
 				printf("\n*** ");
@@ -88,6 +89,7 @@ namespace PGEngine {
 			PGFont* PGAssetManager::SeachForFont(char* ref_Font_Name) {
 				return Fonts_List->FindByName(ref_Font_Name);
 			}
-	};
+		};
+	}
 }
 #endif

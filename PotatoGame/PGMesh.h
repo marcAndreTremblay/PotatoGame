@@ -10,17 +10,18 @@
 #include "PGBuildableObject.h"
 
 
-namespace PGEngine {
-	class PGShader {
+namespace PG {
+	namespace Engine {
+		class PGShader {
 		protected:
 		private:
-			GLuint VertexShaderID;	
+			GLuint VertexShaderID;
 			GLuint FragmentShaderID;
 			GLuint GeometryShaderID;
-			GLuint CompileShaderScr(GLuint shaderId, const char * shader_scr)	 {
+			GLuint CompileShaderScr(GLuint shaderId, const char * shader_scr) {
 				GLint Result = GL_FALSE;
 				int InfoLogLength;
-	
+
 				glShaderSource(shaderId, 1, &shader_scr, NULL);
 				glCompileShader(shaderId);
 
@@ -38,7 +39,7 @@ namespace PGEngine {
 
 				return Result;
 			}
-			
+
 		public:
 			GLuint ShaderID;
 			PGShader(const char * vertex_src, const char * fragment_src) {
@@ -61,7 +62,7 @@ namespace PGEngine {
 				glGetProgramiv(this->ShaderID, GL_LINK_STATUS, &Result);
 				glGetProgramiv(this->ShaderID, GL_INFO_LOG_LENGTH, &InfoLogLength);
 				if (Result == GL_FALSE && InfoLogLength > 0) {
-					char*  ProgramErrorMessage = (char*)malloc(InfoLogLength );
+					char*  ProgramErrorMessage = (char*)malloc(InfoLogLength);
 					glGetProgramInfoLog(this->ShaderID, InfoLogLength, NULL, &ProgramErrorMessage[0]);
 					printf("%s\n", &ProgramErrorMessage[0]);
 					free(ProgramErrorMessage);
@@ -107,18 +108,18 @@ namespace PGEngine {
 			}
 			void PGShader::Use() {
 				glUseProgram(this->ShaderID);
-		}
-	};
+			}
+		};
 
-	class PGMesh : public PGBuildableObject{
+		class PGMesh : public PGBuildableObject {
 		protected:
 			PGShader* Shader;
 			GLuint VAO;
 			GLuint VBO;
 		private:
 		public:
-			PGMesh(PGShader* shader) 
-				:PGBuildableObject(){
+			PGMesh(PGShader* shader)
+				:PGBuildableObject() {
 				this->Shader = shader;
 				glGenVertexArrays(1, &this->VAO);
 				glGenBuffers(1, &this->VBO);
@@ -130,8 +131,8 @@ namespace PGEngine {
 			}
 			void PGMesh::Build() override = 0;
 			void PGMesh::Render();
-	};	
-
+		};
+	}
 
 }
 #endif

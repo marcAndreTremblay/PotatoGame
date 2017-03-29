@@ -1,9 +1,10 @@
 #if !defined(PG_BUILDABLE_OBJECT_H)
 #define PG_BUILDABLE_OBJECT_H
 
-namespace PGEngine {
+namespace PG {
+	namespace Engine {
 
-	class PGBuildableObject {
+		class PGBuildableObject {
 		protected:
 			bool IsObjectBuild;
 			bool IsObjLock;
@@ -18,16 +19,18 @@ namespace PGEngine {
 		private:
 		public:
 			PGBuildableObject() {
-				this->IsObjectBuild = false;	
+				this->IsObjectBuild = false;
 				this->IsObjLock = false;
 			}
 			~PGBuildableObject() {
 
-			} 
+			}
 			bool PGBuildableObject::IsBuild() { return this->IsObjectBuild; }
 			bool PGBuildableObject::IsLock() { return this->IsObjLock; }
 			virtual void PGBuildableObject::Build() {};
-	};
+		};
 
+	}
 }
+
 #endif

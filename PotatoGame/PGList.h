@@ -3,122 +3,124 @@
 
 
 
-namespace PGCore {
-	template <class T>
-	class PGListNode {
-	private:
-		T* element;
-		PGListNode<T>* next;
-	public:
-		PGListNode(T* _element) {
-			this->element = _element;
-			this->next = nullptr;
-		}
-		~PGListNode() {
-		}
-		T* PGListNode::GetData() { return this->element; }
-		PGListNode* PGListNode::GetNext() { return this->next; }
-		void PGListNode::SetNext(PGListNode* _next) { this->next = _next; }
-	};
+namespace PG {
+	namespace Core {
+		template <class T>
+		class PGListNode {
+		private:
+			T* element;
+			PGListNode<T>* next;
+		public:
+			PGListNode(T* _element) {
+				this->element = _element;
+				this->next = nullptr;
+			}
+			~PGListNode() {
+			}
+			T* PGListNode::GetData() { return this->element; }
+			PGListNode* PGListNode::GetNext() { return this->next; }
+			void PGListNode::SetNext(PGListNode* _next) { this->next = _next; }
+		};
 
 
-	template <class T>
-	class PGList {
-	private:
-		/* Variable */
-		PGListNode<T>* head;
-		PGListNode<T>* tail;
-		bool managing_object;
-	public:
-		/* Variable */
-		int element_count;
-		/* Constructors */
-		PGList(bool manage_obj = false) {
-			this->managing_object = manage_obj;
-			this->element_count = 0;
-			this->head = nullptr;
-			this->tail = nullptr;
-		}
-		~PGList() {
-			PGListNode<T>* next_node = head;
-			while (next_node != nullptr) {
-				PGListNode<T>* current_node = next_node;
-				next_node = current_node->GetNext();
-				if (this->managing_object == true) {
-					delete(current_node->GetData());
-				}
-				delete(current_node);
+		template <class T>
+		class PGList {
+		private:
+			/* Variable */
+			PGListNode<T>* head;
+			PGListNode<T>* tail;
+			bool managing_object;
+		public:
+			/* Variable */
+			int element_count;
+			/* Constructors */
+			PGList(bool manage_obj = false) {
+				this->managing_object = manage_obj;
+				this->element_count = 0;
+				this->head = nullptr;
+				this->tail = nullptr;
 			}
-		}
-		/* Functions */
-		PGListNode<T>* PGList::GetHead() {
-			return this->head;
-		}
-		virtual void PGList::Add(T* new_element) {
-			PGListNode<T> *new_node = new PGListNode<T>(new_element);
-			this->element_count++;
-			if (head == nullptr) {
-				this->head = new_node;
-				this->tail = this->head;
-			}
-			else {
-				this->tail->SetNext(new_node);
-				this->tail = new_node;
-			}
-		}
-		void PGList::Clear() {
-			PGListNode<T>* old_head = this->head;
-			this->head = nullptr;
-			this->tail = nullptr;
-			this->element_count = 0;
-			//Todo(Marc): Check if this is clean
-			
-			while (old_head != nullptr) {
-				PGListNode<T>* current_node = old_head;
-				old_head = current_node->GetNext();
-				if (this->managing_object == true) {
-					delete(current_node->GetData());
-				}
-				delete(current_node);
-			}
-		}
-		void PGList::Remove(T* target_element) {
-			PGListNode<T>* last_visited_node = this->head;
-			PGListNode<T>* current_node = this->head;
-			while (current_node != nullptr) {
-				if (current_node->GetData() == target_element) {
-					last_visited_node->SetNext(current_node->GetNext());
-					if (managing_object == true) {
+			~PGList() {
+				PGListNode<T>* next_node = head;
+				while (next_node != nullptr) {
+					PGListNode<T>* current_node = next_node;
+					next_node = current_node->GetNext();
+					if (this->managing_object == true) {
 						delete(current_node->GetData());
 					}
 					delete(current_node);
-					element_count--;
 				}
-				last_visited_node = current_node;
-				current_node = current_node->GetNext();
 			}
-			
-		}
-		T* PGList::GetAt(int target_index) {
-			if (target_index < 0 || target_index > element_count) return nullptr;
-			int cpt_index = 0;
-			PGListNode<T>* next_node = head;
-			while (next_node != nullptr) {
-				PGListNode<T>* current_node = next_node;
-				cpt_index++;
-				if (cpt_index == target_index) {
-					return current_node->GetData();
+			/* Functions */
+			PGListNode<T>* PGList::GetHead() {
+				return this->head;
+			}
+			virtual void PGList::Add(T* new_element) {
+				PGListNode<T> *new_node = new PGListNode<T>(new_element);
+				this->element_count++;
+				if (head == nullptr) {
+					this->head = new_node;
+					this->tail = this->head;
 				}
 				else {
-					next_node = current_node->GetNext();
+					this->tail->SetNext(new_node);
+					this->tail = new_node;
 				}
 			}
-			return nullptr;
-		}
-		
-	};
+			void PGList::Clear() {
+				PGListNode<T>* old_head = this->head;
+				this->head = nullptr;
+				this->tail = nullptr;
+				this->element_count = 0;
+				//Todo(Marc): Check if this is clean
+
+				while (old_head != nullptr) {
+					PGListNode<T>* current_node = old_head;
+					old_head = current_node->GetNext();
+					if (this->managing_object == true) {
+						delete(current_node->GetData());
+					}
+					delete(current_node);
+				}
+			}
+			void PGList::Remove(T* target_element) {
+				PGListNode<T>* last_visited_node = this->head;
+				PGListNode<T>* current_node = this->head;
+				while (current_node != nullptr) {
+					if (current_node->GetData() == target_element) {
+						last_visited_node->SetNext(current_node->GetNext());
+						if (managing_object == true) {
+							delete(current_node->GetData());
+						}
+						delete(current_node);
+						element_count--;
+					}
+					last_visited_node = current_node;
+					current_node = current_node->GetNext();
+				}
+
+			}
+			T* PGList::GetAt(int target_index) {
+				if (target_index < 0 || target_index > element_count) return nullptr;
+				int cpt_index = 0;
+				PGListNode<T>* next_node = head;
+				while (next_node != nullptr) {
+					PGListNode<T>* current_node = next_node;
+					cpt_index++;
+					if (cpt_index == target_index) {
+						return current_node->GetData();
+					}
+					else {
+						next_node = current_node->GetNext();
+					}
+				}
+				return nullptr;
+			}
+
+		};
 
 
 
+	}
 }
 #endif

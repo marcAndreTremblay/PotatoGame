@@ -13,37 +13,38 @@
 #include "PGMousePicker.h"
 #include "PGBaseCamera.h"
 
-namespace PGEngine {
-	class PGBaseScene : public PGBaseObject, PGBuildableObject {
+namespace PG {
+	namespace Engine {
+		class PGBaseScene : public PGBaseObject, PGBuildableObject {
 		protected:
 			PGBaseCamera * Camera;
-			m4 Projection_Matrice; 
+			m4 Projection_Matrice;
 			virtual void PGBaseScene::HandleControler(PGControler *controler) {
-				
+
 			}
 
 			PGBaseObjList<PGEntity>* Entities;
 			PGMousePicker* MousePicker; //Note(marc): <- Unmanaged resources
 		private:
 		public:
-			bool ShouldUpdate;	
+			bool ShouldUpdate;
 			bool ShouldHandleControler;
 			bool ShouldRender;
-			PGBaseScene() :  
-				PGBaseObject(){
-					this->ShouldUpdate = true;
-					this->ShouldRender = true;
-					this->ShouldHandleControler = true;
-					this->Entities = new PGBaseObjList<PGEntity>(true);
+			PGBaseScene() :
+				PGBaseObject() {
+				this->ShouldUpdate = true;
+				this->ShouldRender = true;
+				this->ShouldHandleControler = true;
+				this->Entities = new PGBaseObjList<PGEntity>(true);
 			}
-			~PGBaseScene() {
+			virtual ~PGBaseScene() {
 				delete(this->Entities);
 				delete(this->Camera);
 			}
 			bool PGBaseScene::IsRenderable() {
 				if (this->PGBuildableObject::IsLock() == true) return false;
 				if (this->PGBuildableObject::IsBuild() == false) return false;
-					if (this->ShouldRender == false) return false;
+				if (this->ShouldRender == false) return false;
 				return true;
 			}
 			bool PGBaseScene::IsUpdatable() {
@@ -58,8 +59,8 @@ namespace PGEngine {
 
 				this->PGBuildableObject::EndBuilding();
 			}
-			virtual void PGBaseScene::Render(PGBaseRenderer *renderer) {		
-				renderer->SetWorldView(this->Camera->GetViewMatrice());	
+			virtual void PGBaseScene::Render(PGBaseRenderer *renderer) {
+				renderer->SetWorldView(this->Camera->GetViewMatrice());
 				renderer->SetWorldProjection(&this->Projection_Matrice);
 
 			}
@@ -69,11 +70,12 @@ namespace PGEngine {
 						this->HandleControler(controler);
 					}
 				}
-				
+
 			}
 
-	};
+		};
 
 
+	}
 }
 #endif

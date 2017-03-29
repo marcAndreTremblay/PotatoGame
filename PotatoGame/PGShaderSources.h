@@ -510,6 +510,7 @@ PG_SHADER(const char* model_vertex_shader = GLSL330(
 		Matl.diffuse = diffuse;
 		Matl.specular = specular;
 		Matl.shininess = shininess.x;
+		//Note(Marc): this next line should be uptimise so 1 less call is made
 		gl_Position = WorldProjection  * WorldView * (Translate* Scale) * vertex_position;
 		FragPos = vec3(WorldView*(Translate * Scale) * vertex_position);
 		Normal = mat3(transpose(inverse(WorldView *  Translate * Scale))) * vertex_normal;
@@ -670,4 +671,6 @@ PG_SHADER(const char* FragShaderBasicLight = GLSL330(
 
 	}
 ));
+
+
 #endif

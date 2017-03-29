@@ -3,7 +3,7 @@
 
 #include "PGCore.h"
 #include "PGBaseRenderer.h"
-using namespace PGCore;
+using namespace PG::Core;
 
 
 
@@ -144,6 +144,7 @@ public:
 		//	o				o
 		//		o		o		
 		//			o
+		//			|		|  
 		//Note(Marc): We use the bottom left as the starting point 
 		//Note(Marc): We go left to right and bottom to top in the world space starting from 0,0,0
 		v4 major_row_offset = v4(grid_tile_size, (2 * grid_tile_size) - (grid_tile_size / glm::tan(glm::radians(60.f))), 0.f, 0.f);
@@ -163,10 +164,11 @@ public:
 			for (int x_xpt = 0; x_xpt < grid_size.x; x_xpt++) {
 
 
-				starting_offset.x += grid_tile_size*2.f;
+				tile_type[index_cpt] = 0;
 				grid_pos_data[index_cpt] = starting_offset;
 				grid_height_data[index_cpt] = 2 + 1.3f*sin(y_xpt / 2.5f)*cos(x_xpt / 2.5f);
 				grid_material_data[index_cpt] = Material_Brown_1;
+				starting_offset.x += grid_tile_size*2.f;
 				index_cpt++;
 			}
 			starting_offset = row_start_tempo;
@@ -184,6 +186,31 @@ public:
 		delete(grid_material_data);
 		delete(selected_indexes);	
 		delete(tile_type);
+	}
+	// 1- x axis offset
+	// 2 -y axis offset
+	r32 PGGridRawData::CalculateNextMapOffetPossition(int side) {
+		r32 total = 0; 
+		if (side == 1) {
+			//Check x+ coord
+			for (int i = 0; i < this->Grid_size.x; i++) {
+				total += Tile_size*2;
+				
+			}
+		}
+		if (side == 2) {
+			v4 major_row_offset = v4(Tile_size, (2 * Tile_size) - (Tile_size / glm::tan(glm::radians(60.f))), 0.f, 0.f);
+			v4 minor_row_offset = v4(-Tile_size, (2 * Tile_size) - (Tile_size / glm::tan(glm::radians(60.f))), 0.f, 0.f);
+			bool swither = true;
+			for (int i = 0; i < this->Grid_size.y; i++) {
+					total += major_row_offset.y;
+			}
+			
+		}
+		
+
+		
+		return total;
 	}
 	void SaveToFile(char *file_path) {
 		printf("Saving to |%s|\n", file_path);
@@ -226,7 +253,8 @@ public:
 	void LoadFromFile(char *file_path) {
 		if (grid_pos_data != nullptr) delete(grid_pos_data);
 		if (grid_height_data != nullptr) delete(grid_height_data);
-		printf("Loading from |%s|\n", file_path);
+		printf("Loading | Region |\n");
+		printf("\tFile path : %s\n", file_path);
 		FILE * file_2 = fopen(file_path, "rb");
 		if (file_2 != nullptr) {
 			float x, y, size;
@@ -235,8 +263,8 @@ public:
 			result += fread(&y, sizeof(float), 1, file_2);
 			result += fread(&size, sizeof(float), 1, file_2);
 
-			printf("Header read count |%i|\n", result);
-
+			printf("\tHeader read count |%i|\n", result);
+			
 
 			this->Tile_size = size;
 			this->Grid_size = v2(x, y);
@@ -255,13 +283,13 @@ public:
 			int* tempo_tt_ptr = tile_type;
 			for (int i = 0; i < Grid_size.x*Grid_size.y; i++) {
 				result = fread((void*)tempo_p_ptr, sizeof(v4), 1, file_2);
-				if (ferror(file_2) != 0 || result != 1) { printf(" %i -- Error possition reading\n", i); break; }
+				if (ferror(file_2) != 0 || result != 1) { printf("\t %i -- Error possition reading\n", i); break; }
 				result = fread((void*)tempo_h_ptr, sizeof(r32), 1, file_2);
-				if (ferror(file_2) != 0 || result != 1) { printf(" %i -- Error height reading\n", i); break; }
+				if (ferror(file_2) != 0 || result != 1) { printf("\t %i -- Error height reading\n", i); break; }
 				result = fread((void*)tempo_m_ptr, sizeof(PGMaterial), 1, file_2);
-				if (ferror(file_2) != 0 || result != 1) { printf(" %i -- Error material reading\n", i); break; }
+				if (ferror(file_2) != 0 || result != 1) { printf("\t %i -- Error material reading\n", i); break; }
 				result = fread((void*)tempo_tt_ptr, sizeof(int), 1, file_2);
-				if (ferror(file_2) != 0 || result != 1) { printf(" %i -- Error tile type reading\n", i); break; }
+				if (ferror(file_2) != 0 || result != 1) { printf("\t %i -- Error tile type reading\n", i); break; }
 				loaded_element_count++;
 				tempo_h_ptr++;
 				tempo_p_ptr++;
@@ -271,11 +299,11 @@ public:
 
 
 
-			printf("Element read count |%i|\n", loaded_element_count);
+			printf("\tElement read count |%i|\n", loaded_element_count);
 			fclose(file_2);
 		}
 		else {
-			printf("Error with file loading\n");
+			printf("\tError with file loading\n");
 		}
 	}
 	void GenerateGridPossitionData(v3 offset) {

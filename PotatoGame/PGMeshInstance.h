@@ -12,9 +12,9 @@
 #include "PGTexture.h"
 
 
-using namespace PGEngine;
+using namespace PG::Engine;
 
-namespace PGGame {
+
 
 	class PGLineMesh : public PGMesh {
 	private:
@@ -589,7 +589,7 @@ namespace PGGame {
 	class PGTextMesh :public PGMesh {
 		private:
 			GLuint EBO;
-			GLuint Unif_Translate;
+			GLuint Unif_Translate;	
 			GLuint Unif_Scale;
 			GLuint Unif_Text_Color;
 			v3 PGTextMesh::CalculateOrignFromPossition(v3* possition, PGCharacter* target_char, r32 scale) {
@@ -623,7 +623,7 @@ namespace PGGame {
 					r32 y_top_offset = 0.f;
 					r32 y_bot_offset = 0.f;
 					char* first_passs_ptr = text_string;
-					while (*first_passs_ptr != '\n') {
+					while (*first_passs_ptr != ENDSTR) {
 						PGCharacter * ch = &font->CharacterCollection[*first_passs_ptr];
 						if ((ch->Bearing.y*scale) > y_top_offset) {
 							y_top_offset = (float)ch->Bearing.y*scale;
@@ -637,7 +637,7 @@ namespace PGGame {
 					v3 current_possition = possition;							
 					v3 current_origin = current_possition + v3(0.f, y_top_offset, 0.f);
 				
-					for (char *current_char = text_string; *current_char != '\n'; current_char++) { 
+					for (char *current_char = text_string; *current_char != ENDSTR; current_char++) {
 						PGCharacter * ch = &font->CharacterCollection[*current_char];
 						glBindTexture(GL_TEXTURE_2D, ch->TextureID);
 						
@@ -698,10 +698,6 @@ namespace PGGame {
 			GLuint Unif_Translate;
 			GLuint Unif_Scale;
 
-			GLuint Unif_Mat_Ambient;
-			GLuint Unif_Mat_Diffuse;
-			GLuint Unif_Mat_Specular;
-			GLuint Unif_Mat_Shinniness;
 		public:
 			PGMModelMesh() :
 				PGMesh(new PGShader(model_vertex_shader, Model_FragShader)) {
@@ -736,15 +732,9 @@ namespace PGGame {
 				this->Unif_Translate = glGetUniformLocation(this->Shader->ShaderID, "Translate");
 				this->Unif_Scale = glGetUniformLocation(this->Shader->ShaderID, "Scale");
 
-			/*	this->Unif_Mat_Ambient = glGetUniformLocation(this->Shader->ShaderID, "Material.ambient");
-				this->Unif_Mat_Diffuse = glGetUniformLocation(this->Shader->ShaderID, "Material.diffuse");
-				this->Unif_Mat_Specular = glGetUniformLocation(this->Shader->ShaderID, "Material.specular");
-				this->Unif_Mat_Shinniness = glGetUniformLocation(this->Shader->ShaderID, "Material.shininess");*/
-
-
 
 				PGBuildableObject::EndBuilding();
 			}
 		};
-}
+
 #endif

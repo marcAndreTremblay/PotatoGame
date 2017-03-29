@@ -2,19 +2,20 @@
 #define PG_BASE_OBJECT_H
 
 #include "PGString.h"
-using namespace PGCore;
+using namespace PG::Core;
 
-namespace PGEngine {
-	class PGBaseObject {
+namespace PG {
+	namespace Engine {
+		class PGBaseObject {
 		protected:
 			unsigned int Ref_Id;
-			PGString *Ref_Name;
+			Str *Ref_Name;
 		private:
 		public:
 			PGBaseObject() {
 				this->Ref_Id = UINT_MAX;
 				this->Ref_Name = nullptr;
-				
+
 			}
 			~PGBaseObject() {
 				delete(this->Ref_Name);
@@ -24,13 +25,13 @@ namespace PGEngine {
 				this->Ref_Id = id;
 			}
 			void PGBaseObject::Set_Name(char* name) {
-				this->Ref_Name = new PGString(name);
+				this->Ref_Name = new Str(name);
 			}
 
 			int PGBaseObject::Get_Id() {
 				return Ref_Id;
 			}
-			PGString* PGBaseObject::Get_Name() {
+			Str* PGBaseObject::Get_Name() {
 				return this->Ref_Name;
 			}
 			bool PGBaseObject::Compare_ptr(PGBaseObject* other) {
@@ -55,18 +56,18 @@ namespace PGEngine {
 				return false;
 			}
 			bool PGBaseObject::Compare_Name(char* name) {
-				if (this->Ref_Name != nullptr ) {
-					return (this->Ref_Name->Compare(new PGString(name)));
+				if (this->Ref_Name != nullptr) {
+					return (this->Ref_Name->Compare(new Str(name)));
 				}
 				return false;
 			}
-			bool PGBaseObject::Compare_Name(PGString* name) {
+			bool PGBaseObject::Compare_Name(Str* name) {
 				if (this->Ref_Name != nullptr) {
 					return (this->Ref_Name->Compare(name));
 				}
 				return false;
 			}
-	};
+		};
+	}
 }
-
 #endif 

@@ -1,35 +1,38 @@
-#if !defined(PG_EDITOR_SCENE_H)
+	#if !defined(PG_EDITOR_SCENE_H)
 #define PG_EDITOR_SCENE_H
 
 #include "stdafx.h"
 
 #include "PGCore.h"
 #include "PGBaseRenderer.h"	
+#include "PGBaseScene.h"
 #include "PGControler.h"
 #include "PGEntity.h"
-#include "PGBaseEvent.h"
 #include "PGString.h"
 #include "PGBaseScene.h"
 #include "PGBuildableObject.h"
 #include "PGMapGrid.h"
+#include "PGMousePicker.h"
 
+#include "PGBackgroundMapGridMesh.h"
+#include "PGMapAtlas.h"
 
-
-
-
+using namespace PG::Core;
+using namespace PG::Engine;
 
 class PGTerrainEditorScene : public PGBaseScene {
 	protected:
-	private:	
+	private:
+		PGMapAtlas * test_atlas;
 		PGGridRawData *grid_data;
-
+		PGGridRawData *grid_data_1;
 		PGLight scene_light;
 		RawModelData *test_model;
 		RawModelData *test_model2;
 		RawModelData *test_model3;
 		double time;
 		double tempo_var;
-		
+		PGMapMesh* test_mesh;
 	public:
 		PGTerrainEditorScene()	: PGBaseScene() {
 			this->time = 0.1f;
@@ -44,6 +47,8 @@ class PGTerrainEditorScene : public PGBaseScene {
 		}
 		~PGTerrainEditorScene() {
 			delete(grid_data);
+			delete(test_mesh);
+			delete(test_atlas);
 		}
 		void PGTerrainEditorScene::Update(PGControler *controler, double timeElapse) override {
 			PGBaseScene::Update(controler, timeElapse);
@@ -56,12 +61,16 @@ class PGTerrainEditorScene : public PGBaseScene {
 
 			renderer->axisMesh->Render(v3(0.f, 0.f, 0.f), v4(0.f, 0.f, 1.f, 1.f));
 			renderer->cubeMesh->Render(v3(scene_light.position.x, scene_light.position.y, scene_light.position.z), v3(0.1f, 0.1f, 0.1f), scene_light.diffuse);
-	
+			
 			if (test_model != nullptr) {
-				renderer->model_renderer->Render(test_model, v3(5.f, 5.f, 17.f), v3(1.f, 1.f, 1.f));
+				//Render a dommy player model somewhere on the map
+				int possition_index = 55;
+				v4 possition = grid_data->grid_pos_data[possition_index];
+				possition.z = grid_data->grid_height_data[possition_index];
+				renderer->model_renderer->Render(test_model, v3(possition), v3(1.f, 1.f, 1.f));
 			}
 			if (test_model2 != nullptr) {
-				renderer->model_renderer->Render(test_model2, v3(10.f, 10.f, 17.f), v3(1.f, 1.f, 1.f));
+				renderer->model_renderer->Render(test_model2, v3(10.f, 10.f, 17.f), v3(3.f, 3.f, 3.f));
 			}
 			if (test_model3 != nullptr) {
 				renderer->model_renderer->Render(test_model3, v3(17.f, 17.f, 17.f), v3(1.2f, 1.2f, 1.2f));
@@ -85,6 +94,24 @@ class PGTerrainEditorScene : public PGBaseScene {
 					}
 						
 				}
+				
+				v3 possition_offset = v3(grid_data_1->CalculateNextMapOffetPossition(1), grid_data_1->CalculateNextMapOffetPossition(2), 0.f);
+				v3 possition_cursor = v3(0.f) - possition_offset;
+				for (int grid_index = 0;
+					grid_index < 9;
+					grid_index++) {
+					if (grid_index % 3 == 0 && grid_index != 0) {
+						possition_cursor.y += possition_offset.y;
+						possition_cursor.x -= possition_offset.x*3;
+					}
+					if (grid_index != 4) {
+					//	renderer->axisMesh->Render(possition_cursor, v4(0.f, 0.f, 1.f, 1.f));
+						test_mesh->Render(possition_cursor);
+					}
+					
+					possition_cursor.x += possition_offset.x;
+					
+				}
 			}
 		}
 
@@ -94,37 +121,41 @@ class PGTerrainEditorScene : public PGBaseScene {
 			this->Set_Name("GridEditorScene");			
 			
 			this->Camera = new PGBaseCamera(
-					v3(-10, -10, 15), //Possition
+					v3(-15, -15, 15), //Possition
 					v3(0, 0, 0), //look at
 					v3(0, 0, 1)	 //up
 					);
-			this->Projection_Matrice = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 50.0f);
+			this->Projection_Matrice = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 150.0f);
 			
-			test_model = new RawModelData("Asset/RawOBJ/rock_1_0.obj","Asset/RawOBJ/");
+			test_model = new RawModelData("Asset/RawOBJ/player_v1.obj");
 			test_model->LoadIntoVAO();
 
-			test_model3 = new RawModelData("Asset/RawOBJ/forest.obj", "Asset/RawOBJ/");
+			test_model3 = new RawModelData("Asset/RawOBJ/forest.obj");
 			test_model3->LoadIntoVAO();
 
-			test_model2 = new RawModelData("Asset/RawOBJ/spere2.obj", "Asset/RawOBJ/");
+			test_model2 = new RawModelData("Asset/RawOBJ/spere2.obj");
 			test_model2->LoadIntoVAO();
 
 			
 
-			FILE * file_2 = fopen("Asset/layout_1.pgmap", "r");
+			FILE * file_2 = fopen("Asset/map/layout_1.pgmap", "r");
 			if (file_2 != nullptr) {
 				grid_data = new PGGridRawData();
-				grid_data->LoadFromFile("Asset/layout_1.pgmap");
+				grid_data->LoadFromFile("Asset/map/layout_1.pgmap");
 				//grid_data->BuildGridPosData(v3(0.f, 0.f, 0.f));
 			}
 			else {
-				grid_data = new PGGridRawData(v2(15, 15), 1.f);
+				grid_data = new PGGridRawData(v2(10, 10), 1.f);
 			}
-
-			
-
-
+			grid_data_1 = new PGGridRawData(v2(10, 10), 1.f);
+			test_mesh = new PGMapMesh(grid_data_1);
+			test_mesh->Build();
 		
+
+			int edit_target = 170;
+			//Load atlas
+		test_atlas = new PGMapAtlas("Asset/map/AtlasMap.txt");
+			//Load require region data from their file using the new loaded atlas
 
 			this->ShouldRender = true;
 		}
@@ -200,7 +231,7 @@ class PGTerrainEditorScene : public PGBaseScene {
 					}
 				}
 				if (controler->IsRelease(PGKey_S) == true) {
-					grid_data->SaveToFile("Asset/layout_1.pgmap");
+					grid_data->SaveToFile("Asset/layout_3.pgmap");
 				}
 			}
 			if (controler->IsRelease(PGKey_Left_Ctrl) == true) {
