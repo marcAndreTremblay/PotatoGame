@@ -19,9 +19,6 @@
     <Filter Include="Header Files\PGGameEditor">
       <UniqueIdentifier>{42b202fa-9c3f-4431-af9f-8c8e719f198e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\PGUtil">
-      <UniqueIdentifier>{efb77372-d6d4-486e-b8b2-a537352d7f7d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\PGEngine">
       <UniqueIdentifier>{556ca62f-f9b0-4ad0-8b0d-4eaf0f7fa5fe}</UniqueIdentifier>
     </Filter>
@@ -30,6 +27,9 @@
     </Filter>
     <Filter Include="Header Files\PGGameEditor\Mesh">
       <UniqueIdentifier>{186ee313-c315-4b81-8b91-41444038fee1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\PGCore">
+      <UniqueIdentifier>{efb77372-d6d4-486e-b8b2-a537352d7f7d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -40,7 +40,7 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="PGString.h">
-      <Filter>Header Files\PGUtil</Filter>
+      <Filter>Header Files\PGCore</Filter>
     </ClInclude>
     <ClInclude Include="PGBuildableObject.h">
       <Filter>Header Files\PGEngine</Filter>
@@ -58,7 +58,7 @@
       <Filter>Header Files\PGEngine</Filter>
     </ClInclude>
     <ClInclude Include="PGCore.h">
-      <Filter>Header Files\PGUtil</Filter>
+      <Filter>Header Files\PGCore</Filter>
     </ClInclude>
     <ClInclude Include="PGBaseRenderer.h">
       <Filter>Header Files\PGEngine</Filter>
@@ -70,9 +70,6 @@
       <Filter>Header Files\PGEngine</Filter>
     </ClInclude>
     <ClInclude Include="PGTexture.h">
-      <Filter>Header Files\PGEngine</Filter>
-    </ClInclude>
-    <ClInclude Include="PGAssetManager.h">
       <Filter>Header Files\PGEngine</Filter>
     </ClInclude>
     <ClInclude Include="PGFont.h">
@@ -93,11 +90,8 @@
     <ClInclude Include="PGMousePicker.h">
       <Filter>Header Files\PGEngine</Filter>
     </ClInclude>
-    <ClInclude Include="PGBaseCamera.h">
-      <Filter>Header Files\PGEngine</Filter>
-    </ClInclude>
     <ClInclude Include="PG3DPrimitive.h">
-      <Filter>Header Files\PGUtil</Filter>
+      <Filter>Header Files\PGCore</Filter>
     </ClInclude>
     <ClInclude Include="PGEditorInstance.h">
       <Filter>Header Files\PGGameEditor</Filter>
@@ -106,7 +100,7 @@
       <Filter>Header Files\PGGameEditor</Filter>
     </ClInclude>
     <ClInclude Include="PGList.h">
-      <Filter>Header Files\PGUtil</Filter>
+      <Filter>Header Files\PGCore</Filter>
     </ClInclude>
     <ClInclude Include="PGEntity.h">
       <Filter>Header Files\PGEngine</Filter>
@@ -118,7 +112,7 @@
       <Filter>Header Files\PGGameEditor</Filter>
     </ClInclude>
     <ClInclude Include="PGTree.h">
-      <Filter>Header Files\PGUtil</Filter>
+      <Filter>Header Files\PGCore</Filter>
     </ClInclude>
     <ClInclude Include="PGGameModel.h">
       <Filter>Header Files\PGEngine</Filter>
@@ -135,11 +129,17 @@
     <ClInclude Include="PGMapAtlas.h">
       <Filter>Header Files\PGGameEditor</Filter>
     </ClInclude>
-    <ClInclude Include="PGEngineInstance.h">
-      <Filter>Header Files\PGEngine</Filter>
-    </ClInclude>
     <ClInclude Include="PGUIBaseElement.h">
       <Filter>Header Files\PGGui</Filter>
+    </ClInclude>
+    <ClInclude Include="AssetManager.h">
+      <Filter>Header Files\PGEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Header Files\PGEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineInstance.h">
+      <Filter>Header Files\PGEngine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

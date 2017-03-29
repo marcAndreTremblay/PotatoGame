@@ -120,7 +120,7 @@ class PGTerrainEditorScene : public PGBaseScene {
 
 			this->Set_Name("GridEditorScene");			
 			
-			this->Camera = new PGBaseCamera(
+			this->scene_camera = new Camera(
 					v3(-15, -15, 15), //Possition
 					v3(0, 0, 0), //look at
 					v3(0, 0, 1)	 //up
@@ -250,14 +250,14 @@ class PGTerrainEditorScene : public PGBaseScene {
 				v3 plane_normal = v3(0.f, 0.f, 1.f);
 				r32 offset = 0.f;
 				v3 result_point = v3(0.f);
-				world_ray = MousePicker->CastRay(controler, &this->Projection_Matrice, this->Camera->GetViewMatrice());
+				world_ray = MousePicker->CastRay(controler, &this->Projection_Matrice, this->scene_camera->GetViewMatrice());
 				for (int grid_index = 0;
 					grid_index < grid_data->Grid_size.x*grid_data->Grid_size.y;
 					grid_index++) 
 				{
 					offset = -grid_data->grid_height_data[grid_index]; //Note(Marc): Dont know why the (-) we should find out
-					float dis_t = -((glm::dot(this->Camera->Possition, plane_normal) + offset) / glm::dot(world_ray, plane_normal));
-					result_point = this->Camera->Possition + world_ray*dis_t;
+					float dis_t = -((glm::dot(this->scene_camera->Possition, plane_normal) + offset) / glm::dot(world_ray, plane_normal));
+					result_point = this->scene_camera->Possition + world_ray*dis_t;
 					
 					float dist = glm::distance(result_point, v3(grid_data->grid_pos_data[grid_index].x, grid_data->grid_pos_data[grid_index].y, grid_data->grid_height_data[grid_index]));
 					if (dist < grid_data->Tile_size) {
@@ -292,34 +292,34 @@ class PGTerrainEditorScene : public PGBaseScene {
 					this->scene_light.position += v4(0.0f, 0.0f, 0.1f, 0.f);
 				}
 				if (controler->GetKey(PGKey_C)->IsPress == true) {
-					this->Camera->RotateZAxis(speed, this->Camera->LookAt);
+					this->scene_camera->RotateZAxis(speed, this->scene_camera->LookAt);
 				}
 				if (controler->GetKey(PGKey_Z)->IsPress == true) {
-					this->Camera->RotateZAxis(-speed, this->Camera->LookAt);
+					this->scene_camera->RotateZAxis(-speed, this->scene_camera->LookAt);
 				}
 				if (controler->GetKey(PGKey_A)->IsPress == true) {
-					this->Camera->Possition += v3(-speed, 0.f, 0.f);
-					this->Camera->LookAt += v3(-speed, 0.f, 0.f);
+					this->scene_camera->Possition += v3(-speed, 0.f, 0.f);
+					this->scene_camera->LookAt += v3(-speed, 0.f, 0.f);
 				}
 				if (controler->GetKey(PGKey_D)->IsPress == true) {
-					this->Camera->Possition += v3(speed, 0.f, 0.f);
-					this->Camera->LookAt += v3(speed, 0.f, 0.f);
+					this->scene_camera->Possition += v3(speed, 0.f, 0.f);
+					this->scene_camera->LookAt += v3(speed, 0.f, 0.f);
 				}
 				if (controler->GetKey(PGKey_W)->IsPress == true) {
-					this->Camera->Possition += v3(0.f, speed, 0.f);
-					this->Camera->LookAt += v3(0.f, speed, 0.f);
+					this->scene_camera->Possition += v3(0.f, speed, 0.f);
+					this->scene_camera->LookAt += v3(0.f, speed, 0.f);
 				}
 				if (controler->GetKey(PGKey_S)->IsPress == true) {
-					this->Camera->Possition += v3(0.0f, -speed, 0.f);
-					this->Camera->LookAt += v3(0.0f, -speed, 0.f);
+					this->scene_camera->Possition += v3(0.0f, -speed, 0.f);
+					this->scene_camera->LookAt += v3(0.0f, -speed, 0.f);
 				}
 				if (controler->GetKey(PGKey_Q)->IsPress == true) {
-					this->Camera->Possition += v3(0.0f, 0.f, speed);
-					this->Camera->LookAt += v3(0.0f, 0.f, speed);
+					this->scene_camera->Possition += v3(0.0f, 0.f, speed);
+					this->scene_camera->LookAt += v3(0.0f, 0.f, speed);
 				}
 				if (controler->GetKey(PGKey_E)->IsPress == true) {
-					this->Camera->Possition += v3(0.0f, 0.f, -speed);
-					this->Camera->LookAt += v3(0.0f, 0.f, -speed);
+					this->scene_camera->Possition += v3(0.0f, 0.f, -speed);
+					this->scene_camera->LookAt += v3(0.0f, 0.f, -speed);
 				}
 				if (controler->GetKey(PGKey_Up)->IsPress == true) {
 					this->scene_light.position += v4(0.0f, 0.1f, 0.0f, 0.f);

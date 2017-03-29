@@ -8,12 +8,10 @@
 #include "PGGameModel.h"
 
 using namespace PG::Core;
-
-
 namespace PG {
 	namespace Engine {
 
-		class PGAssetManager {
+		class AssetManager {
 		protected:
 
 		private:
@@ -34,7 +32,7 @@ namespace PG {
 				printf(" ***\n");
 			}
 		public:
-			PGAssetManager() {
+			AssetManager() {
 				this->IsFontLoadingEnable = false;
 
 				/* Init Texture loading */
@@ -56,7 +54,7 @@ namespace PG {
 
 				this->Obj_Model_List = new PGBaseObjList<RawModelData>(true);
 			}
-			~PGAssetManager() {
+			~AssetManager() {
 				delete(this->Fonts_List);
 				delete(this->Textures_List);
 				delete(this->Obj_Model_List);
@@ -67,7 +65,7 @@ namespace PG {
 				FreeImage_DeInitialise();
 
 			}
-			PGFont* PGAssetManager::LoadFont(char *path, char* ref_Name) {
+			PGFont* AssetManager::LoadFont(char *path, char* ref_Name) {
 				if (IsFontLoadingEnable == true) {
 					PGFont* new_font = new PGFont(this->Ft_lib_Intance, path, ref_Name);
 					new_font->Build();
@@ -77,16 +75,16 @@ namespace PG {
 				}
 				return nullptr;
 			}
-			PGTexture*  PGAssetManager::LoadTexture(PGTexFormat format, char *path, char* ref_Name) {
+			PGTexture*  AssetManager::LoadTexture(PGTexFormat format, char *path, char* ref_Name) {
 				PGTexture* new_texture = new PGTexture(format, path, ref_Name);
 				new_texture->Build();
 				this->Textures_List->Add(new_texture);
 				return new_texture;
 			}
-			PGTexture* PGAssetManager::SeachForTexture(char* ref_Texture_Name) {
+			PGTexture* AssetManager::SeachForTexture(char* ref_Texture_Name) {
 				return Textures_List->FindByName(ref_Texture_Name);
 			}
-			PGFont* PGAssetManager::SeachForFont(char* ref_Font_Name) {
+			PGFont* AssetManager::SeachForFont(char* ref_Font_Name) {
 				return Fonts_List->FindByName(ref_Font_Name);
 			}
 		};

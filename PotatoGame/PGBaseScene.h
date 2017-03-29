@@ -11,13 +11,13 @@
 #include "PGString.h"
 #include "PGBaseObjectList.h"
 #include "PGMousePicker.h"
-#include "PGBaseCamera.h"
+#include "Camera.h"
 
 namespace PG {
 	namespace Engine {
 		class PGBaseScene : public PGBaseObject, PGBuildableObject {
 		protected:
-			PGBaseCamera * Camera;
+			Camera * scene_camera;
 			m4 Projection_Matrice;
 			virtual void PGBaseScene::HandleControler(PGControler *controler) {
 
@@ -39,7 +39,7 @@ namespace PG {
 			}
 			virtual ~PGBaseScene() {
 				delete(this->Entities);
-				delete(this->Camera);
+				delete(this->scene_camera);
 			}
 			bool PGBaseScene::IsRenderable() {
 				if (this->PGBuildableObject::IsLock() == true) return false;
@@ -60,7 +60,7 @@ namespace PG {
 				this->PGBuildableObject::EndBuilding();
 			}
 			virtual void PGBaseScene::Render(PGBaseRenderer *renderer) {
-				renderer->SetWorldView(this->Camera->GetViewMatrice());
+				renderer->SetWorldView(this->scene_camera->GetViewMatrice());
 				renderer->SetWorldProjection(&this->Projection_Matrice);
 
 			}

@@ -43,7 +43,7 @@ namespace PG {
 			~PGUICanvas() {
 				delete(this->element_list);
 			}
-			virtual void PGUICanvas::Build(PGGameWindow* game_window, PGMousePicker* _mouse_picker, PGAssetManager* asset_manager) {
+			virtual void PGUICanvas::Build(PGGameWindow* game_window, PGMousePicker* _mouse_picker, AssetManager* asset_manager) {
 				this->StartBuilding();
 				this->MousePicker = _mouse_picker;
 				this->GameWindow = game_window;

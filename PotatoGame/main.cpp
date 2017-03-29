@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "PGEditorInstance.h"
 //
-//#include "PGAssetManager.h"
+//#include "AssetManager.h"
 //
 //
 //#include "PGTree.h"

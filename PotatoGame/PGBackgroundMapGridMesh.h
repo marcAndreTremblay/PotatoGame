@@ -3,7 +3,7 @@
 
 
 #include "stdafx.h"
-#include "PGAssetManager.h"
+#include "AssetManager.h"
 #include "PGCore.h"
 #include "PGList.h"
 #include "PGShaderSources.h"

@@ -11,14 +11,14 @@ using namespace PG::Core;
 #include "PGBaseRenderer.h"
 #include "PGGameWindow.h"
 #include "PGBaseScene.h"
-#include "PGAssetManager.h"
+#include "AssetManager.h"
 #include "PGUICanvas.h"
 #include "PGEditorScene.h"
 #include "PGMousePicker.h"
 
 namespace PG {
 	namespace Engine {
-		class PGEngineInstance : public PGBuildableObject {
+		class EngineInstance : public PGBuildableObject {
 		protected:
 			PGFont *Default_Engine_Font; //Note(Marc): Unmanaged ptr
 			char fps_info_buffer[40];
@@ -29,30 +29,30 @@ namespace PG {
 			PGControler* Controlers;
 			PGGameWindow* GameWindow;
 			PGBaseRenderer* GameRenderer;
-			PGAssetManager* AssetManager;
+			AssetManager* Asset_Manager;
 
 			PGMousePicker* MousePicker;
 
 
-			virtual void PGEngineInstance::HandlerEvents() {
+			virtual void EngineInstance::HandlerEvents() {
 				if (glfwWindowShouldClose(this->GameWindow->Gl_Window) == 1) {
 					this->ShouldGameClose = true;
 				}
 
 			}
-			virtual void PGEngineInstance::HandleControler() {
+			virtual void EngineInstance::HandleControler() {
 				if (glfwGetKey(this->GameWindow->Gl_Window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
 					this->ShouldGameClose = true;
 				}
 
 			}
-			virtual void PGEngineInstance::Render() {
+			virtual void EngineInstance::Render() {
 				if (this->CurrentViewedScene != nullptr) {
 					if (this->CurrentViewedScene->IsRenderable() == true)
 						this->CurrentViewedScene->Render(this->GameRenderer);
 				}
 			}
-			virtual void PGEngineInstance::Update(double _TimeElapse) {
+			virtual void EngineInstance::Update(double _TimeElapse) {
 				this->HandleControler();
 				this->HandlerEvents();
 				if (this->CurrentViewedScene != nullptr) {
@@ -66,7 +66,7 @@ namespace PG {
 			bool IsBuild;
 
 		public:
-			PGEngineInstance() {
+			EngineInstance() {
 				fps_info_buffer[0] = ENDSTR;
 				frame_cpt_buffer[0] = ENDSTR;
 				this->ShouldGameClose = false;
@@ -76,18 +76,18 @@ namespace PG {
 				this->Controlers = new PGControler();
 				this->GameWindow = new PGGameWindow(false, 1024, 768);
 				this->GameRenderer = new PGBaseRenderer();
-				this->AssetManager = new PGAssetManager();
+				this->Asset_Manager = new AssetManager();
 				this->MousePicker = new PGMousePicker(this->GameWindow);
 			}
-			virtual ~PGEngineInstance() {
+			virtual ~EngineInstance() {
 				delete(this->LoadedScenes);
 				delete(this->Controlers);
 				delete(this->GameRenderer);
 				delete(this->GameWindow);
-				delete(this->AssetManager);
+				delete(this->Asset_Manager);
 				delete(this->MousePicker);
 			}
-			void PGEngineInstance::Start() {
+			void EngineInstance::Start() {
 				unsigned int FrameRenderGlobalCount = 0;
 
 				uint32 renderFctCallCpt = 0;
@@ -143,7 +143,7 @@ namespace PG {
 					FrameRenderGlobalCount++;
 				}
 			}
-			virtual void PGEngineInstance::Build() override {
+			virtual void EngineInstance::Build() override {
 				PGBuildableObject::StartBuilding();
 
 

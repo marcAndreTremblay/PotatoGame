@@ -81,9 +81,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PG3DPrimitive.h" />
-    <ClInclude Include="PGAssetManager.h" />
+    <ClInclude Include="AssetManager.h" />
     <ClInclude Include="PGBackgroundMapGridMesh.h" />
-    <ClInclude Include="PGBaseCamera.h" />
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="PGBaseObject.h" />
     <ClInclude Include="PGBaseObjectList.h" />
     <ClInclude Include="PGBuildableObject.h" />
@@ -98,7 +98,7 @@
     <ClInclude Include="PGGameWindow.h" />
     <ClInclude Include="PGBaseRenderer.h" />
     <ClInclude Include="PGCore.h" />
-    <ClInclude Include="PGEngineInstance.h" />
+    <ClInclude Include="EngineInstance.h" />
     <ClInclude Include="PGList.h" />
     <ClInclude Include="PGMesh.h" />
     <ClInclude Include="PGMeshInstance.h" />
