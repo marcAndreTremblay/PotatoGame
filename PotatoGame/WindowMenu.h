@@ -24,7 +24,7 @@ namespace PG {
 		protected:
 			r32 menu_button_default_size = 16.f;
 		private:
-			GUIMargin* Menu_Margin;
+			Margin* Menu_Margin;
 			Panel* Main_Panel;
 			Button * Hide_Button;
 			bool IsMovable;
@@ -34,7 +34,7 @@ namespace PG {
 				this->IsMovable = true;
 				this->IsResizable = true;
 
-				this->Menu_Margin = new GUIMargin(5.f, 5.f, 32.f, 5.f);
+				this->Menu_Margin = new Margin(5.f, 5.f, 32.f, 5.f);
 
 				this->Main_Panel = new Panel();
 				this->Main_Panel->SetPossition(v2(0.f, 0.f));

@@ -19,7 +19,7 @@ namespace PG {
 		protected:
 		private:
 			Str* Text;
-			Font* Font; //Un-managed resource
+			Font* _Font; //Un-managed resource
 		public:
 			v3 Text_color;
 			r32 Text_size;
@@ -30,7 +30,7 @@ namespace PG {
 				this->Text = new Str(text);
 			}
 			void Button::SetFont(PG::Engine::Font* font) {
-				this->Font = font;
+				this->_Font = font;
 			}
 
 			Button() {
@@ -38,7 +38,7 @@ namespace PG {
 				this->Text_color = v3(0.f);
 				this->Text_size = 1.f;
 				this->Text = nullptr;
-				this->Font = nullptr;
+				this->_Font = nullptr;
 			}
 			~Button() {
 
@@ -61,8 +61,8 @@ namespace PG {
 					if (this->State == UIState_Right_Press) {
 						renderer->ui_panel_Mesh->Render(v3(this->GetRelativePossition(), this->GetRelativeZ()), this->Size, v4(1.f, 1.f, 0.f, 1.f));
 					}
-					if (Text != nullptr && Font != nullptr) {
-						renderer->RenderUIText(this->Text->CharAt(), v3(this->GetRelativePossition(), this->GetRelativeZ()) + v3(0.f, 0.f, 0.1f), v4(Text_color, this->GetRelativeOpacity()), this->Text_size, this->Font);
+					if (Text != nullptr && _Font != nullptr) {
+						renderer->RenderUIText(this->Text->CharAt(), v3(this->GetRelativePossition(), this->GetRelativeZ()) + v3(0.f, 0.f, 0.1f), v4(Text_color, this->GetRelativeOpacity()), this->Text_size, this->_Font);
 					}
 				}
 				UIElement::Render(renderer);

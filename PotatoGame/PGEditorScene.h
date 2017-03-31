@@ -24,15 +24,15 @@ class PGTerrainEditorScene : public Scene {
 	protected:
 	private:
 		PGMapAtlas * test_atlas;
-		PGGridRawData *grid_data;
-		PGGridRawData *grid_data_1;
+		PGAtlasRegion* region_display[9];
+		bool region_edited[9];
+		PGAtlasRegion* edited_region;
 		PGLight scene_light;
 		RawModelData *test_model;
 		RawModelData *test_model2;
 		RawModelData *test_model3;
 		double time;
 		double tempo_var;
-		PGMapMesh* test_mesh;
 	public:
 		PGTerrainEditorScene()	: Scene() {
 			this->time = 0.1f;
@@ -43,11 +43,15 @@ class PGTerrainEditorScene : public Scene {
 			this->scene_light.diffuse = v4(1.f, 1.f, 1.f, 1.f);
 			this->scene_light.ambient = v4(0.6f, 0.6f, 0.6f, 1.f);
 			this->scene_light.specular = v4(0.6f, 0.6f, 0.6f, 1.f);
+			for (int i = 0; i <= 9; i++) {
+				region_display[i] = nullptr;
+				region_edited[i] = false;
+			}
 			
 		}
 		~PGTerrainEditorScene() {
-			delete(grid_data);
-			delete(test_mesh);
+			
+			
 			delete(test_atlas);
 		}
 		void PGTerrainEditorScene::Update(Controler *controler, double timeElapse) override {
@@ -62,20 +66,16 @@ class PGTerrainEditorScene : public Scene {
 			renderer->axisMesh->Render(v3(0.f, 0.f, 0.f), v4(0.f, 0.f, 1.f, 1.f));
 			renderer->cubeMesh->Render(v3(scene_light.position.x, scene_light.position.y, scene_light.position.z), v3(0.1f, 0.1f, 0.1f), scene_light.diffuse);
 			
-			if (test_model != nullptr) {
-				//Render a dommy player model somewhere on the map
-				int possition_index = 55;
-				v4 possition = grid_data->grid_pos_data[possition_index];
-				possition.z = grid_data->grid_height_data[possition_index];
-				renderer->model_renderer->Render(test_model, v3(possition), v3(1.f, 1.f, 1.f));
-			}
+
 			if (test_model2 != nullptr) {
 				renderer->model_renderer->Render(test_model2, v3(10.f, 10.f, 17.f), v3(3.f, 3.f, 3.f));
 			}
 			if (test_model3 != nullptr) {
 				renderer->model_renderer->Render(test_model3, v3(17.f, 17.f, 17.f), v3(1.2f, 1.2f, 1.2f));
 			}
-			if (grid_data != nullptr) {
+			
+
+			PGGridRawData *grid_data = region_display[4]->grid;
 				v3 possition;
 				v3 scale;
 				for (int grid_index = 0;
@@ -95,24 +95,26 @@ class PGTerrainEditorScene : public Scene {
 						
 				}
 				
-				v3 possition_offset = v3(grid_data_1->CalculateNextMapOffetPossition(1), grid_data_1->CalculateNextMapOffetPossition(2), 0.f);
+				v3 possition_offset = v3(grid_data->CalculateNextMapOffetPossition(1), grid_data->CalculateNextMapOffetPossition(2), 0.f);
 				v3 possition_cursor = v3(0.f) - possition_offset;
-				for (int grid_index = 0;
-					grid_index < 9;
-					grid_index++) {
+				for (int grid_index = 0;grid_index < 9;	grid_index++) {
 					if (grid_index % 3 == 0 && grid_index != 0) {
 						possition_cursor.y += possition_offset.y;
 						possition_cursor.x -= possition_offset.x*3;
 					}
-					if (grid_index != 4) {
-					//	renderer->axisMesh->Render(possition_cursor, v4(0.f, 0.f, 1.f, 1.f));
-						test_mesh->Render(possition_cursor);
+					if (region_edited[grid_index] == true) {
+								
+					}
+					else {
+						if(region_display[grid_index] != nullptr){
+							region_display[grid_index]->region_mesh->Render(possition_cursor);
+						}
 					}
 					
 					possition_cursor.x += possition_offset.x;
 					
 				}
-			}
+			
 		}
 
 		void PGTerrainEditorScene::Build(MousePicker* mouse_picker) {
@@ -138,32 +140,22 @@ class PGTerrainEditorScene : public Scene {
 
 			
 
-			FILE * file_2 = fopen("Asset/map/layout_1.pgmap", "r");
-			if (file_2 != nullptr) {
-				grid_data = new PGGridRawData();
-				grid_data->LoadFromFile("Asset/map/layout_1.pgmap");
-				//grid_data->BuildGridPosData(v3(0.f, 0.f, 0.f));
-			}
-			else {
-				grid_data = new PGGridRawData(v2(10, 10), 1.f);
-			}
-			grid_data_1 = new PGGridRawData(v2(10, 10), 1.f);
-			test_mesh = new PGMapMesh(grid_data_1);
-			test_mesh->Build();
 		
 
-			int edit_target = 170;
+			int edit_target = 171;
 			//Load atlas
-		test_atlas = new PGMapAtlas("Asset/map/AtlasMap.txt");
+			test_atlas = new PGMapAtlas("Asset/map/AtlasMap.txt");
 			//Load require region data from their file using the new loaded atlas
-
+			test_atlas->LoadRegionsAndFillDisplayTemplate(edit_target, &region_display[0]);
+			region_edited[4] = true;
+			
 			this->ShouldRender = true;
 		}
 		void PGTerrainEditorScene::HandleControler(Controler *controler) override {
 			Scene::HandleControler(controler);
 			float speed = 0.15f;
 			
-
+			PGGridRawData *grid_data = region_display[4]->grid;
 			if (controler->GetKey(PGKey_Left_Ctrl)->IsPress == true) {
 				if (controler->IsRelease(PGKey_1) == true) {
 					for (int grid_index = 0;
@@ -231,7 +223,8 @@ class PGTerrainEditorScene : public Scene {
 					}
 				}
 				if (controler->IsRelease(PGKey_S) == true) {
-					grid_data->SaveToFile("Asset/layout_3.pgmap");
+					edited_region->grid->SaveToFile(edited_region->FilePath->CharAt());
+					
 				}
 			}
 			if (controler->IsRelease(PGKey_Left_Ctrl) == true) {
@@ -248,18 +241,19 @@ class PGTerrainEditorScene : public Scene {
 				&& controler->IsRelease(PGMouse_Right) == true) {
 				v3 world_ray;
 				v3 plane_normal = v3(0.f, 0.f, 1.f);
-				r32 offset = 0.f;
+				r32 z_offset = 0.f;
+				v3 possition_offset = v3(0.f);
 				v3 result_point = v3(0.f);
 				world_ray = Mouse_Picker->CastRay(controler, &this->Projection_Matrice, this->scene_camera->GetViewMatrice());
 				for (int grid_index = 0;
 					grid_index < grid_data->Grid_size.x*grid_data->Grid_size.y;
 					grid_index++) 
 				{
-					offset = -grid_data->grid_height_data[grid_index]; //Note(Marc): Dont know why the (-) we should find out
-					float dis_t = -((glm::dot(this->scene_camera->Possition, plane_normal) + offset) / glm::dot(world_ray, plane_normal));
+					z_offset = grid_data->grid_height_data[grid_index]; //Note(Marc): Dont know why the (-) we should find out
+					float dis_t = -((glm::dot(this->scene_camera->Possition, plane_normal) - z_offset) / glm::dot(world_ray, plane_normal));
 					result_point = this->scene_camera->Possition + world_ray*dis_t;
-					
-					float dist = glm::distance(result_point, v3(grid_data->grid_pos_data[grid_index].x, grid_data->grid_pos_data[grid_index].y, grid_data->grid_height_data[grid_index]));
+					v3 possition = v3(grid_data->grid_pos_data[grid_index].x, grid_data->grid_pos_data[grid_index].y, grid_data->grid_height_data[grid_index]) + possition_offset;
+					float dist = glm::distance(result_point, possition);
 					if (dist < grid_data->Tile_size) {
 						if (grid_data->selected_indexes[grid_index] == true) {
 							grid_data->selected_indexes[grid_index] = false;

@@ -271,6 +271,7 @@ PG_SHADER(const char* tile_vertex_shader = GLSL330(
 		mat4 WorldProjection;
 		mat4 WorldView;
 		mat4 GUIProjection;
+		vec4 CenterOfFog;
 	};
 
 	out vec2 Tex_Coord;
@@ -301,6 +302,7 @@ PG_SHADER(const char* ui_panel_vertex_shader = GLSL330(
 		mat4 WorldProjection;
 		mat4 WorldView;
 		mat4 GUIProjection;
+		vec4 CenterOfFog;
 	};
 
 	void main() {
@@ -322,6 +324,7 @@ PG_SHADER(const char* texture_vertex_shader = GLSL330(
 		mat4 WorldProjection;
 		mat4 WorldView;
 		mat4 GUIProjection;
+		vec4 CenterOfFog;
 	};
 
 	void main() {
@@ -350,6 +353,7 @@ PG_SHADER(const char* simple_vertex_shader = GLSL330(
 		mat4 WorldProjection;
 		mat4 WorldView;
 		mat4 GUIProjection;
+		vec4 CenterOfFog;
 	};
 
 	void main() {
@@ -368,6 +372,7 @@ PG_SHADER(const char* hexagone_vertex_shader = GLSL330(
 		mat4 WorldProjection;
 		mat4 WorldView;
 		mat4 GUIProjection;
+		vec4 CenterOfFog;
 	};
 
 	void main() {
@@ -389,6 +394,7 @@ PG_SHADER(const char* text_vertex_shader = GLSL330(
 		mat4 WorldProjection;
 		mat4 WorldView;
 		mat4 GUIProjection;
+		vec4 CenterOfFog;
 	};
 
 	void main() {
@@ -421,6 +427,7 @@ PG_SHADER(const char* axis_vertex_shader = GLSL330(
 		mat4 WorldProjection;
 		mat4 WorldView;
 		mat4 GUIProjection;
+		vec4 CenterOfFog;
 	};
 
 	void main() {
@@ -461,6 +468,7 @@ PG_SHADER(const char* light_vertex_shader = GLSL330(
 		mat4 WorldProjection;
 		mat4 WorldView;
 		mat4 GUIProjection;
+		vec4 CenterOfFog;
 	};
 
 
@@ -502,6 +510,7 @@ PG_SHADER(const char* model_vertex_shader = GLSL330(
 		mat4 WorldProjection;
 		mat4 WorldView;
 		mat4 GUIProjection;
+		vec4 CenterOfFog;
 	};
 
 
@@ -536,6 +545,7 @@ PG_SHADER(const char* Model_FragShader = GLSL330(
 		mat4 WorldProjection;
 		mat4 WorldView;
 		mat4 GUIProjection;
+		vec4 CenterOfFog;
 	};
 	layout(std140) uniform SceneAdvanceLightData_UBO
 	{
@@ -590,6 +600,7 @@ PG_SHADER(const char* FragShaderMaterializeLight = GLSL330(
 		mat4 WorldProjection;
 		mat4 WorldView;
 		mat4 GUIProjection;
+		vec4 CenterOfFog;
 	};
 	layout(std140) uniform SceneAdvanceLightData_UBO
 	{
@@ -636,6 +647,7 @@ PG_SHADER(const char* FragShaderBasicLight = GLSL330(
 		mat4 WorldProjection;
 		mat4 WorldView;
 		mat4 GUIProjection;
+		vec4 CenterOfFog;
 	};
 	layout(std140) uniform SceneLightData_UBO
 	{

@@ -20,7 +20,7 @@ namespace PG {
 		class TreeListElement : public PG::Core::TreeNode<TreeListElement> {
 			public:
 				bool IsSelected;
-				GUIElementState State;
+				ElementState State;
 				Str* Text;
 				Font * _Font;
 				r32 scale;

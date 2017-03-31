@@ -6,7 +6,7 @@
 using namespace PG::Core;
 namespace PG {
 	namespace GUI {
-		enum GGUIEventCode {
+		enum UIEventCode {
 			GUIEvent_Nothing = 0,
 			GUIEvent_Hide_Window = 1,
 			GUIEvent_Show_Window = 2,
@@ -17,8 +17,8 @@ namespace PG {
 		class GUIEvent {
 		public:
 			void *sender;
-			GGUIEventCode code;
-			GUIEvent(void* sender_ptr, GGUIEventCode event_code) {
+			UIEventCode code;
+			GUIEvent(void* sender_ptr, UIEventCode event_code) {
 				this->code = event_code;
 				this->sender = sender_ptr;
 			}
@@ -68,7 +68,7 @@ namespace PG {
 			}
 		};
 
-		enum GUIElementState {
+		enum ElementState {
 			UIState_Idle = 0,
 			UIState_Hot = 1,
 			UIState_Moving = 2,
@@ -79,28 +79,28 @@ namespace PG {
 			UIState_Selecting = 7
 		};
 
-		class GUIMargin {
+		class Margin {
 		public:
 			r32 Left, Right, Top, Bottom;
-			GUIMargin(r32 left, r32 right, r32 top, r32 bottom) {
+			Margin(r32 left, r32 right, r32 top, r32 bottom) {
 				this->Left = left;
 				this->Right = right;
 				this->Top = top;
 				this->Bottom = bottom;
 			}
-			GUIMargin(r32 margin) {
+			Margin(r32 margin) {
 				this->Left = margin;
 				this->Right = margin;
 				this->Top = margin;
 				this->Bottom = margin;
 			}
-			GUIMargin() {
+			Margin() {
 				this->Left = 0.f;
 				this->Right = 0.f;
 				this->Top = 0.f;
 				this->Bottom = 0.f;
 			}
-			~GUIMargin() {
+			~Margin() {
 			}
 		};
 

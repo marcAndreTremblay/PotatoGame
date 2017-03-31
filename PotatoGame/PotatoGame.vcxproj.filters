@@ -43,8 +43,14 @@
     <Filter Include="Header Files\PG\Engine\Renderer">
       <UniqueIdentifier>{aaef036d-69f7-4a13-9f7a-c43eb2f10e5f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\PG\Gui\GuiElement">
+    <Filter Include="Header Files\PG\Gui\Element">
       <UniqueIdentifier>{ab25fff7-c81c-4b5f-ae70-85634104da8a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\GameEditor\Gui">
+      <UniqueIdentifier>{edb987d8-456e-442f-9396-c67a13f54137}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\PG\Engine\Renderer\Mesh">
+      <UniqueIdentifier>{27de8a22-29f5-4c40-810b-1e90ec8bf9e2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -56,9 +62,6 @@
   <ItemGroup>
     <ClInclude Include="targetver.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PGMeshInstance.h">
-      <Filter>Header Files\GameEditor</Filter>
     </ClInclude>
     <ClInclude Include="PGUICanvas.h">
       <Filter>Header Files\PG\Gui</Filter>
@@ -157,28 +160,37 @@
       <Filter>Header Files\PG\Engine\Container</Filter>
     </ClInclude>
     <ClInclude Include="DropDownMenu.h">
-      <Filter>Header Files\PG\Gui\GuiElement</Filter>
+      <Filter>Header Files\PG\Gui\Element</Filter>
     </ClInclude>
     <ClInclude Include="TreeSelectorMenu.h">
-      <Filter>Header Files\PG\Gui\GuiElement</Filter>
+      <Filter>Header Files\PG\Gui\Element</Filter>
     </ClInclude>
     <ClInclude Include="Label.h">
-      <Filter>Header Files\PG\Gui\GuiElement</Filter>
+      <Filter>Header Files\PG\Gui\Element</Filter>
     </ClInclude>
     <ClInclude Include="UIElement.h">
-      <Filter>Header Files\PG\Gui\GuiElement</Filter>
+      <Filter>Header Files\PG\Gui\Element</Filter>
     </ClInclude>
     <ClInclude Include="WindowMenu.h">
-      <Filter>Header Files\PG\Gui\GuiElement</Filter>
+      <Filter>Header Files\PG\Gui\Element</Filter>
     </ClInclude>
     <ClInclude Include="Panel.h">
-      <Filter>Header Files\PG\Gui\GuiElement</Filter>
+      <Filter>Header Files\PG\Gui\Element</Filter>
     </ClInclude>
     <ClInclude Include="Button.h">
-      <Filter>Header Files\PG\Gui\GuiElement</Filter>
+      <Filter>Header Files\PG\Gui\Element</Filter>
     </ClInclude>
     <ClInclude Include="ImageBox.h">
-      <Filter>Header Files\PG\Gui\GuiElement</Filter>
+      <Filter>Header Files\PG\Gui\Element</Filter>
+    </ClInclude>
+    <ClInclude Include="PGMeshInstance.h">
+      <Filter>Header Files\GameEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="TextMesh.h">
+      <Filter>Header Files\PG\Engine\Renderer\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="AxisMesh.h">
+      <Filter>Header Files\PG\Engine\Renderer\Mesh</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

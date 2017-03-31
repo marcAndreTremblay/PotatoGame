@@ -22,7 +22,7 @@ namespace PG {
 		protected:
 		private:
 		public:
-			GUIElementState State;
+			ElementState State;
 			GUISelectNode() : EventEmiter() {
 				State = UIState_Idle;
 			}

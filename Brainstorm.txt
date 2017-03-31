@@ -1,0 +1,4 @@
+UU
+	CheckBox : On or Off box
+	RadioBoxMenu : Linked radio box , one is On at the time
+	TextBox : Read text input

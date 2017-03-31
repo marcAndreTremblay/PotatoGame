@@ -9,6 +9,9 @@
 #include "String.h"
 #include "Mesh.h"
 #include "PGMeshInstance.h"
+#include "TextMesh.h"
+
+#include "AxisMesh.h"
 
 namespace PG {
 	namespace Engine {
@@ -25,7 +28,7 @@ namespace PG {
 			PGSolidHexagoneMesh * hexagoneMesh;
 			PGSquareMesh * squareMesh;
 			PGCubeMesh * cubeMesh;
-			PGAxisMesh * axisMesh;
+			AxisMesh * axisMesh;
 			PGLightedCubeMesh * lightedCubeMesh;
 			PGLightedHexagoneMesh *lightedHexagoneMesh;
 			PGMaterielHexagoneMesh *materialHexagoneMesh;
@@ -117,8 +120,13 @@ namespace PG {
 
 
 				glBindBuffer(GL_UNIFORM_BUFFER, this->Renderer_UBO_Ref_Id);
-				glBufferData(GL_UNIFORM_BUFFER, 3 * sizeof(m4), NULL, GL_DYNAMIC_DRAW); // allocate bytes of memory
+				glBufferData(GL_UNIFORM_BUFFER, 3 * sizeof(m4) + sizeof(v3), NULL, GL_DYNAMIC_DRAW); // allocate bytes of memory
 				glBindBufferBase(GL_UNIFORM_BUFFER, 1, this->Renderer_UBO_Ref_Id);
+
+					glBindBuffer(GL_UNIFORM_BUFFER, this->Renderer_UBO_Ref_Id);
+					glBufferSubData(GL_UNIFORM_BUFFER, 3 * sizeof(glm::mat4), sizeof(v4), &v4(0.f, 0.f, 0.f, 10.f));
+					glBindBuffer(GL_UNIFORM_BUFFER, 0);
+
 
 				glBindBuffer(GL_UNIFORM_BUFFER, this->SceneLight_UBO_Ref_Id);
 				glBufferData(GL_UNIFORM_BUFFER, 2 * sizeof(glm::vec4), NULL, GL_DYNAMIC_DRAW); // allocate bytes of memory
@@ -148,7 +156,7 @@ namespace PG {
 				this->cubeMesh = new PGCubeMesh();
 				this->cubeMesh->Build();
 
-				this->axisMesh = new PGAxisMesh();
+				this->axisMesh = new AxisMesh();
 				this->axisMesh->Build();
 
 				this->lightedCubeMesh = new PGLightedCubeMesh();

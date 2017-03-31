@@ -10,7 +10,7 @@ namespace PG {
 	namespace GUI {
 		class UIElement : public EngineObject, public EventEmiter, public EventListener {
 		protected:
-			GUIElementState State;
+			ElementState State;
 			UIElement* Parent;//Un-managed resource
 			EngineObjectList<UIElement>* Child_list;
 			bool UIElement::IsIntersection(v3* mouse_location) {
@@ -116,11 +116,7 @@ namespace PG {
 				}
 				return (this->Possition);
 			}
-
-
 		};
-
-
 	}
 }
 #endif 

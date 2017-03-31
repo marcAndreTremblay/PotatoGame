@@ -35,6 +35,7 @@ using namespace PG::Engine;
 
 		out vec3 Normal;
 		out vec3 FragPos;
+		out vec4 Vertex_World_Possiton;
 
 		out PGMaterial Matl;
 
@@ -43,15 +44,17 @@ using namespace PG::Engine;
 			mat4 WorldProjection;
 			mat4 WorldView;
 			mat4 GUIProjection;
+			vec4 CenterOfFog;
 		};
 
 
 		void main() {
+			Vertex_World_Possiton = (Translate)* vertex_position;
 			Matl.ambient = ambient;
 			Matl.diffuse = diffuse;
 			Matl.specular = specular;
 			Matl.shininess = shininess.x;
-			gl_Position = WorldProjection  * WorldView * (Translate) * vertex_position;
+			gl_Position = WorldProjection  * WorldView * Vertex_World_Possiton;
 			FragPos = vec3(WorldView*(Translate) * vertex_position);
 			Normal = mat3(transpose(inverse(WorldView /**  Translate*/ ))) * vertex_normal;
 		}
@@ -76,6 +79,7 @@ using namespace PG::Engine;
 			mat4 WorldProjection;
 			mat4 WorldView;
 			mat4 GUIProjection;
+			vec4 CenterOfFog; // ->W = radius
 		};
 		layout(std140) uniform SceneAdvanceLightData_UBO
 		{
@@ -85,10 +89,22 @@ using namespace PG::Engine;
 		in vec3 Normal;
 		in vec3 FragPos;
 		in PGMaterial Matl;
+		in vec4 Vertex_World_Possiton;
 
 		out vec4 color;
 
 		void main() {
+			float alpha = 1.f;
+			//float radius_fog  = 10;
+			//float decay_lenght = 4;
+			//float dist = distance(CenterOfFog, Vertex_World_Possiton);
+			//if (dist > radius_fog) {
+			//	dist -= radius_fog;
+			//	alpha = 1 - dist / decay_lenght;
+			//	if (dist > decay_lenght) {
+			//		alpha = 0.0f;
+			//	}
+			//}
 			// Ambient
 			vec3 ambient = vec3(Light.ambient) * Matl.ambient;
 
@@ -105,7 +121,7 @@ using namespace PG::Engine;
 			vec3 specular = vec3(Light.specular) * (spec * Matl.specular);
 
 			//Combine each	colors
-			color = vec4((ambient + diffuse + specular), 1.f);
+			color = vec4((ambient + diffuse + specular), alpha);
 
 		}
 	));
@@ -160,7 +176,7 @@ using namespace PG::Engine;
 
 			//Note(Marc):	This is a solution for rendering bottleneck for back ground with
 			//					this we could easily add environment vertex
-			int face_count = 4;
+			int face_count = 17;
 			int vertex_per_face = 3;
 			int per_model_vertex = face_count*vertex_per_face; //Hexagone mesh , maybe we should centralize mesh data like ths
 			v2 grid_size = grid_data->Grid_size;
