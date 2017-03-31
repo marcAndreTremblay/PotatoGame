@@ -17,7 +17,7 @@ namespace PG {
 				this->Ref_Name = nullptr;
 
 			}
-			~EngineObject() {
+			virtual ~EngineObject() {
 				delete(this->Ref_Name);
 			}
 

@@ -77,10 +77,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <Text Include="..\Brainstorm.txt" />
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Buffer.h" />
+    <ClInclude Include="Button.h" />
+    <ClInclude Include="ImageBox.h" />
+    <ClInclude Include="Panel.h" />
+    <ClInclude Include="WindowMenu.h" />
+    <ClInclude Include="Label.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Primitive.h" />
     <ClInclude Include="AssetManager.h" />
@@ -110,11 +116,11 @@
     <ClInclude Include="Controler.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Tree.h" />
-    <ClInclude Include="PGUIBaseElement.h" />
+    <ClInclude Include="UIElement.h" />
     <ClInclude Include="PGUICanvas.h" />
     <ClInclude Include="GUICore.h" />
-    <ClInclude Include="GUISelectView.h" />
-    <ClInclude Include="GUITreeList.h" />
+    <ClInclude Include="DropDownMenu.h" />
+    <ClInclude Include="TreeSelectorMenu.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>

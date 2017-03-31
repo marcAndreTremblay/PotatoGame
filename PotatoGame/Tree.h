@@ -13,7 +13,7 @@ namespace PG {
 			TreeNode() {
 				child = new List<TreeNode>(true);
 			}
-			~TreeNode() {
+			virtual ~TreeNode() {
 				delete(child);
 			}
 			void TreeNode::AddChild(TreeNode *new_node) {
@@ -47,7 +47,7 @@ namespace PG {
 			Tree() {
 				roots = new List<TreeNode>(true);
 			}
-			~Tree() {
+			virtual ~Tree() {
 				delete(roots);
 			}
 			void Tree::PushRoot(TreeNode* new_root) {

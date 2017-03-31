@@ -28,9 +28,6 @@
     <Filter Include="Header Files\PG\Gui">
       <UniqueIdentifier>{bae6f3b4-74f4-4527-9c9d-4dd39312b907}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\PG\Gui\UIElement">
-      <UniqueIdentifier>{ab25fff7-c81c-4b5f-ae70-85634104da8a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\PG\Core">
       <UniqueIdentifier>{efb77372-d6d4-486e-b8b2-a537352d7f7d}</UniqueIdentifier>
     </Filter>
@@ -46,9 +43,15 @@
     <Filter Include="Header Files\PG\Engine\Renderer">
       <UniqueIdentifier>{aaef036d-69f7-4a13-9f7a-c43eb2f10e5f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\PG\Gui\GuiElement">
+      <UniqueIdentifier>{ab25fff7-c81c-4b5f-ae70-85634104da8a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
+    <Text Include="..\Brainstorm.txt">
+      <Filter>Header Files</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="targetver.h">
@@ -77,9 +80,6 @@
     </ClInclude>
     <ClInclude Include="PGMapAtlas.h">
       <Filter>Header Files\GameEditor</Filter>
-    </ClInclude>
-    <ClInclude Include="PGUIBaseElement.h">
-      <Filter>Header Files\PG\Gui</Filter>
     </ClInclude>
     <ClInclude Include="EngineInstance.h">
       <Filter>Header Files\PG\Engine</Filter>
@@ -156,11 +156,29 @@
     <ClInclude Include="EngineObjectList.h">
       <Filter>Header Files\PG\Engine\Container</Filter>
     </ClInclude>
-    <ClInclude Include="GUISelectView.h">
-      <Filter>Header Files\PG\Gui\UIElement</Filter>
+    <ClInclude Include="DropDownMenu.h">
+      <Filter>Header Files\PG\Gui\GuiElement</Filter>
     </ClInclude>
-    <ClInclude Include="GUITreeList.h">
-      <Filter>Header Files\PG\Gui\UIElement</Filter>
+    <ClInclude Include="TreeSelectorMenu.h">
+      <Filter>Header Files\PG\Gui\GuiElement</Filter>
+    </ClInclude>
+    <ClInclude Include="Label.h">
+      <Filter>Header Files\PG\Gui\GuiElement</Filter>
+    </ClInclude>
+    <ClInclude Include="UIElement.h">
+      <Filter>Header Files\PG\Gui\GuiElement</Filter>
+    </ClInclude>
+    <ClInclude Include="WindowMenu.h">
+      <Filter>Header Files\PG\Gui\GuiElement</Filter>
+    </ClInclude>
+    <ClInclude Include="Panel.h">
+      <Filter>Header Files\PG\Gui\GuiElement</Filter>
+    </ClInclude>
+    <ClInclude Include="Button.h">
+      <Filter>Header Files\PG\Gui\GuiElement</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageBox.h">
+      <Filter>Header Files\PG\Gui\GuiElement</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
