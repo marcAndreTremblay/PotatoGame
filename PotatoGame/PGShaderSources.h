@@ -234,6 +234,15 @@ static const GLfloat axes_vertex_data[] = {
 	0.0f, 0.0f, 10000.0f, 1.0f,		0.f, 0.f, 1.f, 1.f,// z axis
 	0.0f, 0.0f, -10000.0f, 1.0f,	0.f, 0.f, 1.f, 1.f// neg z axis
 };
+static const GLfloat marker_vertex_data[] = {
+	// Tex 1						//Line color
+	1.f, 0.0f, 0.0f, 1.0f, 1.f, 0.f, 0.f, 1.f,// x axis
+	0.f, 0.0f, 0.0f, 1.0f, 1.f, 0.f, 0.f, 1.f,  // neg x axis
+	0.0f, 1.f, 0.0f, 1.0f, 0.f, 1.f, 0.f, 1.f,// y axis
+	0.0f, 0.f, 0.0f, 1.0f, 0.f, 1.f, 0.f, 1.f,// neg y axis
+	0.0f, 0.0f, 1.f, 1.0f, 0.f, 0.f, 1.f, 1.f,// z axis
+	0.0f, 0.0f, 0.f, 1.0f, 0.f, 0.f, 1.f, 1.f// neg z axis
+};
 static const GLfloat panel_vertices[] = {
 	// Positions			
 	1.0f, 0.0f, 0.0f,	// Bottom Right

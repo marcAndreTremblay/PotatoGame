@@ -42,6 +42,8 @@ namespace PG {
 			PGKey_3 = GLFW_KEY_3,
 			PGKey_4 = GLFW_KEY_4,
 			PGKey_5 = GLFW_KEY_5,
+			PGKey_6 = GLFW_KEY_6,
+			PGKey_7 = GLFW_KEY_7,
 			PGKey_Space = GLFW_KEY_SPACE,
 			PGKey_Up = GLFW_KEY_UP,
 			PGKey_Down = GLFW_KEY_DOWN,
@@ -96,7 +98,9 @@ namespace PG {
 				this->AddKeyboardKey(PGKey_2, "2_Key");
 				this->AddKeyboardKey(PGKey_3, "3_Key");
 				this->AddKeyboardKey(PGKey_4, "4_Key");
-				this->AddKeyboardKey(PGKey_5, "4_Key");
+				this->AddKeyboardKey(PGKey_5, "5_Key");
+				this->AddKeyboardKey(PGKey_6, "6_Key");
+				this->AddKeyboardKey(PGKey_7, "7_Key");
 				this->AddKeyboardKey(PGKey_A, "A_Key");
 				this->AddKeyboardKey(PGKey_D, "D_Key");
 				this->AddKeyboardKey(PGKey_W, "W_Key");

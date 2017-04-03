@@ -95,16 +95,16 @@ using namespace PG::Engine;
 
 		void main() {
 			float alpha = 1.f;
-			//float radius_fog  = 10;
-			//float decay_lenght = 4;
-			//float dist = distance(CenterOfFog, Vertex_World_Possiton);
-			//if (dist > radius_fog) {
-			//	dist -= radius_fog;
-			//	alpha = 1 - dist / decay_lenght;
-			//	if (dist > decay_lenght) {
-			//		alpha = 0.0f;
-			//	}
-			//}
+			float radius_fog  = 15;
+			float decay_lenght = 4;
+			float dist = distance(CenterOfFog, Vertex_World_Possiton);
+			if (dist > radius_fog) {
+				dist -= radius_fog;
+				alpha = 1 - dist / decay_lenght;
+				if (dist > decay_lenght) {
+					alpha = 0.0f;
+				}
+			}
 			// Ambient
 			vec3 ambient = vec3(Light.ambient) * Matl.ambient;
 
@@ -121,7 +121,7 @@ using namespace PG::Engine;
 			vec3 specular = vec3(Light.specular) * (spec * Matl.specular);
 
 			//Combine each	colors
-			color = vec4((ambient + diffuse + specular), alpha);
+			color = vec4((ambient + diffuse + specular), 0.1f);
 
 		}
 	));

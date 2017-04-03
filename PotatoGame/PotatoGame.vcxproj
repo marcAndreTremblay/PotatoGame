@@ -86,6 +86,7 @@
     <ClInclude Include="Button.h" />
     <ClInclude Include="ImageBox.h" />
     <ClInclude Include="Panel.h" />
+    <ClInclude Include="Quaternion.h" />
     <ClInclude Include="TextMesh.h" />
     <ClInclude Include="WindowMenu.h" />
     <ClInclude Include="Label.h" />

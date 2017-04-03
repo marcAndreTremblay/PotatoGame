@@ -25,7 +25,7 @@
 //	virtual ~Particle() {
 //
 //	}
-//};
+//};w
 //class ParticleEffect {
 //public:
 //	//We need a shader

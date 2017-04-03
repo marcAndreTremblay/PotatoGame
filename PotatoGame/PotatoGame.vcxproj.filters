@@ -192,6 +192,9 @@
     <ClInclude Include="AxisMesh.h">
       <Filter>Header Files\PG\Engine\Renderer\Mesh</Filter>
     </ClInclude>
+    <ClInclude Include="Quaternion.h">
+      <Filter>Header Files\PG\Core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
