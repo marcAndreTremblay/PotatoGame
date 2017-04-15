@@ -62,7 +62,6 @@ namespace PG {
 				this->Build();//todo(marc): make this be call from elsewhere
 			}
 			~BaseRenderer() {
-
 				glDeleteBuffers(1, &this->Renderer_UBO_Ref_Id);
 				glDeleteBuffers(1, &this->SceneLight_UBO_Ref_Id);
 				glDeleteBuffers(1, &this->SceneAdvanceLight_UBO_Ref_Id);

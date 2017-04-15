@@ -3,16 +3,12 @@
 
 #include "stdafx.h"
 
+
+#define ENDSTR '\0'
+
 namespace PG {
 	namespace Core {
-
-		//Todo(Marc): Add overloading operator and cancatenation
-		//Todo(Marc): Split the file into .h and .ccp
-		//Todo(Marc): Remove the window dependancie by implementing the string compare and string lenght
-		//Todo(Marc): Remove the \n at the end we doont need it, and it created problem for file loading
-		//But still a think if you want to create string without the lenght specification, so maybe add a contructor
 		class Str {
-#define ENDSTR '\0'
 		protected:
 		private:
 		public:

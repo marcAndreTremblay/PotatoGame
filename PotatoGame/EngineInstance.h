@@ -12,10 +12,12 @@ using namespace PG::Core;
 #include "GameWindow.h"
 #include "Scene.h"
 #include "AssetManager.h"
-#include "PGUICanvas.h"
-#include "PGEditorScene.h"
+#include "GUICanvas.h"
+#include "PGMapEditor.h"
 #include "MousePicker.h"
 #include "EngineObjectList.h"
+
+
 using namespace PG::Engine;
 namespace PG {
 	namespace Engine {
@@ -127,7 +129,6 @@ namespace PG {
 
 
 					this->Render();
-					//Note(Marc): Render debug stuff here
 					this->GameRenderer->RenderUIText(fps_info_buffer, v3(0.f, 0.f, 1.f), v4(0.3f, 0.5f, 0.2f, 1.f), 0.3f, this->Default_Engine_Font);
 
 					renderFctCallCpt++;

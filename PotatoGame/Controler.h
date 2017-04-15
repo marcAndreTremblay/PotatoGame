@@ -69,8 +69,7 @@ namespace PG {
 
 		class Controler {
 		protected:
-		private:
-			List<ControlerKey>* Keyboard_Keys;
+		private:		
 			List<ControlerKey>* Mouse_Keys;
 			void Controler::AddMouseKey(PGMouseKey new_key_id, char* _Ref_Name = nullptr) {
 				Mouse_Keys->Add(new ControlerKey(new_key_id, _Ref_Name));
@@ -79,9 +78,11 @@ namespace PG {
 				Keyboard_Keys->Add(new ControlerKey(new_key_id, _Ref_Name));
 			}
 		public:
+			List<ControlerKey>* Keyboard_Keys;
 			double xpos, ypos;
 			v2 DeltaPossition;
 			Controler() {
+
 				this->Mouse_Keys = new List<ControlerKey>();
 				this->AddMouseKey(PGMouse_Left, "Space bar");
 				this->AddMouseKey(PGMouse_Center, "Space bar");
@@ -94,6 +95,12 @@ namespace PG {
 				this->AddKeyboardKey(PGKey_Down, "Down_Key");
 				this->AddKeyboardKey(PGKey_Left, "Left_Key");
 				this->AddKeyboardKey(PGKey_Right, "Right_Key");
+
+
+				//Add all letter
+				for (int i = 65; i <= 90; i++) {
+					this->AddKeyboardKey((PGKey)i);
+				}
 				this->AddKeyboardKey(PGKey_1, "1_Key");
 				this->AddKeyboardKey(PGKey_2, "2_Key");
 				this->AddKeyboardKey(PGKey_3, "3_Key");
@@ -101,14 +108,7 @@ namespace PG {
 				this->AddKeyboardKey(PGKey_5, "5_Key");
 				this->AddKeyboardKey(PGKey_6, "6_Key");
 				this->AddKeyboardKey(PGKey_7, "7_Key");
-				this->AddKeyboardKey(PGKey_A, "A_Key");
-				this->AddKeyboardKey(PGKey_D, "D_Key");
-				this->AddKeyboardKey(PGKey_W, "W_Key");
-				this->AddKeyboardKey(PGKey_S, "S_Key");
-				this->AddKeyboardKey(PGKey_Q, "Q_Key");
-				this->AddKeyboardKey(PGKey_E, "E_Key");
-				this->AddKeyboardKey(PGKey_C, "C_Key");
-				this->AddKeyboardKey(PGKey_Z, "Z_Key");
+				
 				this->AddKeyboardKey(PGKey_F1, "F1_Key");
 				this->AddKeyboardKey(PGKey_F2, "F2_Key");
 				this->AddKeyboardKey(PGKey_F3, "F3_Key");
@@ -141,7 +141,11 @@ namespace PG {
 				}
 				return nullptr;
 			}
+			
+			//Note(Marc) : This function must be call every game update
 			void Controler::Update(GameWindow* _GameWindow) {
+
+
 				v2 last_possition = v2(this->xpos, this->ypos);
 				glfwGetCursorPos(_GameWindow->Gl_Window, &this->xpos, &this->ypos);
 				v2 current_possition = v2(this->xpos, this->ypos);
@@ -168,6 +172,8 @@ namespace PG {
 						current_key->IsPress = false;
 					}
 				}
+
+				
 
 			}
 			bool Controler::IsRelease(PGKey key) {
@@ -226,8 +232,9 @@ namespace PG {
 				}
 				return  false;
 			}
-
-		};
+			
+		
+};
 
 
 	}

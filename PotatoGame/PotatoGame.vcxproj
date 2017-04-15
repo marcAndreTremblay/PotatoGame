@@ -87,6 +87,7 @@
     <ClInclude Include="ImageBox.h" />
     <ClInclude Include="Panel.h" />
     <ClInclude Include="Quaternion.h" />
+    <ClInclude Include="TextBox.h" />
     <ClInclude Include="TextMesh.h" />
     <ClInclude Include="WindowMenu.h" />
     <ClInclude Include="Label.h" />
@@ -113,14 +114,14 @@
     <ClInclude Include="List.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="PGMeshInstance.h" />
-    <ClInclude Include="PGEditorScene.h" />
+    <ClInclude Include="PGMapEditor.h" />
     <ClInclude Include="PGShaderSources.h" />
     <ClInclude Include="String.h" />
     <ClInclude Include="Controler.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Tree.h" />
     <ClInclude Include="UIElement.h" />
-    <ClInclude Include="PGUICanvas.h" />
+    <ClInclude Include="GUICanvas.h" />
     <ClInclude Include="GUICore.h" />
     <ClInclude Include="DropDownMenu.h" />
     <ClInclude Include="TreeSelectorMenu.h" />

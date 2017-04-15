@@ -76,7 +76,8 @@ namespace PG {
 			UIState_Right_Press = 4,
 			UIState_Drag = 5,
 			UIState_Resizing = 6,
-			UIState_Selecting = 7
+			UIState_Selecting = 7,
+			UIState_Editing = 8
 		};
 
 		class Margin {

@@ -3,8 +3,8 @@
 
 #include "stdafx.h"
 #include "EngineInstance.h"
-#include "PGEditorScene.h"
-#include "PGUICanvas.h"
+#include "PGMapEditor.h"
+#include "GUICanvas.h"
 
 
 using namespace PG::Engine;
@@ -29,7 +29,7 @@ protected:
 		this->game_canvas->Update(this->Controlers, _TimeElapse);
 	}
 private:
-	PGUICanvas* game_canvas;	
+	GUICanvas* game_canvas;	
 public:	
 	PGEditorInstance() {
 	}
@@ -61,12 +61,12 @@ public:
 			
 			
 			//Build the needed UI for the game
-			this->game_canvas = new PGUICanvas();
+			this->game_canvas = new GUICanvas();
 			this->game_canvas->Build(this->Game_Window, this->Mouse_Picker, this->Asset_Manager);
 			
 			
 			//Build the first scene
-			PGTerrainEditorScene* terrain_editor_scene = new PGTerrainEditorScene();
+			PGMapEditor* terrain_editor_scene = new PGMapEditor();
 				terrain_editor_scene->Set_Id(1);
 				terrain_editor_scene->Build(this->Mouse_Picker);
 			this->LoadedScenes->Add(terrain_editor_scene);

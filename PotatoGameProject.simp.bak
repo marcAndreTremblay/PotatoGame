@@ -69,6 +69,10 @@
         <item-type stereotype="" type="UmlContainment" />
         <value>2</value>
       </counter>
+      <counter>
+        <item-type stereotype="" type="AbstractElementGroup" />
+        <value>2</value>
+      </counter>
     </entity-ids>
     <diagrams>
       <counter>

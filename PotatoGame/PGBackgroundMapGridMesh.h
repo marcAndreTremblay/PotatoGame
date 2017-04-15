@@ -121,7 +121,7 @@ using namespace PG::Engine;
 			vec3 specular = vec3(Light.specular) * (spec * Matl.specular);
 
 			//Combine each	colors
-			color = vec4((ambient + diffuse + specular), 0.1f);
+			color = vec4((ambient + diffuse + specular), 1.0f);
 
 		}
 	));

@@ -22,8 +22,7 @@ namespace PG {
 			void Add(EngineObject* element) override {
 				List::Add(element);
 			}
-
-			EngineObject* EngineObjectList::FindById(unsigned int id) {
+			EngineObject* EngineObjectList::FindById(unsigned int id)  {
 				for (ListNode<EngineObject> *c_node = this->GetHead(); c_node != nullptr; c_node = c_node->GetNext()) {
 					EngineObject* current_obj = c_node->GetData();
 					if (c_node->GetData()->Compare_Id(id) == true) {
