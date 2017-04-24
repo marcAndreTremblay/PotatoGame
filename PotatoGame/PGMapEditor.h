@@ -94,10 +94,10 @@ class PGMapEditor : public Scene {
 									renderer->materialHexagoneMesh->Render(possition, scale, &grid->grid_material_data[grid_index]);
 								}
 								if (grid->tile_type[grid_index] == 1) {
-									renderer->model_renderer->Render(test_model3, v3(possition.x, possition.y, scale.z), v3(1.f, 1.f, 1.f));
+									//renderer->model_renderer->Render(test_model3, v3(possition.x, possition.y, scale.z), v3(1.f, 1.f, 1.f));
 								}
 								if (grid->tile_type[grid_index] == 2) {
-									renderer->model_renderer->Render(test_model, v3(possition.x, possition.y, scale.z), v3(1.f, 1.f, 1.f));
+									//renderer->model_renderer->Render(test_model, v3(possition.x, possition.y, scale.z), v3(1.f, 1.f, 1.f));
 								}
 							}
 						}
@@ -126,7 +126,7 @@ class PGMapEditor : public Scene {
 					);
 			this->Projection_Matrice = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 150.0f);
 			
-			test_model = new RawModelData("Asset/RawOBJ/city_1_0.obj");
+		/*	test_model = new RawModelData("Asset/RawOBJ/city_1_0.obj");
 			test_model->LoadIntoVAO();
 
 			test_model3 = new RawModelData("Asset/RawOBJ/tree_2_0.obj");
@@ -134,7 +134,7 @@ class PGMapEditor : public Scene {
 
 			test_model2 = new RawModelData("Asset/RawOBJ/spere2.obj");
 			test_model2->LoadIntoVAO();
-
+*/
 			
 
 		

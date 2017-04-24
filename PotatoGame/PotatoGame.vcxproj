@@ -14,6 +14,7 @@
     <ProjectGuid>{DDC12EAF-04E4-42CB-99F1-88AF4B9077F0}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>PotatoGame</RootNamespace>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -85,6 +86,7 @@
     <ClInclude Include="Buffer.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="ImageBox.h" />
+    <ClInclude Include="MonkeyEngineInstance.h" />
     <ClInclude Include="Panel.h" />
     <ClInclude Include="Quaternion.h" />
     <ClInclude Include="TextBox.h" />
@@ -130,6 +132,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MonkeyEngineInstance.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
