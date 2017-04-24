@@ -88,17 +88,19 @@ namespace PG {
 							}
 						}
 					}
-					switch (this->State) {
-					case UIState_Idle:{
-										  if (this->IsIntersection(mouse_ui_possition)) {
-											  this->State = UIState_Hot;
-										  }
-										  break; }
-					case UIState_Hot:{
-										 if (!(this->IsIntersection(mouse_ui_possition))) {
-											 this->State = UIState_Idle;
-										 }
-										 break; }
+					if (isChildActive == false) {
+						switch (this->State) {
+						case UIState_Idle: {
+							if (this->IsIntersection(mouse_ui_possition)) {
+								this->State = UIState_Hot;
+							}
+							break; }
+						case UIState_Hot: {
+							if (!(this->IsIntersection(mouse_ui_possition))) {
+								this->State = UIState_Idle;
+							}
+							break; }
+						}
 					}
 					return isChildActive;
 				}

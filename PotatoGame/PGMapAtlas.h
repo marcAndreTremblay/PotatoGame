@@ -8,7 +8,7 @@
 #include "List.h"
 
 class PGAtlasRegion {
-	
+
 	bool IsLoaded;
 	bool ShouldUnload;
 public:
@@ -29,7 +29,7 @@ public:
 		delete(region_mesh);
 	}
 	void PGAtlasRegion::LoadData() {
-		grid = new PGGridRawData(v2(10, 10),1.f);
+		grid = new PGGridRawData(v2(10, 10), 1.f);
 		grid->LoadFromFile(FilePath->CharAt(0));
 		region_mesh = new PGMapMesh(grid);
 		region_mesh->Build();
@@ -105,7 +105,10 @@ public:
 		}
 	}
 	~PGMapAtlas() {
-		delete(Regions);
+		if (Regions != nullptr) {
+			delete(Regions);
+		}
+
 	}
 	PGAtlasRegion* PGMapAtlas::GetRegionByRefIndex(int s_index) {
 		for (ListNode<PGAtlasRegion> *c_node = Regions->GetHead(); c_node != nullptr; c_node = c_node->GetNext()) {

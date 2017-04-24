@@ -1,6 +1,7 @@
 #if !defined(PG_GAME_MODEL_H)
 #define PG_GAME_MODEL_H
 
+#include "stdafx.h"
 #include "List.h"
 #include "EngineObjectList.h"
 #include "Font.h"
@@ -168,7 +169,7 @@ namespace PG {
 				Str * file_path = new Str(FILE_PATH);
 				Str * forlder_path = Str::ExtractFolderPath(file_path);
 
-				FILE * file1 = fopen(FILE_PATH, "r");
+				FILE * file1 = fopen(file_path->CharAt(), "rb");
 				printf("Loading | Model | :\n");
 				printf("\tFile path %s \n", file_path->CharAt());
 				printf("\tFolder path %s \n", forlder_path->CharAt());

@@ -61,6 +61,8 @@ namespace PG {
 			PGKey_F4 = GLFW_KEY_F4,
 			PGKey_Z = GLFW_KEY_Z,
 			PGKey_C = GLFW_KEY_C,
+			PGSpace = GLFW_KEY_SPACE,
+			PGBackSpace = GLFW_KEY_BACKSPACE,
 			PGKey_Page_Down = GLFW_KEY_PAGE_DOWN,
 			PGKey_Page_Up = GLFW_KEY_PAGE_UP,
 			PGKey_Left_Ctrl = GLFW_KEY_LEFT_CONTROL,
@@ -69,7 +71,7 @@ namespace PG {
 
 		class Controler {
 		protected:
-		private:		
+		private:
 			List<ControlerKey>* Mouse_Keys;
 			void Controler::AddMouseKey(PGMouseKey new_key_id, char* _Ref_Name = nullptr) {
 				Mouse_Keys->Add(new ControlerKey(new_key_id, _Ref_Name));
@@ -101,6 +103,8 @@ namespace PG {
 				for (int i = 65; i <= 90; i++) {
 					this->AddKeyboardKey((PGKey)i);
 				}
+				this->AddKeyboardKey(PGBackSpace);
+				this->AddKeyboardKey(PGSpace);
 				this->AddKeyboardKey(PGKey_1, "1_Key");
 				this->AddKeyboardKey(PGKey_2, "2_Key");
 				this->AddKeyboardKey(PGKey_3, "3_Key");
@@ -108,7 +112,7 @@ namespace PG {
 				this->AddKeyboardKey(PGKey_5, "5_Key");
 				this->AddKeyboardKey(PGKey_6, "6_Key");
 				this->AddKeyboardKey(PGKey_7, "7_Key");
-				
+
 				this->AddKeyboardKey(PGKey_F1, "F1_Key");
 				this->AddKeyboardKey(PGKey_F2, "F2_Key");
 				this->AddKeyboardKey(PGKey_F3, "F3_Key");
@@ -141,7 +145,7 @@ namespace PG {
 				}
 				return nullptr;
 			}
-			
+
 			//Note(Marc) : This function must be call every game update
 			void Controler::Update(GameWindow* _GameWindow) {
 
@@ -173,7 +177,7 @@ namespace PG {
 					}
 				}
 
-				
+
 
 			}
 			bool Controler::IsRelease(PGKey key) {
@@ -232,9 +236,9 @@ namespace PG {
 				}
 				return  false;
 			}
-			
-		
-};
+
+
+		};
 
 
 	}

@@ -56,13 +56,13 @@ namespace PG {
 
 				WindowMenu *menu_window = new WindowMenu();
 				menu_window->SetSize(v2(300.f, 900.f));
-					menu_window->SetPossition(v2(200.f, 10.f));
+				menu_window->SetPossition(v2(200.f, 10.f));
 
 				ImageBox* picture_1 = new ImageBox();
-					picture_1->Set_Id(this->GetNextFreeId());
-					picture_1->SetSize(v2(32.f, 32.f));
-					picture_1->SetPossition(v2(10.f, 10.f));
-					picture_1->Image = asset_manager->SeachForTexture("UV_Template");
+				picture_1->Set_Id(this->GetNextFreeId());
+				picture_1->SetSize(v2(32.f, 32.f));
+				picture_1->SetPossition(v2(10.f, 10.f));
+				picture_1->Image = asset_manager->SeachForTexture("UV_Template");
 				menu_window->AddChild(picture_1);
 
 				ImageBox* picture_2 = new ImageBox();
@@ -79,13 +79,18 @@ namespace PG {
 				picture_3->Image = asset_manager->SeachForTexture("SolarPanel");
 				menu_window->AddChild(picture_3);
 
-				TextBox *text_box_1 = new TextBox();
+				TextBox *text_box_1 = new TextBox(asset_manager->SeachForFont("Hammersmith_Regular"));
 				text_box_1->Set_Id(this->GetNextFreeId());
-				text_box_1->SetSize(v2(200.f,32.f));
-				text_box_1->SetPossition(v2(260.f, 84));
-			//	text_box_1->SetText("lButton 1");
-			//	text_box_1->SetFont(asset_manager->SeachForFont("Hammersmith_Regular"));
+				text_box_1->SetSize(v2(200.f, 32.f));
+				text_box_1->SetPossition(v2(5.f, 300));
 				menu_window->AddChild(text_box_1);
+
+
+				TextBox *text_box_2 = new TextBox(asset_manager->SeachForFont("Hammersmith_Regular"));
+				text_box_2->Set_Id(this->GetNextFreeId());
+				text_box_2->SetSize(v2(200.f, 32.f));
+				text_box_2->SetPossition(v2(5.f, 334.f));
+				menu_window->AddChild(text_box_2);
 
 				Button *child_button_2 = new Button();
 				child_button_2->Set_Name("Best Button");
@@ -97,10 +102,10 @@ namespace PG {
 				menu_window->AddChild(child_button_2);
 
 				Label *label_1 = new Label(new Str("Select level"), asset_manager->SeachForFont("Roboto_Bold"));
-					label_1->Set_Id(this->GetNextFreeId());
-					label_1->SetSize(v2(100.f, 64.f));
-					label_1->SetPossition(v2(60.f, 150.f));
-					label_1->text_scale = 0.5;
+				label_1->Set_Id(this->GetNextFreeId());
+				label_1->SetSize(v2(100.f, 64.f));
+				label_1->SetPossition(v2(60.f, 150.f));
+				label_1->text_scale = 0.5;
 				menu_window->AddChild(label_1);
 
 
@@ -111,10 +116,10 @@ namespace PG {
 				menu_window->AddChild(select_view_test);
 
 				TreeSelectorMenu* tree_list_test = new TreeSelectorMenu(asset_manager->SeachForFont("Hammersmith_Regular"));
-					tree_list_test->SetSize(v2(240, 300));
-					tree_list_test->SetPossition(v2(0.f, 400.f));
+				tree_list_test->SetSize(v2(240, 300));
+				tree_list_test->SetPossition(v2(0.f, 400.f));
 				menu_window->AddChild(tree_list_test);
-				
+
 				this->Element_list->Add(menu_window);
 				this->EndBuilding();
 			}
@@ -129,12 +134,18 @@ namespace PG {
 					}
 				}
 			}
-			void GUICanvas::Update(Controler *controler, double timeElapse) {
+			bool GUICanvas::Update(Controler *controler, double timeElapse) {
+				bool IsActif = false;
 				v3 mouse_ui_space = this->Mouse_Picker->TranformWindowStoUIS(controler, this->Game_Window->GetOrtho());
 				for (ListNode<UIElement> *c_node = Element_list->GetHead(); c_node != nullptr; c_node = c_node->GetNext()) {
+
 					UIElement* current_ui_element = c_node->GetData();
-					current_ui_element->Update(controler, timeElapse, &mouse_ui_space);
+					IsActif = current_ui_element->Update(controler, timeElapse, &mouse_ui_space);
+					if (IsActif == false) {
+						IsActif = current_ui_element->IsActif();
+					}
 				}
+				return IsActif;
 			}
 		};
 	}

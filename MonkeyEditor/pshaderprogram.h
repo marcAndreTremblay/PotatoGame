@@ -19,7 +19,15 @@ class PShaderProgram : protected QOpenGLFunctions_3_2_Core {
             void Use() ;
             virtual void Render();
         };
-
+static const GLfloat square_vertex_data[] = {
+    // Tex 1					//Texture Coords
+    -1.0f, -1.0f, 0.0f, 1.0f,  // Bottom Left 1
+    -1.0f, 1.0f, 0.0f, 1.0f,  // Top Left 2
+    1.0f, 1.0f, 0.0f, 1.0f,  // Top Right 3
+    -1.0f, -1.0f, 0.0f, 1.0f,   // Bottom Left 4
+    1.0f, 1.0f, 0.0f, 1.0f, // Top Right 5
+    1.0f, -1.0f, 0.0f, 1.0f // Bottom Right 6
+};
 #define PG_SHADER(shader_text) static shader_text
 #define GLSL330(src) "#version 330 core\n" #src
 PG_SHADER(const char* model_vertex_shader = GLSL330(
@@ -147,6 +155,32 @@ PG_SHADER(const char* Model_FragShader = GLSL330(
 
             void main() {
                 color = FragColor;
+            }
+        ));
+
+
+        PG_SHADER(const char* TEST_vertex_shader = GLSL330(
+            layout(location = 0) in vec4 vertex_position;
+
+            uniform mat4 Translate;
+            uniform mat4 Scale;
+
+            layout(std140) uniform Renderer_UBO {
+                mat4 WorldProjection;
+                mat4 WorldView;
+                mat4 GUIProjection;
+                vec4 CenterOfFog;
+            };
+
+            void main() {
+                gl_Position = WorldProjection * WorldView * (Translate* Scale) * vertex_position;
+            }
+        ));
+        PG_SHADER(const char* TEST_fragment_shader = GLSL330(
+            out vec4 color;
+
+            void main() {
+                color = vec4(1.0f, 0.0f, 1.0f, 1.0f);
             }
         ));
 #endif // PSHADERPROGRAM_H
