@@ -3,9 +3,10 @@
 
 #include "stdafx.h"
 #include "EngineInstance.h"
-#include "PGMapEditor.h"
-#include "GUICanvas.h"
 
+#include "GUICanvas.h"
+#include "CombatScene.h"
+#include "MapEditorScene.h"
 
 using namespace PG::Engine;
 using namespace PG::GUI;
@@ -27,6 +28,8 @@ private:
 	GUICanvas* game_canvas;
 public:
 	PGEditorInstance() {
+		
+		
 	}
 	~PGEditorInstance() {
 		delete(game_canvas);
@@ -62,9 +65,9 @@ public:
 
 
 		//Build the first scene
-		PGMapEditor* terrain_editor_scene = new PGMapEditor();
-		terrain_editor_scene->Set_Id(1);
-		terrain_editor_scene->Build(this->Mouse_Picker);
+		MapEditorScene* terrain_editor_scene = new MapEditorScene();
+			terrain_editor_scene->Set_Id(1);
+			terrain_editor_scene->Build(this->Mouse_Picker);
 		this->LoadedScenes->Add(terrain_editor_scene);
 
 		this->CurrentViewedScene = terrain_editor_scene;

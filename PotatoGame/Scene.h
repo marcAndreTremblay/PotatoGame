@@ -34,6 +34,7 @@ namespace PG {
 			bool ShouldRender;
 			Scene() :
 				EngineObject() {
+				this->scene_camera = nullptr;
 				this->ShouldUpdate = true;
 				this->ShouldRender = true;
 				this->ShouldHandleControler = true;

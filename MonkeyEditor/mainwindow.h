@@ -1,29 +1,29 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+        #ifndef MAINWINDOW_H
+    #define MAINWINDOW_H
 
-#include "CustomWidget/gameobjecteditorWidget.h"
-#include "CustomWidget/gameobjectpickerWidget.h"
+    #include "CustomWidget/gameobjecteditorWidget.h"
+    #include "CustomWidget/gameobjectpickerWidget.h"
 
-#include <QMainWindow>
-
-
+    #include <QMainWindow>
 
 
-namespace Ui {
-class MainWindow;
-}
-
-class MainWindow : public QMainWindow
-{
-    Q_OBJECT
-
-public:
-    explicit MainWindow(QWidget *parent = 0);
-    ~MainWindow();
-
-private:
-
-};
 
 
-#endif // MAINWINDOW_H
+    namespace Ui {
+    class MainWindow;
+    }
+
+    class MainWindow : public QMainWindow
+    {
+        Q_OBJECT
+
+    public:
+        explicit MainWindow(QWidget *parent = 0);
+        ~MainWindow();
+
+    private:
+
+    };
+
+
+    #endif // MAINWINDOW_H

@@ -7,6 +7,7 @@
 #include "CustomWidget/peditorbasetabwidget.h"
 #include "ModelData/assetmanager.h"
 #include "CustomWidget/custumopenglwidget.h"
+#include "CustomWidget/gameobjecteditorWidget.h"
 
 #include <QtWidgets>
 #include <QLabel>
@@ -22,6 +23,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     MEditorTabWidget* main_tab_widget = new MEditorTabWidget();
       main_tab_widget->insertTab(0,new CustumOpenGlWidget(),QString("OpenGl widget"));
+      main_tab_widget->insertTab(1,new GameObjectEditor(),QString("Editor widget"));
     GameObjectPickerWidget* seach_widget = new GameObjectPickerWidget();
 
     QGroupBox *MainLayout = new  QGroupBox();

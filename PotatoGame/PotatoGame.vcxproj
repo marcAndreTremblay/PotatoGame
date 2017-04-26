@@ -85,10 +85,13 @@
     <ClInclude Include="AxisMesh.h" />
     <ClInclude Include="Buffer.h" />
     <ClInclude Include="Button.h" />
+    <ClInclude Include="CombatScene.h" />
     <ClInclude Include="ImageBox.h" />
+    <ClInclude Include="MapEditorScene.h" />
     <ClInclude Include="MonkeyEngineInstance.h" />
     <ClInclude Include="Panel.h" />
     <ClInclude Include="Quaternion.h" />
+    <ClInclude Include="ShaderProgram.h" />
     <ClInclude Include="TextBox.h" />
     <ClInclude Include="TextMesh.h" />
     <ClInclude Include="WindowMenu.h" />
@@ -116,7 +119,6 @@
     <ClInclude Include="List.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="PGMeshInstance.h" />
-    <ClInclude Include="PGMapEditor.h" />
     <ClInclude Include="PGShaderSources.h" />
     <ClInclude Include="String.h" />
     <ClInclude Include="Controler.h" />
@@ -131,8 +133,11 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CombatScene.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MapEditorScene.cpp" />
     <ClCompile Include="MonkeyEngineInstance.cpp" />
+    <ClCompile Include="ShaderProgram.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>

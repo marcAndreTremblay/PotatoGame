@@ -41,7 +41,8 @@ SOURCES += main.cpp\
     pmodelvao.cpp \
     pcamera.cpp \
     plineshaderprogram.cpp \
-    plinevao.cpp
+    plinevao.cpp \
+    CustomWidget/itemviewwidget.cpp
 
 HEADERS += mainwindow.h \
     CustomWidget/gameobjecteditorWidget.h \
@@ -59,7 +60,8 @@ HEADERS += mainwindow.h \
     pmodelvao.h \
     pcamera.h \
     plineshaderprogram.h \
-    plinevao.h
+    plinevao.h \
+    CustomWidget/itemviewwidget.h
 
 FORMS += mainwindow.ui
 

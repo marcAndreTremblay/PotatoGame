@@ -12,8 +12,6 @@ GameObjectEditor::GameObjectEditor(QWidget *parent) :
      QGroupBox *ProGrp1 = new  QGroupBox(tr("Property group 1"));
      QGridLayout *Glayout = new QGridLayout();
 
-
-
      ProGrp1->setLayout(Glayout);
 
          Glayout->addWidget(new QLabel("Name"),0,0);

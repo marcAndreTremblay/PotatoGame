@@ -10,7 +10,7 @@
 #include "Mesh.h"
 #include "PGMeshInstance.h"
 #include "TextMesh.h"
-
+#include "ShaderProgram.h"
 #include "AxisMesh.h"
 
 namespace PG {
@@ -79,17 +79,17 @@ namespace PG {
 			}
 			void BaseRenderer::SetWorldView(m4 *_matrix) {
 				glBindBuffer(GL_UNIFORM_BUFFER, this->Renderer_UBO_Ref_Id);
-				glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), sizeof(glm::mat4), _matrix);
+				glBufferSubData(GL_UNIFORM_BUFFER, sizeof(m4), sizeof(m4), _matrix);
 				glBindBuffer(GL_UNIFORM_BUFFER, 0);
 			}
 			void BaseRenderer::SetWorldProjection(m4 *_matrix) {
 				glBindBuffer(GL_UNIFORM_BUFFER, this->Renderer_UBO_Ref_Id);
-				glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), _matrix);
+				glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(m4), _matrix);
 				glBindBuffer(GL_UNIFORM_BUFFER, 0);
 			}
 			void BaseRenderer::SetUIProjection(m4 *_matrix) {
 				glBindBuffer(GL_UNIFORM_BUFFER, this->Renderer_UBO_Ref_Id);
-				glBufferSubData(GL_UNIFORM_BUFFER, 2 * sizeof(glm::mat4), sizeof(glm::mat4), _matrix);
+				glBufferSubData(GL_UNIFORM_BUFFER, 2 * sizeof(m4), sizeof(m4), _matrix);
 				glBindBuffer(GL_UNIFORM_BUFFER, 0);
 			}
 
@@ -123,17 +123,17 @@ namespace PG {
 				glBindBufferBase(GL_UNIFORM_BUFFER, 1, this->Renderer_UBO_Ref_Id);
 
 					glBindBuffer(GL_UNIFORM_BUFFER, this->Renderer_UBO_Ref_Id);
-					glBufferSubData(GL_UNIFORM_BUFFER, 3 * sizeof(glm::mat4), sizeof(v4), &v4(0.f, 0.f, 0.f, 10.f));
+					glBufferSubData(GL_UNIFORM_BUFFER, 3 * sizeof(m4), sizeof(v4), &v4(0.f, 0.f, 0.f, 10.f));
 					glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
 
 				glBindBuffer(GL_UNIFORM_BUFFER, this->SceneLight_UBO_Ref_Id);
-				glBufferData(GL_UNIFORM_BUFFER, 2 * sizeof(glm::vec4), NULL, GL_DYNAMIC_DRAW); // allocate bytes of memory
+				glBufferData(GL_UNIFORM_BUFFER, 2 * sizeof(v4), NULL, GL_DYNAMIC_DRAW); // allocate bytes of memory
 				glBindBufferBase(GL_UNIFORM_BUFFER, 2, this->SceneLight_UBO_Ref_Id);
 
 
 				glBindBuffer(GL_UNIFORM_BUFFER, this->SceneAdvanceLight_UBO_Ref_Id);
-				glBufferData(GL_UNIFORM_BUFFER, 4 * sizeof(glm::vec4), NULL, GL_DYNAMIC_DRAW); // allocate bytes of memory
+				glBufferData(GL_UNIFORM_BUFFER, 4 * sizeof(v4), NULL, GL_DYNAMIC_DRAW); // allocate bytes of memory
 				glBindBufferBase(GL_UNIFORM_BUFFER, 3, this->SceneAdvanceLight_UBO_Ref_Id);
 				model_renderer = new PGMModelMesh();
 				model_renderer->Build();

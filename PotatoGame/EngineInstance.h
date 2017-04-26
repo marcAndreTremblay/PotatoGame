@@ -13,7 +13,6 @@ using namespace PG::Core;
 #include "Scene.h"
 #include "AssetManager.h"
 #include "GUICanvas.h"
-#include "PGMapEditor.h"
 #include "MousePicker.h"
 #include "EngineObjectList.h"
 
@@ -41,7 +40,11 @@ namespace PG {
 				if (glfwWindowShouldClose(this->Game_Window->Gl_Window) == 1) {
 					this->ShouldGameClose = true;
 				}
-
+				if (this->Controlers->GetKey(PGKey_D)->IsPress == true) {
+					//this->scene_camera->Possition += v3(speed, 0.f, 0.f);
+					//this->scene_camera->LookAt += v3(speed, 0.f, 0.f);
+					Game_Window->SetWindowSize(Game_Window->GetWidth() - 10, Game_Window->GetHeight() - 10);
+				}
 			}
 			virtual void EngineInstance::HandleControler() {
 				if (glfwGetKey(this->Game_Window->Gl_Window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
