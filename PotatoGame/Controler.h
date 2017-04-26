@@ -55,6 +55,8 @@ namespace PG {
 			PGKey_S = GLFW_KEY_S,
 			PGKey_Q = GLFW_KEY_Q,
 			PGKey_E = GLFW_KEY_E,
+			PGKey_F = GLFW_KEY_F,
+			PGKey_R = GLFW_KEY_R,
 			PGKey_F1 = GLFW_KEY_F1,
 			PGKey_F2 = GLFW_KEY_F2,
 			PGKey_F3 = GLFW_KEY_F3,

@@ -78,9 +78,6 @@
     <ClInclude Include="stdafx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="PGEditorInstance.h">
-      <Filter>Header Files\GameEditor</Filter>
-    </ClInclude>
     <ClInclude Include="PGMapGrid.h">
       <Filter>Header Files\GameEditor</Filter>
     </ClInclude>
@@ -219,6 +216,9 @@
     <ClInclude Include="MapEditorScene.h">
       <Filter>Header Files\GameEditor\Scene</Filter>
     </ClInclude>
+    <ClInclude Include="EditorInstance.h">
+      <Filter>Header Files\GameEditor</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -238,6 +238,9 @@
     </ClCompile>
     <ClCompile Include="MapEditorScene.cpp">
       <Filter>Header Files\GameEditor\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="EditorInstance.cpp">
+      <Filter>Header Files\GameEditor</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
