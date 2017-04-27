@@ -64,6 +64,9 @@
     <Filter Include="Header Files\PG\Engine\Renderer\ShaderProgram">
       <UniqueIdentifier>{cbd7069d-bb24-4c6c-9ef5-d59d7c15828d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\GameEditor\Entities">
+      <UniqueIdentifier>{ee34aaf3-b34d-47a5-ab73-07269fea33d9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -80,9 +83,6 @@
     </ClInclude>
     <ClInclude Include="PGMapGrid.h">
       <Filter>Header Files\GameEditor</Filter>
-    </ClInclude>
-    <ClInclude Include="PGBackgroundMapGridMesh.h">
-      <Filter>Header Files\GameEditor\Mesh</Filter>
     </ClInclude>
     <ClInclude Include="PGMapAtlas.h">
       <Filter>Header Files\GameEditor</Filter>
@@ -189,9 +189,6 @@
     <ClInclude Include="PGMeshInstance.h">
       <Filter>Header Files\GameEditor</Filter>
     </ClInclude>
-    <ClInclude Include="TextMesh.h">
-      <Filter>Header Files\PG\Engine\Renderer\Mesh</Filter>
-    </ClInclude>
     <ClInclude Include="AxisMesh.h">
       <Filter>Header Files\PG\Engine\Renderer\Mesh</Filter>
     </ClInclude>
@@ -219,6 +216,24 @@
     <ClInclude Include="EditorInstance.h">
       <Filter>Header Files\GameEditor</Filter>
     </ClInclude>
+    <ClInclude Include="HexaGridMapShaderProgram.h">
+      <Filter>Header Files\PG\Engine\Renderer\ShaderProgram</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseMesh.h">
+      <Filter>Header Files\PG\Engine\Renderer\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="HexaGridMapMesh.h">
+      <Filter>Header Files\PG\Engine\Renderer\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="GeometryShaderProgram.h">
+      <Filter>Header Files\PG\Engine\Renderer\ShaderProgram</Filter>
+    </ClInclude>
+    <ClInclude Include="TextMesh.h">
+      <Filter>Header Files\PG\Engine\Renderer\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="BasicGeometryMesh.h">
+      <Filter>Header Files\PG\Engine\Renderer\Mesh</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -241,6 +256,21 @@
     </ClCompile>
     <ClCompile Include="EditorInstance.cpp">
       <Filter>Header Files\GameEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="HexaGridMapShaderProgram.cpp">
+      <Filter>Header Files\PG\Engine\Renderer\ShaderProgram</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseMesh.cpp">
+      <Filter>Header Files\PG\Engine\Renderer\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="HexaGridMapMesh.cpp">
+      <Filter>Header Files\PG\Engine\Renderer\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="GeometryShaderProgram.cpp">
+      <Filter>Header Files\PG\Engine\Renderer\ShaderProgram</Filter>
+    </ClCompile>
+    <ClCompile Include="BasicGeometryMesh.cpp">
+      <Filter>Header Files\PG\Engine\Renderer\Mesh</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -6,6 +6,7 @@
 #include "String.h"
 #include "PGMapGrid.h"
 #include "List.h"
+#include "HexaGridMapMesh.h"
 
 class PGAtlasRegion {
 
@@ -14,7 +15,7 @@ class PGAtlasRegion {
 public:
 	Str *FilePath;
 	int Grid_Index;
-	PGMapMesh* region_mesh;
+	HexaGridMapMesh* mesh;
 	PGGridRawData *grid;
 	PGAtlasRegion(int index, Str *name) {
 		FilePath = name;
@@ -22,22 +23,24 @@ public:
 		IsLoaded = false;
 		ShouldUnload = false;
 		grid = nullptr;
+		mesh = nullptr;
 	}
 	~PGAtlasRegion() {
 		delete(FilePath);
 		delete(grid);
-		delete(region_mesh);
+
+		delete(mesh);
 	}
 	void PGAtlasRegion::LoadData() {
 		grid = new PGGridRawData(v2(10, 10), 1.f);
 		grid->LoadFromFile(FilePath->CharAt(0));
-		region_mesh = new PGMapMesh(grid);
-		region_mesh->Build();
+		mesh = new HexaGridMapMesh(grid);
+		mesh->Build();
 		this->IsLoaded = true;
 	}
 	void PGAtlasRegion::FreeData() {
 		delete(grid);
-		delete(region_mesh);
+		delete(mesh);
 		this->IsLoaded = false;
 	}
 };

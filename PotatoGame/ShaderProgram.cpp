@@ -28,8 +28,7 @@ GLuint ShaderProgram::CompileShaderScr(GLuint shaderId, const char * shader_scr)
 	return Result;
 }
 
-ShaderProgram::ShaderProgram() {
-}
+
 
 ShaderProgram::ShaderProgram(const char * vertex_src, const char * fragment_src) {
 	GLint Result = GL_FALSE;
@@ -56,6 +55,7 @@ ShaderProgram::ShaderProgram(const char * vertex_src, const char * fragment_src)
 		printf("%s\n", &ProgramErrorMessage[0]);
 		free(ProgramErrorMessage);
 	}
+	IsInitialize = false;
 }
 
 ShaderProgram::ShaderProgram(const char * vertex_src, const char * fragment_src, const char * geometry_src) {
@@ -85,6 +85,7 @@ ShaderProgram::ShaderProgram(const char * vertex_src, const char * fragment_src,
 		printf("%s\n", &ProgramErrorMessage[0]);
 		free(ProgramErrorMessage);
 	}
+	IsInitialize = false;
 }
 
 
@@ -99,4 +100,5 @@ void ShaderProgram::Render() {
 }
 
 void ShaderProgram::Init() {
+	IsInitialize = true;
 }

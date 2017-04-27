@@ -12,6 +12,8 @@
 #include "TextMesh.h"
 #include "ShaderProgram.h"
 #include "AxisMesh.h"
+#include "HexaGridMapShaderProgram.h"
+#include "GeometryShaderProgram.h"
 
 namespace PG {
 	namespace Engine {
@@ -35,8 +37,8 @@ namespace PG {
 			PGUIPanelMesh* ui_panel_Mesh;
 			PGUIImageMesh* ui_image_mesh;
 			PGMModelMesh* model_renderer;
-
-
+			HexaGridMapShaderProgram* map_shader_program;
+			GeometryShaderProgram* geometry_shader_prog;
 
 			BaseRenderer() {
 				glewExperimental = true; // Needed for core profile
@@ -66,6 +68,7 @@ namespace PG {
 				glDeleteBuffers(1, &this->SceneLight_UBO_Ref_Id);
 				glDeleteBuffers(1, &this->SceneAdvanceLight_UBO_Ref_Id);
 
+				delete(map_shader_program);
 				delete(this->textMesh);
 				delete(this->squareMesh);
 				delete(this->hexagoneMesh);
@@ -135,6 +138,14 @@ namespace PG {
 				glBindBuffer(GL_UNIFORM_BUFFER, this->SceneAdvanceLight_UBO_Ref_Id);
 				glBufferData(GL_UNIFORM_BUFFER, 4 * sizeof(v4), NULL, GL_DYNAMIC_DRAW); // allocate bytes of memory
 				glBindBufferBase(GL_UNIFORM_BUFFER, 3, this->SceneAdvanceLight_UBO_Ref_Id);
+				
+				
+				map_shader_program = new HexaGridMapShaderProgram();
+				map_shader_program->Init();
+
+				geometry_shader_prog = new GeometryShaderProgram();
+				geometry_shader_prog->Init();
+
 				model_renderer = new PGMModelMesh();
 				model_renderer->Build();
 				this->ui_image_mesh = new PGUIImageMesh();

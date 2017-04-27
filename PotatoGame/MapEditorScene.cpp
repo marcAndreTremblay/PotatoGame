@@ -3,6 +3,7 @@
 
 
 MapEditorScene::MapEditorScene() {
+	current_mode = Mode_Camera_Move;
 	this->time = 0.1f;
 	this->tempo_var = 0.1f;
 	this->scene_light = PGLight();
@@ -20,6 +21,8 @@ MapEditorScene::MapEditorScene() {
 
 MapEditorScene::~MapEditorScene() {
 	delete(test_atlas);
+	delete(square_mesh);
+	delete(region_mesh);
 }
 
 void MapEditorScene::Update(Controler * controler, double timeElapse) {
@@ -35,9 +38,11 @@ void MapEditorScene::Render(BaseRenderer * renderer) {
 	renderer->axisMesh->Render(v3(0.f, 0.f, 0.f), v4(0.f, 0.f, 1.f, 1.f));
 	renderer->cubeMesh->Render(v3(scene_light.position.x, scene_light.position.y, scene_light.position.z), v3(0.1f, 0.1f, 0.1f), scene_light.diffuse);
 
+	//renderer->map_shader_program->Render(region_mesh, &v3(0.f, 0.f, 20.f));
+	//renderer->geometry_shader_prog->Render(this->square_mesh, &v3(0.f, 0.f, 1.f), &v3(7.f, 7.f, 1.f), &v4(1.f, 0.0f, 0.0f, 1.f));
 
-
-
+	v3 selected_item_marker_color = v3(1.f,0.f, 0.f);
+	v3 selected_item_marker_scale = v3(1.f, 1.f, 1.f);
 
 	PGGridRawData *grid_data = region_display[4]->grid;
 	v3 possition_offset = v3(grid_data->CalculateNextMapOffetPossition(1), grid_data->CalculateNextMapOffetPossition(2), 0.f);
@@ -56,12 +61,13 @@ void MapEditorScene::Render(BaseRenderer * renderer) {
 				grid_index++) {
 				possition = possition_cursor + v3(grid->grid_pos_data[grid_index]);
 				scale = v3(grid->Tile_size, grid->Tile_size, grid->grid_height_data[grid_index]);
+				
 				if (grid->selected_indexes[grid_index] == true) {
-					renderer->materialHexagoneMesh->Render(possition, scale, &Material_Copper);
+					renderer->cubeMesh->Render(v3(possition.x, possition.y, scale.z), v3(0.1f, 0.1f, 0.1f), scene_light.diffuse);
 				}
-				else {
-					renderer->materialHexagoneMesh->Render(possition, scale, &grid->grid_material_data[grid_index]);
-				}
+				
+				renderer->materialHexagoneMesh->Render(possition, scale, &grid->grid_material_data[grid_index]);
+				
 				if (grid->tile_type[grid_index] == 1) {
 					renderer->model_renderer->Render(test_model3, v3(possition.x, possition.y, scale.z), v3(1.f, 1.f, 1.f));
 				}
@@ -73,7 +79,8 @@ void MapEditorScene::Render(BaseRenderer * renderer) {
 
 		else {
 			if (region_display[grid_index] != nullptr) {
-				region_display[grid_index]->region_mesh->Render(possition_cursor);
+				renderer->map_shader_program->Render(region_display[grid_index]->mesh, &possition_cursor);
+				
 			}
 		}
 
@@ -105,8 +112,10 @@ void MapEditorScene::Build(MousePicker * mouse_picker) {
 	test_model2->LoadIntoVAO();
 
 
+	
 
-
+	square_mesh = new BasicGeometryMesh();
+	square_mesh->Build();
 
 	int edit_target = 171;
 	//Load atlas
@@ -117,169 +126,24 @@ void MapEditorScene::Build(MousePicker * mouse_picker) {
 	region_edited[1] = true;
 	region_edited[2] = true;
 	region_edited[3] = true;
-	/*	region_edited[4] = true;
+		region_edited[4] = true;
 	region_edited[5] = true;
 	region_edited[6] = true;
 	region_edited[7] = true;
-	region_edited[8] = true;*/
+	region_edited[8] = true;
+	
+	
+	region_mesh = new HexaGridMapMesh(region_display[0]->grid);
+	region_mesh->Build();
+	
+
 	this->ShouldRender = true;
+
+
+
 }
 
-void MapEditorScene::HandleControler(Controler * controler) {
-	Scene::HandleControler(controler);
-	float speed = 0.15f;
-
-	PGGridRawData *grid_data = region_display[4]->grid;
-	if (controler->GetKey(PGKey_Left_Ctrl)->IsPress == true) {
-		if (controler->IsRelease(PGKey_1) == true) {
-			for (int i = 0; i < 9; i++) {
-				if (region_edited[i] == true) {
-					PGGridRawData *grid = region_display[i]->grid;
-					for (int grid_index = 0;
-						grid_index < grid->Grid_size.x*grid->Grid_size.y;
-						grid_index++) {
-						if (grid->selected_indexes[grid_index] == true) {
-							grid->grid_material_data[grid_index] = Material_Green;
-						}
-					}
-				}
-			}
-		}
-		if (controler->IsRelease(PGKey_2) == true) {
-			for (int i = 0; i < 9; i++) {
-				if (region_edited[i] == true) {
-					PGGridRawData *grid = region_display[i]->grid;
-					for (int grid_index = 0;
-						grid_index < grid->Grid_size.x*grid->Grid_size.y;
-						grid_index++) {
-						if (grid->selected_indexes[grid_index] == true) {
-							grid->grid_material_data[grid_index] = Material_Brown_1;
-						}
-					}
-				}
-			}
-		}
-		if (controler->IsRelease(PGKey_3) == true) {
-			for (int i = 0; i < 9; i++) {
-				if (region_edited[i] == true) {
-					PGGridRawData *grid = region_display[i]->grid;
-					for (int grid_index = 0;
-						grid_index < grid->Grid_size.x*grid->Grid_size.y;
-						grid_index++) {
-						if (grid->selected_indexes[grid_index] == true) {
-							grid->grid_material_data[grid_index] = Material_Gray;
-						}
-					}
-				}
-			}
-		}
-		if (controler->IsRelease(PGKey_4) == true) {
-			for (int i = 0; i < 9; i++) {
-				if (region_edited[i] == true) {
-					PGGridRawData *grid = region_display[i]->grid;
-					for (int grid_index = 0;
-						grid_index < grid->Grid_size.x*grid->Grid_size.y;
-						grid_index++) {
-						if (grid->selected_indexes[grid_index] == true) {
-							grid->grid_material_data[grid_index] = Material_Blue;
-						}
-					}
-				}
-			}
-		}
-		if (controler->IsRelease(PGKey_5) == true) {
-			for (int i = 0; i < 9; i++) {
-				if (region_edited[i] == true) {
-					PGGridRawData *grid = region_display[i]->grid;
-					for (int grid_index = 0;
-						grid_index < grid->Grid_size.x*grid->Grid_size.y;
-						grid_index++) {
-						if (grid->selected_indexes[grid_index] == true) {
-							grid->tile_type[grid_index] = 1;
-						}
-					}
-				}
-			}
-		}
-		if (controler->IsRelease(PGKey_7) == true) { //Align all tile height
-			for (int i = 0; i < 9; i++) {
-				if (region_edited[i] == true) {
-					PGGridRawData *grid = region_display[i]->grid;
-					for (int grid_index = 0;
-						grid_index < grid->Grid_size.x*grid->Grid_size.y;
-						grid_index++) {
-						if (grid->selected_indexes[grid_index] == true) {
-							grid->grid_height_data[grid_index] = 1;
-						}
-					}
-				}
-			}
-		}
-		if (controler->IsRelease(PGKey_6) == true) { //Align all tile height
-			for (int i = 0; i < 9; i++) {
-				if (region_edited[i] == true) {
-					PGGridRawData *grid = region_display[i]->grid;
-					for (int grid_index = 0;
-						grid_index < grid->Grid_size.x*grid->Grid_size.y;
-						grid_index++) {
-						if (grid->selected_indexes[grid_index] == true) {
-							grid->tile_type[grid_index] = 2;
-						}
-					}
-				}
-			}
-		}
-		if (controler->IsRelease(PGKey_A) == true) {
-			for (int i = 0; i < 9; i++) {
-				if (region_edited[i] == true) {
-					PGGridRawData *grid = region_display[i]->grid;
-					for (int grid_index = 0;
-						grid_index < grid->Grid_size.x*grid->Grid_size.y;
-						grid_index++) {
-						if (grid->selected_indexes[grid_index] == true) {
-							grid->grid_height_data[grid_index] -= 0.1f;
-						}
-					}
-				}
-			}
-
-		}
-		if (controler->IsRelease(PGKey_Q) == true) {
-			for (int i = 0; i < 9; i++) {
-				if (region_edited[i] == true) {
-					PGGridRawData *grid = region_display[i]->grid;
-					for (int grid_index = 0;
-						grid_index < grid->Grid_size.x*grid->Grid_size.y;
-						grid_index++) {
-						if (grid->selected_indexes[grid_index] == true) {
-							grid->grid_height_data[grid_index] += 0.1f;
-						}
-					}
-				}
-			}
-
-		}
-		if (controler->IsRelease(PGKey_S) == true) {
-			for (int i = 0; i < 9; i++) {
-				if (region_edited[i] == true) {
-					region_display[i]->grid->SaveToFile(region_display[i]->FilePath->data_ptr);
-				}
-			}
-
-		}
-	}
-	if (controler->IsRelease(PGKey_Left_Ctrl) == true) {
-		for (int i = 0; i < 9; i++) {
-			if (region_edited[i] == true) {
-				PGGridRawData *grid = region_display[i]->grid;
-				for (int grid_index = 0;
-					grid_index < grid->Grid_size.x*grid->Grid_size.y;
-					grid_index++) {
-					grid->selected_indexes[grid_index] = false;
-				}
-			}
-		}
-	}
+void MapEditorScene::HandleTilePicking(Controler * controler) {
 	int picked_index = -1;
 	//Picking into world space
 	//*************************************************************************************		
@@ -322,60 +186,292 @@ void MapEditorScene::HandleControler(Controler * controler) {
 			possition_cursor.x += possition_offset.x;
 		}
 	}
-	//*************************************************************************************
-	//Todo(Marc): remove all light systems
-	if (controler->GetKey(PGKey_Left_Ctrl)->IsPress == true) {
+}
+void MapEditorScene::HandleCameraMovement(Controler * controler) {
+	float speed = 0.15f;
+	if (controler->GetKey(PGKey_Left)->IsPress == true) {
+		this->scene_light.position += v4(0.1f, 0.0f, 0.0f, 0.f);
+	}
+	if (controler->GetKey(PGKey_Right)->IsPress == true) {
+		this->scene_light.position -= v4(0.1f, 0.0f, 0.0, 0.f);
+	}
+	if (controler->GetKey(PGKey_Page_Up)->IsPress == true) {
+		this->scene_light.position -= v4(0.0f, 0.0f, 0.1f, 0.f);
+	}
+	if (controler->GetKey(PGKey_Page_Down)->IsPress == true) {
+		this->scene_light.position += v4(0.0f, 0.0f, 0.1f, 0.f);
+	}
+	if (controler->GetKey(PGKey_Q)->IsPress == true) {
+		this->scene_camera->RotateZAxis(speed, this->scene_camera->LookAt);
+	}
+	if (controler->GetKey(PGKey_E)->IsPress == true) {
+		this->scene_camera->RotateZAxis(-speed, this->scene_camera->LookAt);
+	}
+	if (controler->GetKey(PGKey_A)->IsPress == true) {
+		this->scene_camera->Possition += v3(-speed, 0.f, 0.f);
+		this->scene_camera->LookAt += v3(-speed, 0.f, 0.f);
+	}
+	if (controler->GetKey(PGKey_D)->IsPress == true) {
+		this->scene_camera->Possition += v3(speed, 0.f, 0.f);
+		this->scene_camera->LookAt += v3(speed, 0.f, 0.f);
+	}
+	if (controler->GetKey(PGKey_W)->IsPress == true) {
+		this->scene_camera->Possition += v3(0.f, speed, 0.f);
+		this->scene_camera->LookAt += v3(0.f, speed, 0.f);
+	}
+	if (controler->GetKey(PGKey_S)->IsPress == true) {
+		this->scene_camera->Possition += v3(0.0f, -speed, 0.f);
+		this->scene_camera->LookAt += v3(0.0f, -speed, 0.f);
+	}
+	if (controler->GetKey(PGKey_R)->IsPress == true) {
+		this->scene_camera->Possition += v3(0.f, 0.f, speed);
+		this->scene_camera->LookAt += v3(0.f, 0.f, speed);
+	}
+	if (controler->GetKey(PGKey_F)->IsPress == true) {
+		this->scene_camera->Possition += v3(0.0f, 0.f, -speed);
+		this->scene_camera->LookAt += v3(0.0f, 0.f, -speed);
+	}
+	if (controler->GetKey(PGKey_Up)->IsPress == true) {
+		this->scene_light.position += v4(0.0f, 0.1f, 0.0f, 0.f);
+	}
+	if (controler->GetKey(PGKey_Down)->IsPress == true) {
+		this->scene_light.position -= v4(0.0f, 0.1f, 0.0f, 0.f);
+	}
+}
+void MapEditorScene::HandleControler(Controler * controler) {
+	Scene::HandleControler(controler);
+	
 
+
+	if (controler->IsRelease(PGKey_F1) == true) {
+		current_mode = Mode_Camera_Move;
+		printf("Mode_Camera_Move Mode\n");
 	}
-	else {
-		if (controler->GetKey(PGKey_Left)->IsPress == true) {
-			this->scene_light.position += v4(0.1f, 0.0f, 0.0f, 0.f);
-		}
-		if (controler->GetKey(PGKey_Right)->IsPress == true) {
-			this->scene_light.position -= v4(0.1f, 0.0f, 0.0, 0.f);
-		}
-		if (controler->GetKey(PGKey_Page_Up)->IsPress == true) {
-			this->scene_light.position -= v4(0.0f, 0.0f, 0.1f, 0.f);
-		}
-		if (controler->GetKey(PGKey_Page_Down)->IsPress == true) {
-			this->scene_light.position += v4(0.0f, 0.0f, 0.1f, 0.f);
-		}
-		if (controler->GetKey(PGKey_C)->IsPress == true) {
-			this->scene_camera->RotateZAxis(speed, this->scene_camera->LookAt);
-		}
-		if (controler->GetKey(PGKey_Z)->IsPress == true) {
-			this->scene_camera->RotateZAxis(-speed, this->scene_camera->LookAt);
-		}
-		if (controler->GetKey(PGKey_A)->IsPress == true) {
-			this->scene_camera->Possition += v3(-speed, 0.f, 0.f);
-			this->scene_camera->LookAt += v3(-speed, 0.f, 0.f);
-		}
-		if (controler->GetKey(PGKey_D)->IsPress == true) {
-			//this->scene_camera->Possition += v3(speed, 0.f, 0.f);
-			//this->scene_camera->LookAt += v3(speed, 0.f, 0.f);
-		}
-		if (controler->GetKey(PGKey_W)->IsPress == true) {
-			this->scene_camera->Possition += v3(0.f, speed, 0.f);
-			this->scene_camera->LookAt += v3(0.f, speed, 0.f);
-		}
-		if (controler->GetKey(PGKey_S)->IsPress == true) {
-			this->scene_camera->Possition += v3(0.0f, -speed, 0.f);
-			this->scene_camera->LookAt += v3(0.0f, -speed, 0.f);
-		}
-		if (controler->GetKey(PGKey_Q)->IsPress == true) {
-			this->scene_camera->Possition += v3(0.0f, 0.f, speed);
-			this->scene_camera->LookAt += v3(0.0f, 0.f, speed);
-		}
-		if (controler->GetKey(PGKey_E)->IsPress == true) {
-			this->scene_camera->Possition += v3(0.0f, 0.f, -speed);
-			this->scene_camera->LookAt += v3(0.0f, 0.f, -speed);
-		}
-		if (controler->GetKey(PGKey_Up)->IsPress == true) {
-			this->scene_light.position += v4(0.0f, 0.1f, 0.0f, 0.f);
-		}
-		if (controler->GetKey(PGKey_Down)->IsPress == true) {
-			this->scene_light.position -= v4(0.0f, 0.1f, 0.0f, 0.f);
+	if (controler->IsRelease(PGKey_F2) == true) {
+		current_mode = Mode_Entities_Selection;
+		printf("Mode_Entities_Selection Mode\n");
+	}
+	if (controler->IsRelease(PGKey_F3) == true) {
+		current_mode = Mode_Tiles_Selection;
+		printf("Mode_Tiles_Selection Mode\n");
+	}
+	if (controler->IsRelease(PGKey_F4) == true) {
+		current_mode = Mode_Edit_Tile_Material;
+		printf("Mode_Edit_Tile_Material Mode\n");
+	}
+	if (controler->IsRelease(PGKey_F5) == true) {
+		current_mode = Mode_Edit_Tile_Height;
+		printf("Mode_Edit_Tile_Height Mode\n");
+	}
+	if (controler->IsRelease(PGKey_F6) == true) {
+		current_mode = Mode_Edit_Tile_Model;
+		printf("Mode_Edit_Tile_Model Mode\n");
+	}
+	if (controler->GetKey(PGKey_Left_Ctrl)->IsPress == true) {
+		if (controler->IsRelease(PGKey_S) == true) {
+			for (int i = 0; i < 9; i++) {
+				if (region_edited[i] == true) {
+					region_display[i]->grid->SaveToFile(region_display[i]->FilePath->data_ptr);
+				}
+			}
+
 		}
 	}
+	switch (current_mode) {
+		case Mode_Camera_Move:
+			HandleCameraMovement(controler);
+			break;
+		case Mode_Entities_Selection:
+			break;
+		case Mode_Tiles_Selection:
+		{
+
+			HandleCameraMovement(controler);
+			HandleTilePicking(controler);
+			//*************************************************************************************
+			if (controler->IsRelease(PGKey_C) == true) {
+				for (int i = 0; i < 9; i++) {
+					if (region_edited[i] == true) {
+						PGGridRawData *grid = region_display[i]->grid;
+						for (int grid_index = 0;
+							grid_index < grid->Grid_size.x*grid->Grid_size.y;
+							grid_index++) {
+							grid->selected_indexes[grid_index] = false;
+						}
+					}
+				}
+			}
+			//*************************************************************************************
+
+			break; }
+		case Mode_Edit_Tile_Material:
+			HandleCameraMovement(controler);
+			HandleTilePicking(controler);
+			if (controler->IsRelease(PGKey_1) == true) {
+				for (int i = 0; i < 9; i++) {
+					if (region_edited[i] == true) {
+						PGGridRawData *grid = region_display[i]->grid;
+						for (int grid_index = 0;
+							grid_index < grid->Grid_size.x*grid->Grid_size.y;
+							grid_index++) {
+							if (grid->selected_indexes[grid_index] == true) {
+								grid->grid_material_data[grid_index] = Material_Green;
+							}
+						}
+					}
+				}
+			}
+			if (controler->IsRelease(PGKey_2) == true) {
+				for (int i = 0; i < 9; i++) {
+					if (region_edited[i] == true) {
+						PGGridRawData *grid = region_display[i]->grid;
+						for (int grid_index = 0;
+							grid_index < grid->Grid_size.x*grid->Grid_size.y;
+							grid_index++) {
+							if (grid->selected_indexes[grid_index] == true) {
+								grid->grid_material_data[grid_index] = Material_Brown_1;
+							}
+						}
+					}
+				}
+			}
+			if (controler->IsRelease(PGKey_3) == true) {
+				for (int i = 0; i < 9; i++) {
+					if (region_edited[i] == true) {
+						PGGridRawData *grid = region_display[i]->grid;
+						for (int grid_index = 0;
+							grid_index < grid->Grid_size.x*grid->Grid_size.y;
+							grid_index++) {
+							if (grid->selected_indexes[grid_index] == true) {
+								grid->grid_material_data[grid_index] = Material_Gray;
+							}
+						}
+					}
+				}
+			}
+			if (controler->IsRelease(PGKey_4) == true) {
+				for (int i = 0; i < 9; i++) {
+					if (region_edited[i] == true) {
+						PGGridRawData *grid = region_display[i]->grid;
+						for (int grid_index = 0;
+							grid_index < grid->Grid_size.x*grid->Grid_size.y;
+							grid_index++) {
+							if (grid->selected_indexes[grid_index] == true) {
+								grid->grid_material_data[grid_index] = Material_Blue;
+							}
+						}
+					}
+				}
+			}
+			break;
+		case Mode_Edit_Tile_Height:{
+			HandleCameraMovement(controler);
+			HandleTilePicking(controler);
+			if (controler->IsRelease(PGKey_1) == true) {
+				float height_count = 0.f;
+				float element_count = 0.f;
+				for (int i = 0; i < 9; i++) {
+					if (region_edited[i] == true) {
+						PGGridRawData *grid = region_display[i]->grid;
+						for (int grid_index = 0; grid_index < grid->Grid_size.x*grid->Grid_size.y; grid_index++) {
+							if (grid->selected_indexes[grid_index] == true) {
+								height_count += grid->grid_height_data[grid_index];
+								element_count += 1.0f;
+							}
+						}
+						float new_height = height_count / element_count;
+						for (int grid_index = 0; grid_index < grid->Grid_size.x*grid->Grid_size.y; grid_index++) {
+							if (grid->selected_indexes[grid_index] == true) {
+								grid->grid_height_data[grid_index] = new_height;
+							}
+						}
+					}
+				}
+
+			}
+			if (controler->IsRelease(PGKey_G) == true) {
+				for (int i = 0; i < 9; i++) {
+					if (region_edited[i] == true) {
+						PGGridRawData *grid = region_display[i]->grid;
+						for (int grid_index = 0;grid_index < grid->Grid_size.x*grid->Grid_size.y;grid_index++) {
+							if (grid->selected_indexes[grid_index] == true) {
+								grid->grid_height_data[grid_index] -= 0.1f;
+							}
+						}
+					}
+				}
+
+			}
+			if (controler->IsRelease(PGKey_T) == true) {
+				for (int i = 0; i < 9; i++) {
+					if (region_edited[i] == true) {
+						PGGridRawData *grid = region_display[i]->grid;
+						for (int grid_index = 0;
+							grid_index < grid->Grid_size.x*grid->Grid_size.y;
+							grid_index++) {
+							if (grid->selected_indexes[grid_index] == true) {
+								grid->grid_height_data[grid_index] += 0.1f;
+							}
+						}
+					}
+				}
+
+			}
+			break; }
+		case Mode_Edit_Tile_Model:{
+			if (controler->IsRelease(PGKey_1) == true) {
+				for (int i = 0; i < 9; i++) {
+					if (region_edited[i] == true) {
+						PGGridRawData *grid = region_display[i]->grid;
+						for (int grid_index = 0;
+							grid_index < grid->Grid_size.x*grid->Grid_size.y;
+							grid_index++) {
+							if (grid->selected_indexes[grid_index] == true) {
+								grid->tile_type[grid_index] = 0;
+							}
+						}
+					}
+				}
+			}
+
+			if (controler->IsRelease(PGKey_2) == true) {
+				for (int i = 0; i < 9; i++) {
+					if (region_edited[i] == true) {
+						PGGridRawData *grid = region_display[i]->grid;
+						for (int grid_index = 0;
+							grid_index < grid->Grid_size.x*grid->Grid_size.y;
+							grid_index++) {
+							if (grid->selected_indexes[grid_index] == true) {
+								grid->tile_type[grid_index] = 1;
+							}
+						}
+					}
+				}
+			}
+
+			if (controler->IsRelease(PGKey_3) == true) { //Align all tile height
+				for (int i = 0; i < 9; i++) {
+					if (region_edited[i] == true) {
+						PGGridRawData *grid = region_display[i]->grid;
+						for (int grid_index = 0;
+							grid_index < grid->Grid_size.x*grid->Grid_size.y;
+							grid_index++) {
+							if (grid->selected_indexes[grid_index] == true) {
+								grid->tile_type[grid_index] = 2;
+							}
+						}
+					}
+				}
+			}
+			break; }
+		default: {current_mode = Mode_Camera_Move;
+			break; }
+				 
+	}
+	
+
+	
+
+
 
 }

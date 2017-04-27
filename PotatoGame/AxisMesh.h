@@ -17,9 +17,11 @@ namespace PG {
 		private:
 			GLuint Unif_Translate;
 			GLuint Unif_Frag_Color;
+			int Vertices_Count;
 		public:
 			AxisMesh() :
 				Mesh(new PGShader(axis_vertex_shader, FragShaderColor4fIn)) {
+				Vertices_Count = 0;
 			}
 			~AxisMesh() {
 

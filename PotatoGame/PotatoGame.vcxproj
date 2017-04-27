@@ -83,10 +83,15 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AxisMesh.h" />
+    <ClInclude Include="BaseMesh.h" />
+    <ClInclude Include="BasicGeometryMesh.h" />
     <ClInclude Include="Buffer.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="CombatScene.h" />
     <ClInclude Include="EditorInstance.h" />
+    <ClInclude Include="GeometryShaderProgram.h" />
+    <ClInclude Include="HexaGridMapMesh.h" />
+    <ClInclude Include="HexaGridMapShaderProgram.h" />
     <ClInclude Include="ImageBox.h" />
     <ClInclude Include="MapEditorScene.h" />
     <ClInclude Include="MonkeyEngineInstance.h" />
@@ -100,7 +105,6 @@
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Primitive.h" />
     <ClInclude Include="AssetManager.h" />
-    <ClInclude Include="PGBackgroundMapGridMesh.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="EngineObject.h" />
     <ClInclude Include="EngineObjectList.h" />
@@ -133,8 +137,13 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BaseMesh.cpp" />
+    <ClCompile Include="BasicGeometryMesh.cpp" />
     <ClCompile Include="CombatScene.cpp" />
     <ClCompile Include="EditorInstance.cpp" />
+    <ClCompile Include="GeometryShaderProgram.cpp" />
+    <ClCompile Include="HexaGridMapMesh.cpp" />
+    <ClCompile Include="HexaGridMapShaderProgram.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MapEditorScene.cpp" />
     <ClCompile Include="MonkeyEngineInstance.cpp" />

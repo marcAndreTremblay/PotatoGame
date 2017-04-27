@@ -57,10 +57,14 @@ namespace PG {
 			PGKey_E = GLFW_KEY_E,
 			PGKey_F = GLFW_KEY_F,
 			PGKey_R = GLFW_KEY_R,
+			PGKey_T = GLFW_KEY_T,
+			PGKey_G = GLFW_KEY_G,
 			PGKey_F1 = GLFW_KEY_F1,
 			PGKey_F2 = GLFW_KEY_F2,
 			PGKey_F3 = GLFW_KEY_F3,
 			PGKey_F4 = GLFW_KEY_F4,
+			PGKey_F5 = GLFW_KEY_F5,
+			PGKey_F6 = GLFW_KEY_F6,
 			PGKey_Z = GLFW_KEY_Z,
 			PGKey_C = GLFW_KEY_C,
 			PGSpace = GLFW_KEY_SPACE,
@@ -85,7 +89,12 @@ namespace PG {
 			List<ControlerKey>* Keyboard_Keys;
 			double xpos, ypos;
 			v2 DeltaPossition;
+			void Scroll_Call_Back() {
+
+			}
 			Controler() {
+
+				
 
 				this->Mouse_Keys = new List<ControlerKey>();
 				this->AddMouseKey(PGMouse_Left, "Space bar");
@@ -100,7 +109,7 @@ namespace PG {
 				this->AddKeyboardKey(PGKey_Left, "Left_Key");
 				this->AddKeyboardKey(PGKey_Right, "Right_Key");
 
-
+				
 				//Add all letter
 				for (int i = 65; i <= 90; i++) {
 					this->AddKeyboardKey((PGKey)i);
@@ -119,6 +128,8 @@ namespace PG {
 				this->AddKeyboardKey(PGKey_F2, "F2_Key");
 				this->AddKeyboardKey(PGKey_F3, "F3_Key");
 				this->AddKeyboardKey(PGKey_F4, "F4_Key");
+				this->AddKeyboardKey(PGKey_F5, "F5_Key");
+				this->AddKeyboardKey(PGKey_F6, "F6_Key");
 				this->AddKeyboardKey(PGKey_Page_Down, "Down_Key");
 				this->AddKeyboardKey(PGKey_Page_Up, "Up_Key");
 				this->AddKeyboardKey(PGKey_Left_Ctrl, "Ctrl_Left");
@@ -150,8 +161,7 @@ namespace PG {
 
 			//Note(Marc) : This function must be call every game update
 			void Controler::Update(GameWindow* _GameWindow) {
-
-
+			
 				v2 last_possition = v2(this->xpos, this->ypos);
 				glfwGetCursorPos(_GameWindow->Gl_Window, &this->xpos, &this->ypos);
 				v2 current_possition = v2(this->xpos, this->ypos);
@@ -167,7 +177,6 @@ namespace PG {
 						current_key->IsPress = false;
 					}
 				}
-
 				for (ListNode<ControlerKey> *c_node = Keyboard_Keys->GetHead(); c_node != nullptr; c_node = c_node->GetNext()) {
 					ControlerKey* current_key = c_node->GetData();
 					current_key->WasPress = current_key->IsPress;

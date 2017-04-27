@@ -1,4 +1,4 @@
-#if !defined(Map_Editor_SCENE_H)
+#ifndef Map_Editor_SCENE_H
 #define Map_Editor_SCENE_H
 
 #include "Core.h"
@@ -12,29 +12,42 @@
 #include "PGMapGrid.h"
 #include "MousePicker.h"
 
-#include "PGBackgroundMapGridMesh.h"
+
 #include "PGMapAtlas.h"
+#include "HexaGridMapMesh.h"
+#include "BasicGeometryMesh.h"
 
-
+enum MapEditorMode {
+	Mode_Camera_Move = 0,
+	Mode_Entities_Selection = 1,
+	Mode_Tiles_Selection = 2,
+	Mode_Edit_Tile_Material =3,
+	Mode_Edit_Tile_Height = 4,
+	Mode_Edit_Tile_Model = 5
+};
 class MapEditorScene :
 	public Scene {
 private:
 	PGMapAtlas * test_atlas;
 	PGAtlasRegion* region_display[9];
 	bool region_edited[9];
-
+	HexaGridMapMesh* region_mesh;
 	PGLight scene_light;
 	RawModelData *test_model;
 	RawModelData *test_model2;
 	RawModelData *test_model3;
 	double time;
 	double tempo_var;
+	BasicGeometryMesh* square_mesh;
+	MapEditorMode current_mode;
 public:
 	MapEditorScene();
 	virtual ~MapEditorScene();
 	void Update(Controler *controler, double timeElapse);
 	void Render(BaseRenderer *renderer);
 	void Build(MousePicker* mouse_picker);
+	void HandleTilePicking(Controler * controler);
+	void HandleCameraMovement(Controler * controler);
 	void HandleControler(Controler *controler);
 };
 #endif

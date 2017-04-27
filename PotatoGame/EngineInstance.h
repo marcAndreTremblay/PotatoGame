@@ -40,12 +40,6 @@ namespace PG {
 				if (glfwWindowShouldClose(this->Game_Window->Gl_Window) == 1) {
 					this->ShouldGameClose = true;
 				}
-				if (this->Controlers->GetKey(PGKey_F)->IsPress == true) {
-					Game_Window->SetWindowSize(Game_Window->GetWidth() - 10, Game_Window->GetHeight() - 10);
-				}
-				if (this->Controlers->GetKey(PGKey_R)->IsPress == true) {
-					Game_Window->SetWindowSize(Game_Window->GetWidth() + 10, Game_Window->GetHeight() + 10);
-				}
 			}
 			virtual void EngineInstance::HandleControler() {
 				if (glfwGetKey(this->Game_Window->Gl_Window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
