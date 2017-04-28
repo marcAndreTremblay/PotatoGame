@@ -97,9 +97,9 @@ namespace PG {
 				
 
 				this->Mouse_Keys = new List<ControlerKey>();
-				this->AddMouseKey(PGMouse_Left, "Space bar");
-				this->AddMouseKey(PGMouse_Center, "Space bar");
-				this->AddMouseKey(PGMouse_Right, "Space bar");
+				this->AddMouseKey(PGMouse_Left, "Mouse Left");
+				this->AddMouseKey(PGMouse_Center, "Mouse Center");
+				this->AddMouseKey(PGMouse_Right, "Mouse Right");
 
 				this->Keyboard_Keys = new List<ControlerKey>();
 				DeltaPossition = {};

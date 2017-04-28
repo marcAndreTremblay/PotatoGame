@@ -14,8 +14,8 @@ BasicGeometryMesh::~BasicGeometryMesh() {
 void BasicGeometryMesh::Build() {
 	BaseMesh::Build();
 	//Build the Vao buffer
-	glBindVertexArray(VAO);
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBindVertexArray(this->VAO);
+	glBindBuffer(GL_ARRAY_BUFFER, this->VBO);
 
 	glBufferData(GL_ARRAY_BUFFER, sizeof(geo_square_vertex_data), geo_square_vertex_data, GL_STATIC_DRAW);
 	this->Vertices_Count = 6;

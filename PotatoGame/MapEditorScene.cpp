@@ -39,7 +39,7 @@ void MapEditorScene::Render(BaseRenderer * renderer) {
 	renderer->cubeMesh->Render(v3(scene_light.position.x, scene_light.position.y, scene_light.position.z), v3(0.1f, 0.1f, 0.1f), scene_light.diffuse);
 
 	//renderer->map_shader_program->Render(region_mesh, &v3(0.f, 0.f, 20.f));
-	//renderer->geometry_shader_prog->Render(this->square_mesh, &v3(0.f, 0.f, 1.f), &v3(7.f, 7.f, 1.f), &v4(1.f, 0.0f, 0.0f, 1.f));
+	renderer->geometry_shader_prog->Render(this->square_mesh, v3(0.f, 0.f, 10.f), v3(70.f, 70.f, 0.f), v4(1.f, 0.0f, 0.0f, 1.f));
 
 	v3 selected_item_marker_color = v3(1.f,0.f, 0.f);
 	v3 selected_item_marker_scale = v3(1.f, 1.f, 1.f);
@@ -128,9 +128,9 @@ void MapEditorScene::Build(MousePicker * mouse_picker) {
 	region_edited[3] = true;
 		region_edited[4] = true;
 	region_edited[5] = true;
-	region_edited[6] = true;
-	region_edited[7] = true;
-	region_edited[8] = true;
+	//region_edited[6] = true;
+	//region_edited[7] = true;
+	//region_edited[8] = true;
 	
 	
 	region_mesh = new HexaGridMapMesh(region_display[0]->grid);

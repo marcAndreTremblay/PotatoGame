@@ -17,14 +17,12 @@ void HexaGridMapShaderProgram::Init(){
 void HexaGridMapShaderProgram::Render(BaseMesh * mesh, v3 *possition) {
 	if (this->IsInitialize == true)	{ 
 		this->Use();
-	
-		mesh->BindVAO();
 		//Vertex shader uniform variable
 		glUniformMatrix4fv(this->Unif_Translate, 1, GL_FALSE, &glm::translate(m4(1.f), *possition)[0][0]);
-
+		mesh->BindVAO();
 		glDrawArrays(GL_TRIANGLES, 0, mesh->GetVeticesCount());
 	}
 	else {
-		//Todo(Marc): Add debugg
+		//Todo(Marc): Add debugg	
 	}
 }

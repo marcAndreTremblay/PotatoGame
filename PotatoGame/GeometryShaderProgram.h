@@ -9,10 +9,10 @@ using namespace PG::Core;
 //Vertex shader
 #if 1 
 PG_SHADER(const char* Geometry_VertexShader = GLSL330(
-	layout(location = 0) in vec4 vertex_position; //<- world space already
+	layout(location = 0) in vec4 vertex_position;
 
-	uniform mat4 unif_translate; //Note(Marc): will translate all the world space coord of the map
-	uniform mat4 unif_Scale;
+	uniform mat4 Translate;
+	uniform mat4 Scale;
 
 	layout(std140) uniform Renderer_UBO {
 		mat4 WorldProjection;
@@ -21,29 +21,19 @@ PG_SHADER(const char* Geometry_VertexShader = GLSL330(
 		vec4 CenterOfFog;
 	};
 
-
 	void main() {
-		gl_Position = WorldProjection  * WorldView * (unif_translate*unif_Scale)* vertex_position;
+		gl_Position = WorldProjection  * WorldView * (Translate* Scale) * vertex_position;
 	}
 ));
 #endif
 //Fragment shader
 #if 1 
 PG_SHADER(const char* Geometry_FragShader = GLSL330(
-
-	layout(std140) uniform Renderer_UBO {
-		mat4 WorldProjection;
-		mat4 WorldView;
-		mat4 GUIProjection;
-		vec4 CenterOfFog; // ->W = radius
-	};
-
-	uniform vec4 unif_color;
+	uniform vec4 FragColor;
 	out vec4 color;
 
 	void main() {
-		//Combine each	colors
-		color = unif_color;
+		color = FragColor;
 	}
 ));
 #endif
@@ -57,7 +47,7 @@ public:
 	GeometryShaderProgram();
 	virtual ~GeometryShaderProgram();
 	virtual void Init();
-	virtual void Render(BaseMesh * mesh, v3 * possition, v3 *scale, v4 *color);
+	virtual void Render(BaseMesh * mesh, v3 possition, v3 scale, v4 color);
 };
 #endif //GEOMETRY_SHADER_PROGRAM_H
 
