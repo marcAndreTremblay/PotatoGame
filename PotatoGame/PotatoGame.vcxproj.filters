@@ -67,6 +67,9 @@
     <Filter Include="Header Files\GameEditor\Entities">
       <UniqueIdentifier>{ee34aaf3-b34d-47a5-ab73-07269fea33d9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\GameEditor\FileData">
+      <UniqueIdentifier>{aefee0ac-8c3b-4a69-9a31-632ee2f229ed}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -225,14 +228,26 @@
     <ClInclude Include="HexaGridMapMesh.h">
       <Filter>Header Files\PG\Engine\Renderer\Mesh</Filter>
     </ClInclude>
-    <ClInclude Include="GeometryShaderProgram.h">
-      <Filter>Header Files\PG\Engine\Renderer\ShaderProgram</Filter>
-    </ClInclude>
     <ClInclude Include="TextMesh.h">
       <Filter>Header Files\PG\Engine\Renderer\Mesh</Filter>
     </ClInclude>
-    <ClInclude Include="BasicGeometryMesh.h">
-      <Filter>Header Files\PG\Engine\Renderer\Mesh</Filter>
+    <ClInclude Include="HexaGridMapMeshV2.h">
+      <Filter>Header Files\GameEditor\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="GridRawDataV2.h">
+      <Filter>Header Files\GameEditor\FileData</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelRawDataV1.h">
+      <Filter>Header Files\GameEditor\FileData</Filter>
+    </ClInclude>
+    <ClInclude Include="FileMtlRawDataV2.h">
+      <Filter>Header Files\GameEditor\FileData</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelMeshV1.h">
+      <Filter>Header Files\GameEditor\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelShaderProgram.h">
+      <Filter>Header Files\PG\Engine\Renderer\ShaderProgram</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -266,11 +281,23 @@
     <ClCompile Include="HexaGridMapMesh.cpp">
       <Filter>Header Files\PG\Engine\Renderer\Mesh</Filter>
     </ClCompile>
-    <ClCompile Include="GeometryShaderProgram.cpp">
-      <Filter>Header Files\PG\Engine\Renderer\ShaderProgram</Filter>
+    <ClCompile Include="HexaGridMapMeshV2.cpp">
+      <Filter>Header Files\GameEditor\Mesh</Filter>
     </ClCompile>
-    <ClCompile Include="BasicGeometryMesh.cpp">
-      <Filter>Header Files\PG\Engine\Renderer\Mesh</Filter>
+    <ClCompile Include="GridRawDataV2.cpp">
+      <Filter>Header Files\GameEditor\FileData</Filter>
+    </ClCompile>
+    <ClCompile Include="ModelRawDataV1.cpp">
+      <Filter>Header Files\GameEditor\FileData</Filter>
+    </ClCompile>
+    <ClCompile Include="FileMtlRawDataV2.cpp">
+      <Filter>Header Files\GameEditor\FileData</Filter>
+    </ClCompile>
+    <ClCompile Include="ModelMeshV1.cpp">
+      <Filter>Header Files\GameEditor\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="ModelShaderProgram.cpp">
+      <Filter>Header Files\PG\Engine\Renderer\ShaderProgram</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

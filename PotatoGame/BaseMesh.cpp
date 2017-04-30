@@ -4,8 +4,6 @@
 
 BaseMesh::BaseMesh() {
 	Vertices_Count = 0;
-	glGenVertexArrays(1, &this->VAO);
-	glGenBuffers(1, &this->VBO);
 }
 
 
@@ -15,7 +13,10 @@ BaseMesh::~BaseMesh() {
 }
 
 void BaseMesh::Build() {
-
+	BuildableObject::StartBuilding();
+	glGenVertexArrays(1, &this->VAO);
+	glGenBuffers(1, &this->VBO);
+	BuildableObject::EndBuilding();
 }
 
 void BaseMesh::BindVAO() {

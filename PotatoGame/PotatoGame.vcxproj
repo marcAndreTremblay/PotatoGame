@@ -84,16 +84,20 @@
   <ItemGroup>
     <ClInclude Include="AxisMesh.h" />
     <ClInclude Include="BaseMesh.h" />
-    <ClInclude Include="BasicGeometryMesh.h" />
     <ClInclude Include="Buffer.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="CombatScene.h" />
     <ClInclude Include="EditorInstance.h" />
-    <ClInclude Include="GeometryShaderProgram.h" />
+    <ClInclude Include="GridRawDataV2.h" />
     <ClInclude Include="HexaGridMapMesh.h" />
+    <ClInclude Include="HexaGridMapMeshV2.h" />
     <ClInclude Include="HexaGridMapShaderProgram.h" />
     <ClInclude Include="ImageBox.h" />
     <ClInclude Include="MapEditorScene.h" />
+    <ClInclude Include="FileMtlRawDataV2.h" />
+    <ClInclude Include="ModelMeshV1.h" />
+    <ClInclude Include="ModelRawDataV1.h" />
+    <ClInclude Include="ModelShaderProgram.h" />
     <ClInclude Include="MonkeyEngineInstance.h" />
     <ClInclude Include="Panel.h" />
     <ClInclude Include="Quaternion.h" />
@@ -138,14 +142,18 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BaseMesh.cpp" />
-    <ClCompile Include="BasicGeometryMesh.cpp" />
     <ClCompile Include="CombatScene.cpp" />
     <ClCompile Include="EditorInstance.cpp" />
-    <ClCompile Include="GeometryShaderProgram.cpp" />
+    <ClCompile Include="GridRawDataV2.cpp" />
     <ClCompile Include="HexaGridMapMesh.cpp" />
+    <ClCompile Include="HexaGridMapMeshV2.cpp" />
     <ClCompile Include="HexaGridMapShaderProgram.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MapEditorScene.cpp" />
+    <ClCompile Include="FileMtlRawDataV2.cpp" />
+    <ClCompile Include="ModelMeshV1.cpp" />
+    <ClCompile Include="ModelRawDataV1.cpp" />
+    <ClCompile Include="ModelShaderProgram.cpp" />
     <ClCompile Include="MonkeyEngineInstance.cpp" />
     <ClCompile Include="ShaderProgram.cpp" />
     <ClCompile Include="stdafx.cpp">

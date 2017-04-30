@@ -5,8 +5,6 @@
 HexaGridMapMesh::HexaGridMapMesh(PGGridRawData *_grid_data) : BaseMesh() {
 	grid_data = _grid_data;
 }
-
-
 HexaGridMapMesh::~HexaGridMapMesh() {
 
 }

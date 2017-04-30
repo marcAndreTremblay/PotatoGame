@@ -21,7 +21,6 @@ MapEditorScene::MapEditorScene() {
 
 MapEditorScene::~MapEditorScene() {
 	delete(test_atlas);
-	delete(square_mesh);
 	delete(region_mesh);
 }
 
@@ -38,8 +37,12 @@ void MapEditorScene::Render(BaseRenderer * renderer) {
 	renderer->axisMesh->Render(v3(0.f, 0.f, 0.f), v4(0.f, 0.f, 1.f, 1.f));
 	renderer->cubeMesh->Render(v3(scene_light.position.x, scene_light.position.y, scene_light.position.z), v3(0.1f, 0.1f, 0.1f), scene_light.diffuse);
 
-	//renderer->map_shader_program->Render(region_mesh, &v3(0.f, 0.f, 20.f));
-	renderer->geometry_shader_prog->Render(this->square_mesh, v3(0.f, 0.f, 10.f), v3(70.f, 70.f, 0.f), v4(1.f, 0.0f, 0.0f, 1.f));
+	renderer->map_shader_program->Render(region_mesh, &v3(0.f, 0.f, 20.f));
+	
+	//renderer->map_shader_program->Render(test_model_mesh, &v3(0.f, 0.f, 10.f));
+	
+	renderer->model_mtl_shader_program->Render(test1_model_mesh, &v3(0.f, 0.f, 10.f));
+	renderer->model_base_shader_program->Render(test2_model_mesh, &v3(2.f, 0.f, 10.f),&v4(1.f, 0.f, 1.f, 1.f));
 
 	v3 selected_item_marker_color = v3(1.f,0.f, 0.f);
 	v3 selected_item_marker_scale = v3(1.f, 1.f, 1.f);
@@ -113,9 +116,29 @@ void MapEditorScene::Build(MousePicker * mouse_picker) {
 
 
 	
+	grid_data_V2 = new GridRawDataV2(v2(10, 15), 1.f);
+	grid_data_V2->SaveToFile("Asset/TestMapV2.mmv2");
+	delete(grid_data_V2);
+	grid_data_V2 = new GridRawDataV2();
+	grid_data_V2->LoadFromFile("Asset/TestMapV2.mmv2");
+	delete(grid_data_V2);
+	material_Test = new FileMtlRawDataV2();
+	material_Test->LoadFromFile("Asset/map/Asset/base_material.mtl");
+	delete(material_Test);
 
-	square_mesh = new BasicGeometryMesh();
-	square_mesh->Build();
+	modele_test1 = new ModelRawDataV1();
+	modele_test1->LoadFromFile("Asset/map/Asset/forest.obj");
+	modele_test2 = new ModelRawDataV1();
+	modele_test2->LoadFromFile("Asset/map/Asset/tile_bottom.obj");
+
+	test1_model_mesh = new ModelMeshV1(modele_test1);
+	test1_model_mesh->Build();
+	
+	test2_model_mesh = new ModelMeshV1(modele_test2);
+	test2_model_mesh->Build();
+	delete(modele_test1);
+	delete(modele_test2);
+
 
 	int edit_target = 171;
 	//Load atlas

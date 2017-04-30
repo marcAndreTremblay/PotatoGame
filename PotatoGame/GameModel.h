@@ -133,14 +133,14 @@ namespace PG {
 
 			bool IsMaterialize;
 			RawMaterielData *material_data;
-
-			int v_count;
-			int vn_count;
-			int vt_count;
+	
 			int face_count;
 			//Data arrays
+			int v_count;
 			v3* vertices_array;
+			int vt_count;
 			v2* uvs_array;
+			int vn_count;
 			v3* normal_array;
 			unsigned int* faces_array;
 			~RawModelData() {
@@ -332,7 +332,6 @@ namespace PG {
 					per_vertex_data_lenght =
 						sizeof(v4)+ //LOC (0)
 						sizeof(v3); //LOC (0)
-
 				}
 				glBufferData(GL_ARRAY_BUFFER, per_vertex_data_lenght * face_count * 3, nullptr, GL_DYNAMIC_DRAW);
 
@@ -380,19 +379,19 @@ namespace PG {
 
 				}
 				if (this->IsMaterialize == true) {
-					glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, per_vertex_data_lenght, (GLvoid*)0);
-					glEnableVertexAttribArray(0);
-					glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, per_vertex_data_lenght, (GLvoid*)(sizeof(v4)));
-					glEnableVertexAttribArray(1);
-					glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, per_vertex_data_lenght, (GLvoid*)(sizeof(v4)+sizeof(v3)));
-					glEnableVertexAttribArray(2);
-					glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, per_vertex_data_lenght, (GLvoid*)(sizeof(v4)+2 * sizeof(v3)));
-					glEnableVertexAttribArray(3);
-					glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, per_vertex_data_lenght, (GLvoid*)(sizeof(v4)+3 * sizeof(v3)));
-					glEnableVertexAttribArray(4);
-					glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, per_vertex_data_lenght, (GLvoid*)(sizeof(v4)+4 * sizeof(v3)));
-					glEnableVertexAttribArray(5);
-					glBindVertexArray(0);
+								glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, per_vertex_data_lenght, (GLvoid*)0);
+			glEnableVertexAttribArray(0);
+			glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, per_vertex_data_lenght, (GLvoid*)(sizeof(v4)));
+			glEnableVertexAttribArray(1);
+			glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, per_vertex_data_lenght, (GLvoid*)(sizeof(v4) + sizeof(v3)));
+			glEnableVertexAttribArray(2);
+			glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, per_vertex_data_lenght, (GLvoid*)(sizeof(v4) + 2 * sizeof(v3)));
+			glEnableVertexAttribArray(3);
+			glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, per_vertex_data_lenght, (GLvoid*)(sizeof(v4) + 3 * sizeof(v3)));
+			glEnableVertexAttribArray(4);
+			glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, per_vertex_data_lenght, (GLvoid*)(sizeof(v4) + 4 * sizeof(v3)));
+			glEnableVertexAttribArray(5);
+			glBindVertexArray(0);
 				}
 				if (this->IsMaterialize == false) {
 					glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, per_vertex_data_lenght, (GLvoid*)0);

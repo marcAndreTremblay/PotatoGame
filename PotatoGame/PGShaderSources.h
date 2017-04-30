@@ -2,6 +2,8 @@
 #define PG_SHADER_SOURCE_H
 //Note(Marc): This file is onyl there for quick editing and make it easy to test shader, you dont have to load the from elsewhere
 
+#include "Core.h"
+using namespace PG::Core;
 
 struct PGMaterial {
 	v3 ambient;

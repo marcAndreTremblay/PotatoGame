@@ -13,7 +13,7 @@
 #include "ShaderProgram.h"
 #include "AxisMesh.h"
 #include "HexaGridMapShaderProgram.h"
-#include "GeometryShaderProgram.h"
+#include "ModelShaderProgram.h"
 
 namespace PG {
 	namespace Engine {
@@ -37,8 +37,10 @@ namespace PG {
 			PGUIPanelMesh* ui_panel_Mesh;
 			PGUIImageMesh* ui_image_mesh;
 			PGMModelMesh* model_renderer;
+			
 			HexaGridMapShaderProgram* map_shader_program;
-			GeometryShaderProgram* geometry_shader_prog;
+			ModelMtlShaderProgram* model_mtl_shader_program;
+			ModelShaderProgram* model_base_shader_program;
 
 			BaseRenderer() {
 				glewExperimental = true; // Needed for core profile
@@ -143,8 +145,11 @@ namespace PG {
 				map_shader_program = new HexaGridMapShaderProgram();
 				map_shader_program->Init();
 
-				geometry_shader_prog = new GeometryShaderProgram();
-				geometry_shader_prog->Init();
+				model_mtl_shader_program = new ModelMtlShaderProgram();
+				model_mtl_shader_program->Init();
+
+				model_base_shader_program = new ModelShaderProgram();
+				model_base_shader_program->Init();
 
 				model_renderer = new PGMModelMesh();
 				model_renderer->Build();

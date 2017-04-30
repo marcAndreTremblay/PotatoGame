@@ -12,7 +12,7 @@ namespace PG {
 		protected:
 		private:
 		public:
-			char *data_ptr;
+			char *data_ptr = nullptr;
 			int char_count;
 			Str(int s_char) {
 				char_count = s_char + 1;
@@ -109,6 +109,8 @@ namespace PG {
 			char* Str::CharAt(int i = 0) {
 				return &data_ptr[i];
 			}
+
+			//Note(Marc): We have a issue when when destroy the string created by this fct
 			static Str* Str::ExtractFolderPath(Str *atlas_path) {
 				//Count where the last '/' is.		
 				char* cursor = atlas_path->CharAt();
@@ -142,6 +144,7 @@ namespace PG {
 				Str * new_String = new Str(char_count);
 				char* dst_buffer = new_String->CharAt();
 				strncpy(dst_buffer, atlas_path->CharAt(), char_count);
+
 				dst_buffer[char_count] = ENDSTR;
 				return new_String;
 			}

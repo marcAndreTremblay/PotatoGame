@@ -12,10 +12,13 @@
 #include "PGMapGrid.h"
 #include "MousePicker.h"
 
-
+#include "GridRawDataV2.h"
 #include "PGMapAtlas.h"
 #include "HexaGridMapMesh.h"
-#include "BasicGeometryMesh.h"
+#include "ModelRawDataV1.h"
+#include "FileMtlRawDataV2.h"
+#include "ModelMeshV1.h"
+
 
 enum MapEditorMode {
 	Mode_Camera_Move = 0,
@@ -28,17 +31,25 @@ enum MapEditorMode {
 class MapEditorScene :
 	public Scene {
 private:
+	GridRawDataV2* grid_data_V2;
 	PGMapAtlas * test_atlas;
 	PGAtlasRegion* region_display[9];
 	bool region_edited[9];
 	HexaGridMapMesh* region_mesh;
-	PGLight scene_light;
+
+	FileMtlRawDataV2* material_Test;
+	ModelRawDataV1* modele_test1;
+	ModelRawDataV1* modele_test2;
+	ModelMeshV1* test1_model_mesh;	
+	ModelMeshV1* test2_model_mesh;
+	
 	RawModelData *test_model;
 	RawModelData *test_model2;
 	RawModelData *test_model3;
+	
+	PGLight scene_light;
 	double time;
 	double tempo_var;
-	BasicGeometryMesh* square_mesh;
 	MapEditorMode current_mode;
 public:
 	MapEditorScene();

@@ -121,9 +121,14 @@ class PGGridRawData {
 public:
 	v4* grid_pos_data = nullptr;
 	r32* grid_height_data = nullptr;
-	PGMaterial* grid_material_data = nullptr;
+	PGMaterial* grid_material_data = nullptr; // <- remove , will be replace by new variable down there
 	bool* selected_indexes = nullptr;
 	int* tile_type = nullptr;
+	//todo(marc): Add a offset for top model in case of up_tile part is higher that 0
+	//todo(marc): Add a tile_bottom_material
+	//todo(marc): Add a tile_bottom_type
+	//todo(marc): Add a tile_up_material //0= use model material 
+	//todo(marc): Add a tile_up_type 
 	v2 Grid_size;
 	r32 Tile_size;
 	PGGridRawData() {
@@ -332,8 +337,6 @@ public:
 
 	}
 };
-
-
 
 
 #endif

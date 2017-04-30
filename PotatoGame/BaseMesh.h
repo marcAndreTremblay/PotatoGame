@@ -14,7 +14,8 @@ class BaseMesh : public BuildableObject {
 protected:
 	GLuint VAO;
 	GLuint VBO;
-	int Vertices_Count; 
+	int Vertices_Count;
+	int Data_Size_Per_vertex;
 public:
 	BaseMesh();
 	virtual ~BaseMesh();
