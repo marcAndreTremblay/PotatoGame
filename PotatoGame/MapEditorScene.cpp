@@ -16,12 +16,16 @@ MapEditorScene::MapEditorScene() {
 		region_display[i] = nullptr;
 		region_edited[i] = false;
 	}
+
+	mesh_map_test = nullptr;
 }
 
 
 MapEditorScene::~MapEditorScene() {
+	delete(mesh_map_test);
 	delete(test_atlas);
 	delete(region_mesh);
+	delete(grid_data_V2);
 }
 
 void MapEditorScene::Update(Controler * controler, double timeElapse) {
@@ -37,12 +41,13 @@ void MapEditorScene::Render(BaseRenderer * renderer) {
 	renderer->axisMesh->Render(v3(0.f, 0.f, 0.f), v4(0.f, 0.f, 1.f, 1.f));
 	renderer->cubeMesh->Render(v3(scene_light.position.x, scene_light.position.y, scene_light.position.z), v3(0.1f, 0.1f, 0.1f), scene_light.diffuse);
 
-	renderer->map_shader_program->Render(region_mesh, &v3(0.f, 0.f, 20.f));
+//	renderer->map_shader_program->Render(region_mesh, &v3(0.f, 0.f, 13.f));
 	
-	//renderer->map_shader_program->Render(test_model_mesh, &v3(0.f, 0.f, 10.f));
+	renderer->map_shader_program->Render(mesh_map_test, &v3(0.f, 0.f, 10.f));
 	
-	renderer->model_mtl_shader_program->Render(test1_model_mesh, &v3(0.f, 0.f, 10.f));
-	renderer->model_base_shader_program->Render(test2_model_mesh, &v3(2.f, 0.f, 10.f),&v4(1.f, 0.f, 1.f, 1.f));
+	
+	
+	renderer->model_base_shader_program->Render(test2_model_mesh, &v3(0.f, 0.f, 5.f),&v4(1.f, 0.f, 1.f, 1.f));
 
 	v3 selected_item_marker_color = v3(1.f,0.f, 0.f);
 	v3 selected_item_marker_scale = v3(1.f, 1.f, 1.f);
@@ -79,7 +84,6 @@ void MapEditorScene::Render(BaseRenderer * renderer) {
 				}
 			}
 		}
-
 		else {
 			if (region_display[grid_index] != nullptr) {
 				renderer->map_shader_program->Render(region_display[grid_index]->mesh, &possition_cursor);
@@ -99,7 +103,7 @@ void MapEditorScene::Build(MousePicker * mouse_picker) {
 	this->Set_Name("GridEditorScene");
 
 	this->scene_camera = new Camera(
-		v3(-15, -15, 15), //Possition
+		v3(-15, -15, 10), //Possition
 		v3(0, 0, 0), //look at
 		v3(0, 0, 1)	 //up
 	);
@@ -116,27 +120,26 @@ void MapEditorScene::Build(MousePicker * mouse_picker) {
 
 
 	
-	grid_data_V2 = new GridRawDataV2(v2(10, 15), 1.f);
-	grid_data_V2->SaveToFile("Asset/TestMapV2.mmv2");
-	delete(grid_data_V2);
+	/*grid_data_V2 = new GridRawDataV2(v2(10, 10), 1.f);
+	grid_data_V2->SaveToFile("Asset/map/TestMapV2.mmap");*/
+	//delete(grid_data_V2);
 	grid_data_V2 = new GridRawDataV2();
-	grid_data_V2->LoadFromFile("Asset/TestMapV2.mmv2");
-	delete(grid_data_V2);
-	material_Test = new FileMtlRawDataV2();
-	material_Test->LoadFromFile("Asset/map/Asset/base_material.mtl");
-	delete(material_Test);
-
-	modele_test1 = new ModelRawDataV1();
-	modele_test1->LoadFromFile("Asset/map/Asset/forest.obj");
-	modele_test2 = new ModelRawDataV1();
-	modele_test2->LoadFromFile("Asset/map/Asset/tile_bottom.obj");
-
-	test1_model_mesh = new ModelMeshV1(modele_test1);
-	test1_model_mesh->Build();
+	grid_data_V2->LoadFromFile("Asset/map/layout_1.mmap");
 	
+	mesh_map_test = new HexaGridMapMeshV2(grid_data_V2);
+	mesh_map_test->Build();
+	//material_Test = new FileMtlRawDataV2();
+	//material_Test->LoadFromFile("Asset/map/Asset/base_material.mtl");
+	//delete(material_Test);
+
+
+	modele_test2 = new ModelRawDataV1();
+	modele_test2->LoadFromFile("Asset/map/Asset/tile_top_type_2.obj");
+
+
 	test2_model_mesh = new ModelMeshV1(modele_test2);
 	test2_model_mesh->Build();
-	delete(modele_test1);
+
 	delete(modele_test2);
 
 

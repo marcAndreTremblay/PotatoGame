@@ -21,8 +21,8 @@ void GridRawDataV2::SaveToFile(char * file_path) {
 			r32 * tempo_tile_top_model_rotation_ptr = grid_tile_top_model_rotation_data;
 			r32* tempo_tile_top_model_offset_ptr = grid_tile_top_model_offset_data;
 		int* tempo_tile_top_style_ptr = grid_tile_top_style_data;
-		PGMaterial* tempo_top_material_ptr = grid_top_material_data;
-		PGMaterial* tempo_bottom_material_ptr = grid_bottom_material_data;
+		int* tempo_top_material_ptr = grid_top_material_data;
+		int* tempo_bottom_material_ptr = grid_bottom_material_data;
 		
 
 		for (int i = 0; i < Grid_size.x*Grid_size.y; i++) {
@@ -58,11 +58,11 @@ void GridRawDataV2::SaveToFile(char * file_path) {
 			if (ferror(file_2) != 0 || result != 1) { printf(" %i -- Tile top style saving\n", i); }
 			tempo_tile_top_style_ptr++;
 
-			result = fwrite((void*)tempo_top_material_ptr, sizeof(PGMaterial), 1, file_2);
+			result = fwrite((void*)tempo_top_material_ptr, sizeof(int), 1, file_2);
 			if (ferror(file_2) != 0 || result != 1) { printf(" %i -- Tile top style saving\n", i); }
 			tempo_top_material_ptr++;
 
-			result = fwrite((void*)tempo_bottom_material_ptr, sizeof(PGMaterial), 1, file_2);
+			result = fwrite((void*)tempo_bottom_material_ptr, sizeof(int), 1, file_2);
 			if (ferror(file_2) != 0 || result != 1) { printf(" %i -- Tile top style saving\n", i); }
 			tempo_bottom_material_ptr++;
 
@@ -79,6 +79,33 @@ void GridRawDataV2::SaveToFile(char * file_path) {
 	}
 }
 
+v3 GridRawDataV2::CalculateGridOffset() 
+{
+	r32 x_offset = glm::cos(glm::radians(30.f));
+	r32 y_offset = 1 + glm::sin(glm::radians(30.f));
+	return v3(Grid_size.x*x_offset, Grid_size.y*y_offset,0.f);
+}
+
+int * GridRawDataV2::GetTopStyleArrayPtr() {
+	return &grid_tile_top_style_data[0];
+}
+
+v4 * GridRawDataV2::GetPossitionArrayPtr() {
+	return &grid_pos_data[0];
+}
+
+r32 * GridRawDataV2::GetHeightArrayPtr() {
+	return &grid_height_data[0];
+}
+
+int * GridRawDataV2::GetTopMaterialPtr() {
+	return &grid_top_material_data[0];
+}
+
+int * GridRawDataV2::GetBottomMaterialPtr() {
+	return &grid_bottom_material_data[0];
+}
+
 void GridRawDataV2::LoadFromFile(char * file_path) {
 	if (grid_pos_data != nullptr) delete(grid_pos_data);
 	if (grid_height_data != nullptr) delete(grid_height_data);
@@ -92,6 +119,15 @@ void GridRawDataV2::LoadFromFile(char * file_path) {
 	if (grid_top_material_data != nullptr) delete(grid_top_material_data);
 	if (grid_bottom_material_data != nullptr) delete(grid_bottom_material_data);
 	if (selected_indexes != nullptr) delete(selected_indexes);
+	
+
+	mtl_file = new  FileMtlRawDataV2();
+	mtl_file->LoadFromFile("Asset/map/asset/base_material.mtl");
+	bottom = new ModelRawDataV1();
+	bottom->LoadFromFile("Asset/map/asset/tile_bottom2.obj");
+	top = new ModelRawDataV1();
+	top->LoadFromFile("Asset/map/asset/tile_top_type_1.obj");
+
 	printf("Loading | Region |\n");
 	printf("\tFile path : %s\n", file_path);
 	FILE * file_2 = fopen(file_path, "rb");
@@ -117,8 +153,8 @@ void GridRawDataV2::LoadFromFile(char * file_path) {
 		this->grid_tile_top_model_offset_data = (r32*)malloc(sizeof(r32)*Grid_size.x*Grid_size.y);
 
 		this->grid_tile_top_style_data = (int*)malloc(sizeof(int)*Grid_size.x*Grid_size.y);
-		this->grid_top_material_data = (PGMaterial*)malloc(sizeof(PGMaterial)*Grid_size.x*Grid_size.y);
-		this->grid_bottom_material_data = (PGMaterial*)malloc(sizeof(PGMaterial)*Grid_size.x*Grid_size.y);
+		this->grid_top_material_data = (int*)malloc(sizeof(int)*Grid_size.x*Grid_size.y);
+		this->grid_bottom_material_data = (int*)malloc(sizeof(int)*Grid_size.x*Grid_size.y);
 
 		this->selected_indexes = (bool*)malloc(sizeof(bool)*Grid_size.x*Grid_size.y);
 
@@ -132,8 +168,8 @@ void GridRawDataV2::LoadFromFile(char * file_path) {
 		r32 * tempo_tile_top_model_rotation_ptr = grid_tile_top_model_rotation_data;
 		r32* tempo_tile_top_model_offset_ptr = grid_tile_top_model_offset_data;
 		int* tempo_tile_top_style_ptr = grid_tile_top_style_data;
-		PGMaterial* tempo_top_material_ptr = grid_top_material_data;
-		PGMaterial* tempo_bottom_material_ptr = grid_bottom_material_data;
+		int* tempo_top_material_ptr = grid_top_material_data;
+		int* tempo_bottom_material_ptr = grid_bottom_material_data;
 		
 		for (int i = 0; i < Grid_size.x*Grid_size.y; i++) {
 			result = fread((void*)tempo_p_ptr, sizeof(v4), 1, file_2);
@@ -168,11 +204,11 @@ void GridRawDataV2::LoadFromFile(char * file_path) {
 			if (ferror(file_2) != 0 || result != 1) { printf(" %i -- Tile top style Reading\n", i); }
 			tempo_tile_top_style_ptr++;
 
-			result = fread((void*)tempo_top_material_ptr, sizeof(PGMaterial), 1, file_2);
+			result = fread((void*)tempo_top_material_ptr, sizeof(int), 1, file_2);
 			if (ferror(file_2) != 0 || result != 1) { printf(" %i -- Tile top style Reading\n", i); }
 			tempo_top_material_ptr++;
 
-			result = fread((void*)tempo_bottom_material_ptr, sizeof(PGMaterial), 1, file_2);
+			result = fread((void*)tempo_bottom_material_ptr, sizeof(int), 1, file_2);
 			if (ferror(file_2) != 0 || result != 1) { printf(" %i -- Tile top style Reading\n", i); }
 			tempo_bottom_material_ptr++;
 
@@ -194,6 +230,13 @@ GridRawDataV2::GridRawDataV2(v2 grid_size, r32 grid_tile_size) {
 	Grid_size = grid_size;
 	Tile_size = grid_tile_size;
 
+
+	mtl_file = new  FileMtlRawDataV2();
+	mtl_file->LoadFromFile("Asset/map/asset/base_material.mtl");
+	bottom = new ModelRawDataV1();
+	bottom->LoadFromFile("Asset/map/asset/tile_bottom2.obj");
+	top = new ModelRawDataV1();
+	top->LoadFromFile("Asset/map/asset/tile_top_type_1.obj");
 	//			o
 	//		o		o
 	//	o				o
@@ -206,8 +249,10 @@ GridRawDataV2::GridRawDataV2(v2 grid_size, r32 grid_tile_size) {
 	//			|		|  
 	//Note(Marc): We use the bottom left as the starting point 
 	//Note(Marc): We go left to right and bottom to top in the world space starting from 0,0,0
-	v4 major_row_offset = v4(grid_tile_size, (2 * grid_tile_size) - (grid_tile_size / glm::tan(glm::radians(60.f))), 0.f, 0.f);
-	v4 minor_row_offset = v4(-grid_tile_size, (2 * grid_tile_size) - (grid_tile_size / glm::tan(glm::radians(60.f))), 0.f, 0.f);
+
+	r32 x_offset = glm::cos(glm::radians(30.f));
+	v4 major_row_offset = v4(x_offset , 1 + glm::sin(glm::radians(30.f)), 0.f, 0.f);
+	v4 minor_row_offset = v4( -x_offset, 1 + glm::sin(glm::radians(30.f)), 0.f, 0.f);
 
 	v4 starting_offset = v4(0.f, 0, 0.f, 0.f); //Note(Marc): Offset for the starting possition
 
@@ -222,8 +267,8 @@ GridRawDataV2::GridRawDataV2(v2 grid_size, r32 grid_tile_size) {
 		this->grid_tile_top_model_offset_data = (r32*)malloc(sizeof(r32)*grid_size.x*grid_size.y);
 
 		this->grid_tile_top_style_data = (int*)malloc(sizeof(int)*grid_size.x*grid_size.y);
-	this->grid_top_material_data = (PGMaterial*)malloc(sizeof(PGMaterial)*grid_size.x*grid_size.y);
-	this->grid_bottom_material_data = (PGMaterial*)malloc(sizeof(PGMaterial)*grid_size.x*grid_size.y);
+	this->grid_top_material_data = (int*)malloc(sizeof(int)*grid_size.x*grid_size.y);
+	this->grid_bottom_material_data = (int*)malloc(sizeof(int)*grid_size.x*grid_size.y);
 
 	this->selected_indexes = (bool*)malloc(sizeof(bool)*grid_size.x*grid_size.y);
 
@@ -244,11 +289,11 @@ GridRawDataV2::GridRawDataV2(v2 grid_size, r32 grid_tile_size) {
 				grid_tile_top_model_offset_data[index_cpt] = 0.f;
 
 				grid_tile_top_style_data[index_cpt] = 1.f;
-				grid_top_material_data[index_cpt] = Material_Green;
-				grid_bottom_material_data[index_cpt] = Material_Brown_1;
+				grid_top_material_data[index_cpt] = 1;
+				grid_bottom_material_data[index_cpt] = 2;
 				selected_indexes[index_cpt] = false;
 				
-			starting_offset.x += grid_tile_size*2.f;
+				starting_offset.x += x_offset*2.f;
 			index_cpt++;
 		}
 		starting_offset = row_start_tempo;
@@ -267,6 +312,9 @@ GridRawDataV2::GridRawDataV2() {
 
 
 GridRawDataV2::~GridRawDataV2() {
+	delete(bottom);
+	delete(top);
+	
 	delete(this->grid_pos_data);
 	delete(this->grid_height_data);
 

@@ -14,7 +14,10 @@
 
 #include "GridRawDataV2.h"
 #include "PGMapAtlas.h"
+#include "MapAtlasRawDataV1.h"
 #include "HexaGridMapMesh.h"
+#include "HexaGridMapMeshV2.h"
+
 #include "ModelRawDataV1.h"
 #include "FileMtlRawDataV2.h"
 #include "ModelMeshV1.h"
@@ -35,12 +38,17 @@ private:
 	PGMapAtlas * test_atlas;
 	PGAtlasRegion* region_display[9];
 	bool region_edited[9];
-	HexaGridMapMesh* region_mesh;
 
+	MapAtlasRawDataV1* map_atlas;
+	PGAtlasRegion* map_atlas_region_display[9];
+	bool map_atlas_region_edited[9];
+
+	HexaGridMapMesh* region_mesh;
+	HexaGridMapMeshV2 * mesh_map_test;
 	FileMtlRawDataV2* material_Test;
-	ModelRawDataV1* modele_test1;
+
 	ModelRawDataV1* modele_test2;
-	ModelMeshV1* test1_model_mesh;	
+
 	ModelMeshV1* test2_model_mesh;
 	
 	RawModelData *test_model;

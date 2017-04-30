@@ -93,6 +93,7 @@
     <ClInclude Include="HexaGridMapMeshV2.h" />
     <ClInclude Include="HexaGridMapShaderProgram.h" />
     <ClInclude Include="ImageBox.h" />
+    <ClInclude Include="MapAtlasRawDataV1.h" />
     <ClInclude Include="MapEditorScene.h" />
     <ClInclude Include="FileMtlRawDataV2.h" />
     <ClInclude Include="ModelMeshV1.h" />
@@ -149,6 +150,7 @@
     <ClCompile Include="HexaGridMapMeshV2.cpp" />
     <ClCompile Include="HexaGridMapShaderProgram.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MapAtlasRawDataV1.cpp" />
     <ClCompile Include="MapEditorScene.cpp" />
     <ClCompile Include="FileMtlRawDataV2.cpp" />
     <ClCompile Include="ModelMeshV1.cpp" />

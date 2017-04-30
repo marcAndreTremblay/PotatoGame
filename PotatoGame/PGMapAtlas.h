@@ -8,6 +8,10 @@
 #include "List.h"
 #include "HexaGridMapMesh.h"
 
+#include "GridRawDataV2.h"
+#include "HexaGridMapMeshV2.h"
+using namespace PG::Core;
+
 class PGAtlasRegion {
 
 	bool IsLoaded;
@@ -122,24 +126,24 @@ public:
 		}
 		return nullptr;
 	}
-	void PGMapAtlas::LoadRegionsAndFillDisplayTemplate(int world_index, PGAtlasRegion** out_regions_array) {
-		int index[9];
-		index[0] = { world_index - size_X - 1 }; //Bottom left
-		index[1] = { world_index - size_X };
-		index[2] = { world_index - size_X + 1 };
-		index[3] = { world_index - 1 };
-		index[4] = { world_index };
-		index[5] = { world_index + 1 };
-		index[6] = { world_index + size_X - 1 };
-		index[7] = { world_index + size_X };
-		index[8] = { world_index + size_X + 1 };
-		for (int i = 0; i < 9; i++) {
-			out_regions_array[i] = GetRegionByRefIndex(index[i]);
-			if (out_regions_array[i] != nullptr) {
-				out_regions_array[i]->LoadData();
+		void PGMapAtlas::LoadRegionsAndFillDisplayTemplate(int world_index, PGAtlasRegion** out_regions_array) {
+			int index[9];
+			index[0] = { world_index - size_X - 1 }; //Bottom left
+			index[1] = { world_index - size_X };
+			index[2] = { world_index - size_X + 1 };
+			index[3] = { world_index - 1 };
+			index[4] = { world_index };
+			index[5] = { world_index + 1 };
+			index[6] = { world_index + size_X - 1 };
+			index[7] = { world_index + size_X };
+			index[8] = { world_index + size_X + 1 };
+			for (int i = 0; i < 9; i++) {
+				out_regions_array[i] = GetRegionByRefIndex(index[i]);
+				if (out_regions_array[i] != nullptr) {
+					out_regions_array[i]->LoadData();
+				}
 			}
 		}
-	}
 };
 
 #endif

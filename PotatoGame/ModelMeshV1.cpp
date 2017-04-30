@@ -34,9 +34,7 @@ void ModelMeshV1::Build() {
 	this->Data_Size_Per_vertex = 0;
 	this->Vertices_Count = Model_Data->GetFaceCount() * 3;
 
-	unsigned int *faces_array_ptr = Model_Data->GetFacesArrayPtr();
-	v3* vertices_array_ptr = Model_Data->GetVertivesArrayPtr();
-	v3* normals_array_ptr = Model_Data->GetNormalsArrayPtr();
+	
 	
 	switch (Mode) {
 		case Vertices_Normal: { 
@@ -83,6 +81,10 @@ void ModelMeshV1::Build() {
 		this->Data_Size_Per_vertex * this->Vertices_Count, 
 		nullptr, GL_DYNAMIC_DRAW);
 	//*********************************************************************
+
+	unsigned int *faces_array_ptr = Model_Data->GetFacesArrayPtr();
+	v3* vertices_array_ptr = Model_Data->GetVertivesArrayPtr();
+	v3* normals_array_ptr = Model_Data->GetNormalsArrayPtr();
 
 	int buffer_offet = 0;
 	for (int i = 0; i < Model_Data->GetFaceCount() * 3; i++) {

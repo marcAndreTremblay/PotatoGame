@@ -249,6 +249,9 @@
     <ClInclude Include="ModelShaderProgram.h">
       <Filter>Header Files\PG\Engine\Renderer\ShaderProgram</Filter>
     </ClInclude>
+    <ClInclude Include="MapAtlasRawDataV1.h">
+      <Filter>Header Files\GameEditor\FileData</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -298,6 +301,9 @@
     </ClCompile>
     <ClCompile Include="ModelShaderProgram.cpp">
       <Filter>Header Files\PG\Engine\Renderer\ShaderProgram</Filter>
+    </ClCompile>
+    <ClCompile Include="MapAtlasRawDataV1.cpp">
+      <Filter>Header Files\GameEditor\FileData</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
