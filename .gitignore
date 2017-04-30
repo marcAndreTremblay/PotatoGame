@@ -50,7 +50,7 @@ artifacts/
 *_i.h
 *.ilk
 *.meta
-*.obj
+#*.obj
 *.pch
 *.pdb
 *.sdf
@@ -83,7 +83,7 @@ ipch/
 *.ncb
 *.opendb
 *.opensdf
-*sdf
+*.sdf
 *.cachefile
 *.VC.db
 *.VC.VC.opendb
