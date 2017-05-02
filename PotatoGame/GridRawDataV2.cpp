@@ -81,7 +81,7 @@ void GridRawDataV2::SaveToFile(char * file_path) {
 
 v3 GridRawDataV2::CalculateGridOffset() 
 {
-	r32 x_offset = glm::cos(glm::radians(30.f));
+	r32 x_offset = 2.f*glm::cos(glm::radians(30.f));
 	r32 y_offset = 1 + glm::sin(glm::radians(30.f));
 	return v3(Grid_size.x*x_offset, Grid_size.y*y_offset,0.f);
 }
@@ -122,11 +122,11 @@ void GridRawDataV2::LoadFromFile(char * file_path) {
 	
 
 	mtl_file = new  FileMtlRawDataV2();
-	mtl_file->LoadFromFile("Asset/map/asset/base_material.mtl");
+	mtl_file->LoadFromFile("Asset/Map_Data/Asset/atlas_material_map.mtl");
 	bottom = new ModelRawDataV1();
-	bottom->LoadFromFile("Asset/map/asset/tile_bottom2.obj");
+	bottom->LoadFromFile("Asset/Map_Data/Asset/tile_bottom2.obj");
 	top = new ModelRawDataV1();
-	top->LoadFromFile("Asset/map/asset/tile_top_type_1.obj");
+	top->LoadFromFile("Asset/Map_Data/Asset/tile_top_type_1.obj");
 
 	printf("Loading | Region |\n");
 	printf("\tFile path : %s\n", file_path);

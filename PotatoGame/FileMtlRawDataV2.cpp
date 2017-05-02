@@ -61,7 +61,7 @@ void FileMtlRawDataV2::LoadFromFile(char * _file_path) {
 					printf("Error reading alpha |\n");
 				}
 				else {
-					printf("\t\tMaterial Shininess : %f\n", last_new_mat->Shininess);
+				//	printf("\t\tMaterial Shininess : %f\n", last_new_mat->Shininess);
 				}
 			}
 			else if (strcmp(lineHeader, "Ke") == 0) {
@@ -71,7 +71,7 @@ void FileMtlRawDataV2::LoadFromFile(char * _file_path) {
 					printf("Error reading ka |\n");
 				}
 				else {
-					printf("\t\tMaterial Ambiant : %f,%f,%f \n", last_new_mat->Ambient.x, last_new_mat->Ambient.y, last_new_mat->Ambient.z);
+					//printf("\t\tMaterial Ambiant : %f,%f,%f \n", last_new_mat->Ambient.x, last_new_mat->Ambient.y, last_new_mat->Ambient.z);
 				}
 			}
 			else if (strcmp(lineHeader, "Kd") == 0) {
@@ -81,7 +81,7 @@ void FileMtlRawDataV2::LoadFromFile(char * _file_path) {
 					printf("Error reading kd |\n");
 				}
 				else {
-					printf("\t\tMaterial Diffuse : %f,%f,%f \n", last_new_mat->Diffuse.x, last_new_mat->Diffuse.y, last_new_mat->Diffuse.z);
+					//printf("\t\tMaterial Diffuse : %f,%f,%f \n", last_new_mat->Diffuse.x, last_new_mat->Diffuse.y, last_new_mat->Diffuse.z);
 				}
 			}
 			else if (strcmp(lineHeader, "Ks") == 0) {
@@ -91,7 +91,7 @@ void FileMtlRawDataV2::LoadFromFile(char * _file_path) {
 					printf("Error reading k |\n");
 				}
 				else {
-					printf("\t\tMaterial Specular : %f,%f,%f \n", last_new_mat->Specular.x, last_new_mat->Specular.y, last_new_mat->Specular.z);
+					//printf("\t\tMaterial Specular : %f,%f,%f \n", last_new_mat->Specular.x, last_new_mat->Specular.y, last_new_mat->Specular.z);
 				}
 			}
 

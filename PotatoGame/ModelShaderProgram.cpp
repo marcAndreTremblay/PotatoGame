@@ -11,15 +11,34 @@ void ModelMtlShaderProgram::Init() {
 	glUniformBlockBinding(this->ShaderID, glGetUniformBlockIndex(this->ShaderID, "Renderer_UBO"), 1);
 	glUniformBlockBinding(this->ShaderID, glGetUniformBlockIndex(this->ShaderID, "SceneAdvanceLightData_UBO"), 3);
 	this->Unif_Translate = glGetUniformLocation(this->ShaderID, "Translate");
+	this->Unif_IsOverringMtl = glGetUniformLocation(this->ShaderID, "IsOverringMtl");
+	this->Unif_Mat_Ambient = glGetUniformLocation(this->ShaderID, "OverridingMtl.ambient");
+	this->Unif_Mat_Diffuse = glGetUniformLocation(this->ShaderID, "OverridingMtl.diffuse");
+	this->Unif_Mat_Specular = glGetUniformLocation(this->ShaderID, "OverridingMtl.specular");
+	this->Unif_Mat_Shinniness = glGetUniformLocation(this->ShaderID, "OverridingMtl.shininess");
 	ShaderProgram::Init();
 }
-void ModelMtlShaderProgram::Render(ModelMeshV1 * mesh, v3 * possition) {
-	if (this->IsInitialize == true && mesh->Mode == Vertices_Normal_Material) {
-		this->Use();
-		//Vertex shader uniform variable
-		glUniformMatrix4fv(this->Unif_Translate, 1, GL_FALSE, &glm::translate(m4(1.f), *possition)[0][0]);
-		mesh->BindVAO();
-		glDrawArrays(GL_TRIANGLES, 0, mesh->GetVeticesCount());
+void ModelMtlShaderProgram::Render(ModelMeshV1 * mesh, v3 * possition, MaterielRawData* mtl = nullptr) {
+	if (this->IsInitialize == true) {
+		if (mesh->Mode == Vertices_Normal_Material) {
+			this->Use();
+			//Vertex shader uniform variable
+			glUniformMatrix4fv(this->Unif_Translate, 1, GL_FALSE, &glm::translate(m4(1.f), *possition)[0][0]);
+			if (mtl != nullptr) {
+				glUniform1i(this->Unif_IsOverringMtl, 1);
+				//// Set material properties
+				glUniform3fv(Unif_Mat_Ambient, 1, &mtl->Ambient[0]);
+				glUniform3fv(Unif_Mat_Diffuse, 1, &mtl->Diffuse[0]);
+				glUniform3fv(Unif_Mat_Specular, 1, &mtl->Specular[0]);
+				glUniform1f(Unif_Mat_Shinniness, mtl->Shininess);
+			}
+			else {
+				glUniform1i(this->Unif_IsOverringMtl, 0);
+			}
+
+			mesh->BindVAO();
+			glDrawArrays(GL_TRIANGLES, 0, mesh->GetVeticesCount());
+		}
 	}
 	else {	
 	}
@@ -27,22 +46,30 @@ void ModelMtlShaderProgram::Render(ModelMeshV1 * mesh, v3 * possition) {
 //********************************************************************************************
 //********************************************************************************************
 ModelShaderProgram::ModelShaderProgram() :
-	ShaderProgram(base_model_vertex_shader, base_model_FragShader) {
+	ShaderProgram(base_model_vertex_shader, model_mtl_FragShader) {
 }
 ModelShaderProgram::~ModelShaderProgram() {
 }
 void ModelShaderProgram::Init() {
 	glUniformBlockBinding(this->ShaderID, glGetUniformBlockIndex(this->ShaderID, "Renderer_UBO"), 1);
+	glUniformBlockBinding(this->ShaderID, glGetUniformBlockIndex(this->ShaderID, "SceneAdvanceLightData_UBO"), 3);
+
 	this->Unif_Translate = glGetUniformLocation(this->ShaderID, "Translate");
-	this->Unif_Color = glGetUniformLocation(this->ShaderID, "Model_Color");
+	this->Unif_Mat_Ambient = glGetUniformLocation(this->ShaderID, "OverridingMtl.ambient");
+	this->Unif_Mat_Diffuse = glGetUniformLocation(this->ShaderID, "OverridingMtl.diffuse");
+	this->Unif_Mat_Specular = glGetUniformLocation(this->ShaderID, "OverridingMtl.specular");
+	this->Unif_Mat_Shinniness = glGetUniformLocation(this->ShaderID, "OverridingMtl.shininess");
 	ShaderProgram::Init();
 }
-void ModelShaderProgram::Render(ModelMeshV1 * mesh, v3 * possition, v4 * color) {
+void ModelShaderProgram::Render(ModelMeshV1 * mesh, v3 * possition, MaterielRawData * mtl) {
 	if (this->IsInitialize == true && mesh->Mode == Vertices_Normal) {
 		this->Use();
 		//Vertex shader uniform variable
 		glUniformMatrix4fv(this->Unif_Translate, 1, GL_FALSE, &glm::translate(m4(1.f), *possition)[0][0]);
-		glUniform4fv(this->Unif_Color, 1, &color->x);
+		glUniform3fv(Unif_Mat_Ambient, 1, &mtl->Ambient[0]);
+		glUniform3fv(Unif_Mat_Diffuse, 1, &mtl->Diffuse[0]);
+		glUniform3fv(Unif_Mat_Specular, 1, &mtl->Specular[0]);
+		glUniform1f(Unif_Mat_Shinniness, mtl->Shininess);
 		mesh->BindVAO();
 		glDrawArrays(GL_TRIANGLES, 0, mesh->GetVeticesCount());
 	}

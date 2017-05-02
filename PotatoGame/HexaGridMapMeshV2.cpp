@@ -39,19 +39,19 @@ void HexaGridMapMeshV2::PushModelToBuffer(int * buffer_cursor, ModelRawDataV1 * 
 }
 
 HexaGridMapMeshV2::HexaGridMapMeshV2(GridRawDataV2 * data) :BaseMesh() {
-	Data = data;
+	Grid_Data = data;
 }
 
 HexaGridMapMeshV2::~HexaGridMapMeshV2() {
 }
 int HexaGridMapMeshV2::CalculateRegionVerticesCount() {
 	int total_vertices = 0;
-	int tile_count = Data->Grid_size.x*Data->Grid_size.y;
+	int tile_count = Grid_Data->Grid_size.x*Grid_Data->Grid_size.y;
 
-	int * top_style_cursor = Data->GetTopStyleArrayPtr();
+	int * top_style_cursor = Grid_Data->GetTopStyleArrayPtr();
 	for (int grid_index = 0; grid_index < tile_count; grid_index++) {
-		total_vertices += Data->bottom->GetFaceCount()*3;
-		total_vertices += Data->top->GetFaceCount() * 3;
+		total_vertices += Grid_Data->bottom->GetFaceCount()*3;
+		total_vertices += Grid_Data->top->GetFaceCount() * 3;
 		top_style_cursor++;
 	}
 	return total_vertices;
@@ -92,9 +92,9 @@ void HexaGridMapMeshV2::Build() {
 	//*********************************************************************
 
 
-	int* tile_top_style_array = Data->GetTopStyleArrayPtr();
-	int* tile_top_mtl_array = Data->GetTopMaterialPtr();
-	int* tile_bottom_mtl_array = Data->GetBottomMaterialPtr();
+	int* tile_top_style_array = Grid_Data->GetTopStyleArrayPtr();
+	int* tile_top_mtl_array = Grid_Data->GetTopMaterialPtr();
+	int* tile_bottom_mtl_array = Grid_Data->GetBottomMaterialPtr();
 
 	m4 scale_matrix = m4(1.f);
 	m4 translate_matrix = m4(1.f);
@@ -102,26 +102,26 @@ void HexaGridMapMeshV2::Build() {
 
 	int data_buffer_cursor = 0; //Note(Marc): Main buffer cursor
 	
-	int tile_count = Data->Grid_size.x*Data->Grid_size.y;
+	int tile_count = Grid_Data->Grid_size.x*Grid_Data->Grid_size.y;
 	for (int grid_index = 0; grid_index < tile_count; grid_index++) {
-		ModelRawDataV1 *bottom_model = Data->bottom;
-		ModelRawDataV1 *top_model = Data->top;
+		ModelRawDataV1 *bottom_model = Grid_Data->bottom;
+		ModelRawDataV1 *top_model = Grid_Data->top;
 		MaterielRawData * current_top_mtl = nullptr;
 		MaterielRawData * current_bottom_mtl = nullptr;
 		if (tile_top_mtl_array[grid_index] != 0) {
-			current_top_mtl = Data->mtl_file->FindByNameId(tile_top_mtl_array[grid_index]);
+			current_top_mtl = Grid_Data->mtl_file->FindByNameId(tile_top_mtl_array[grid_index]);
 		}
 		if (tile_bottom_mtl_array[grid_index] != 0) {
-			current_bottom_mtl = Data->mtl_file->FindByNameId(tile_bottom_mtl_array[grid_index]);
+			current_bottom_mtl = Grid_Data->mtl_file->FindByNameId(tile_bottom_mtl_array[grid_index]);
 		}
 
-		translate_matrix = glm::translate(m4(1.f), v3(Data->grid_pos_data[grid_index].x, Data->grid_pos_data[grid_index].y, 0.f));
-		scale_matrix = glm::scale(m4(1.f), v3(1.f, 1.f, Data->grid_height_data[grid_index])); //Z = tile height
+		translate_matrix = glm::translate(m4(1.f), v3(Grid_Data->grid_pos_data[grid_index].x, Grid_Data->grid_pos_data[grid_index].y, 0.f));
+		scale_matrix = glm::scale(m4(1.f), v3(1.f, 1.f, Grid_Data->grid_height_data[grid_index])); //Z = tile height
 		rotate_matrix = glm::rotate(m4(1.f), 0.f, v3(0.f, 0.f, 1.f));		
 		PushModelToBuffer(&data_buffer_cursor, bottom_model, current_bottom_mtl,&translate_matrix, &scale_matrix,&rotate_matrix);
 
 	
-		translate_matrix = glm::translate(m4(1.f), v3(Data->grid_pos_data[grid_index].x, Data->grid_pos_data[grid_index].y, Data->grid_height_data[grid_index]));
+		translate_matrix = glm::translate(m4(1.f), v3(Grid_Data->grid_pos_data[grid_index].x, Grid_Data->grid_pos_data[grid_index].y, Grid_Data->grid_height_data[grid_index]));
 		scale_matrix = glm::scale(m4(1.f), v3(1.f, 1.f, 1.f)); //Z = tile height
 		rotate_matrix = glm::rotate(m4(1.f), 0.f, v3(0.f, 0.f, 1.f));
 		PushModelToBuffer(&data_buffer_cursor, top_model, current_top_mtl, &translate_matrix, &scale_matrix, &rotate_matrix);

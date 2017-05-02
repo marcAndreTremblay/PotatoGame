@@ -132,7 +132,7 @@ void ModelRawDataV1::LoadFromFile(char * _file_path) {
 				if (match_cpt != 3) {
 					printf("Error reading vertices Num:|%i|\n", v_c_index);
 				}
-				printf("- Vertices  #:|%i|: %f %f %f\n", vn_c_index, c_v_data->x, c_v_data->y, c_v_data->z);
+				//printf("- Vertices  #:|%i|: %f %f %f\n", vn_c_index, c_v_data->x, c_v_data->y, c_v_data->z);
 				v_c_index++;
 			}
 			else if (strcmp(lineHeader, "vn") == 0) {
@@ -141,7 +141,7 @@ void ModelRawDataV1::LoadFromFile(char * _file_path) {
 				if (match_cpt != 3) {
 					printf("Error reading vertices normal #:|%i|:\n", vn_c_index);
 				}
-				printf("- Normal  #:|%i|: %f %f %f\n", vn_c_index, c_vn_data->x, c_vn_data->y, c_vn_data->z);
+				//printf("- Normal  #:|%i|: %f %f %f\n", vn_c_index, c_vn_data->x, c_vn_data->y, c_vn_data->z);
 				vn_c_index++;
 			}
 			else if (strcmp(lineHeader, "vt") == 0) {

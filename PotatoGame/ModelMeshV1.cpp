@@ -110,6 +110,7 @@ void ModelMeshV1::Build() {
 				buffer_offet += sizeof(v3);
 			
 				MaterielRawData* current_mat = Model_Data->mtl_file->FindByNameId(*faces_array_ptr);
+			
 				glBufferSubData(GL_ARRAY_BUFFER, buffer_offet, sizeof(v3), &current_mat->Ambient); //Note dont know bender
 				buffer_offet += sizeof(v3);
 				glBufferSubData(GL_ARRAY_BUFFER, buffer_offet, sizeof(v3), &current_mat->Diffuse);

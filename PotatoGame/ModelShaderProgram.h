@@ -14,23 +14,33 @@ class ModelMtlShaderProgram :
 	public ShaderProgram {
 private:
 	GLuint Unif_Translate;
+	GLuint Unif_IsOverringMtl;
+	
+	GLuint Unif_Mat_Ambient;
+	GLuint Unif_Mat_Diffuse;
+	GLuint Unif_Mat_Specular;
+	GLuint Unif_Mat_Shinniness;
 public:
 	ModelMtlShaderProgram();
 	virtual ~ModelMtlShaderProgram();
 	 void Init();
-	 void Render(ModelMeshV1 * mesh, v3 *possition);
+	 void Render(ModelMeshV1 * mesh, v3 *possition, MaterielRawData* mtl);
 };
 
 class ModelShaderProgram :
 	public ShaderProgram {
 private:
 	GLuint Unif_Translate;
-	GLuint Unif_Color;
+	
+	GLuint Unif_Mat_Ambient;
+	GLuint Unif_Mat_Diffuse;
+	GLuint Unif_Mat_Specular;
+	GLuint Unif_Mat_Shinniness;
 public:
 	ModelShaderProgram();
 	virtual ~ModelShaderProgram();
 	void Init();
-	void Render(ModelMeshV1 * mesh, v3 *possition, v4 *color);
+	void Render(ModelMeshV1 * mesh, v3 *possition, MaterielRawData *color);
 };
 //Shader for model  todo(Marc): Make the lighting work for this shit
 //Vertex shader
@@ -39,13 +49,20 @@ PG_SHADER(const char* base_model_vertex_shader = GLSL330(
 	layout(location = 0) in vec4 vertex_position; //<- world space already
 	layout(location = 1) in vec3 vertex_normal;
 
+	struct PGMaterial {
+		vec3 ambient;
+		vec3 diffuse;
+		vec3 specular;
+		float shininess;
+	};
 
 	uniform mat4 Translate; //Note(Marc): will translate all the world space coord of the map
+	uniform PGMaterial OverridingMtl;
 
 	out vec3 Normal;
 	out vec3 FragPos;
 	out vec4 Vertex_World_Possiton;
-
+	out PGMaterial Matl;
 
 
 	layout(std140) uniform Renderer_UBO {
@@ -57,10 +74,11 @@ PG_SHADER(const char* base_model_vertex_shader = GLSL330(
 
 
 	void main() {
+		Matl = OverridingMtl;
 		Vertex_World_Possiton = (Translate)* vertex_position;
 		gl_Position = WorldProjection  * WorldView * Vertex_World_Possiton;
 		FragPos = vec3(WorldView*(Translate)* vertex_position);
-		Normal = mat3(transpose(inverse(WorldView /**  Translate*/))) * vertex_normal;
+		Normal = mat3(transpose(inverse(WorldView))) * vertex_normal;
 	}
 ));
 #endif
@@ -115,13 +133,15 @@ PG_SHADER(const char* model_mtl_vertex_shader = GLSL330(
 	};
 
 	uniform mat4 Translate; //Note(Marc): will translate all the world space coord of the map
+	uniform int IsOverringMtl;
+	uniform PGMaterial OverridingMtl;
 
 	out vec3 Normal;
 	out vec3 FragPos;
 	out vec4 Vertex_World_Possiton;
 
 	out PGMaterial Matl;
-
+	
 	layout(std140) uniform Renderer_UBO {
 		mat4 WorldProjection;
 		mat4 WorldView;
@@ -131,11 +151,17 @@ PG_SHADER(const char* model_mtl_vertex_shader = GLSL330(
 
 
 	void main() {
+		if (IsOverringMtl == 1) 			{
+			Matl = OverridingMtl;
+		}
+		else {
+			Matl.ambient = ambient;
+			Matl.diffuse = diffuse;
+			Matl.specular = specular;
+			Matl.shininess = shininess.x;
+		}
 		Vertex_World_Possiton = (Translate)* vertex_position;
-		Matl.ambient = ambient;
-		Matl.diffuse = diffuse;
-		Matl.specular = specular;
-		Matl.shininess = shininess.x;
+		
 		gl_Position = WorldProjection  * WorldView * Vertex_World_Possiton;
 		FragPos = vec3(WorldView*(Translate)* vertex_position);
 		Normal = mat3(transpose(inverse(WorldView /**  Translate*/))) * vertex_normal;

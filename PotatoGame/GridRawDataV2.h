@@ -24,18 +24,19 @@ private:
 	int* grid_top_material_data = nullptr;
 	int* grid_bottom_material_data = nullptr;
 	//other 
-	bool* selected_indexes = nullptr; 	
+	
 public:
 	int* GetTopStyleArrayPtr();
 	v4* GetPossitionArrayPtr();
 	r32* GetHeightArrayPtr();
 	int* GetTopMaterialPtr();
 	int* GetBottomMaterialPtr();
-	//Header
+
 	v2 Grid_size;
 	r32 Tile_size;
 	v4* grid_pos_data = nullptr;
 	r32* grid_height_data = nullptr;
+	bool* selected_indexes = nullptr;
 	//Todo(Marc): Refactor this to a list or a array and load as much as we need
 	//Also add model ref to the region data file so we can look up into the other list	
 	ModelRawDataV1* bottom;

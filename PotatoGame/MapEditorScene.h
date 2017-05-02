@@ -34,31 +34,34 @@ enum MapEditorMode {
 class MapEditorScene :
 	public Scene {
 private:
-	GridRawDataV2* grid_data_V2;
-	PGMapAtlas * test_atlas;
-	PGAtlasRegion* region_display[9];
-	bool region_edited[9];
-
 	MapAtlasRawDataV1* map_atlas;
-	PGAtlasRegion* map_atlas_region_display[9];
+
+	//Display information
+	MapAtlasRegion* map_atlas_region_display[9];
 	bool map_atlas_region_edited[9];
-
-	HexaGridMapMesh* region_mesh;
-	HexaGridMapMeshV2 * mesh_map_test;
-	FileMtlRawDataV2* material_Test;
-
-	ModelRawDataV1* modele_test2;
-
-	ModelMeshV1* test2_model_mesh;
+	//Note(Marc): Maybe we should keep the selected_indexes_array here array[i][x*y]
 	
-	RawModelData *test_model;
-	RawModelData *test_model2;
-	RawModelData *test_model3;
+	//Todo(marc): move this into the atlas file
+	FileMtlRawDataV2* material_file;
+	ModelRawDataV1* bottom_tile_raw_data;
+	ModelRawDataV1* top_tile_raw_data;
+
+	MaterielRawData* test_mat;
+
+	//only create the requirement mesh for the edited map
+	ModelMeshV1* bottom_tile_mesh;
+	ModelMeshV1* top_tile_mesh;
+	ModelMeshV1* sphere_mesh;
 	
+	//Other Scene data
 	PGLight scene_light;
 	double time;
 	double tempo_var;
 	MapEditorMode current_mode;
+	//Man is a master of his own fate, not the god. 
+	//The gods are men's creation to give answer that they are to 
+	//	afraid to give themself
+	void RenderMapGrid(BaseRenderer * renderer);
 public:
 	MapEditorScene();
 	virtual ~MapEditorScene();

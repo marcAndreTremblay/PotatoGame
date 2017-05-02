@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "MapEditorScene.h"
+#include "MapEditorScene.h"/
 
 
 MapEditorScene::MapEditorScene() {
@@ -12,26 +12,83 @@ MapEditorScene::MapEditorScene() {
 	this->scene_light.diffuse = v4(1.f, 1.f, 1.f, 1.f);
 	this->scene_light.ambient = v4(0.6f, 0.6f, 0.6f, 1.f);
 	this->scene_light.specular = v4(0.6f, 0.6f, 0.6f, 1.f);
+	
+	map_atlas = nullptr;
 	for (int i = 0; i <= 9; i++) {
-		region_display[i] = nullptr;
-		region_edited[i] = false;
+		map_atlas_region_display[i] = nullptr;
+		map_atlas_region_edited[i] = false;
 	}
 
-	mesh_map_test = nullptr;
+	top_tile_raw_data = nullptr;
+	bottom_tile_raw_data = nullptr;
+	bottom_tile_mesh = nullptr;
+	top_tile_mesh = nullptr;
+	sphere_mesh = nullptr;
 }
 
 
 MapEditorScene::~MapEditorScene() {
-	delete(mesh_map_test);
-	delete(test_atlas);
-	delete(region_mesh);
-	delete(grid_data_V2);
+	delete(top_tile_raw_data);
+	delete(bottom_tile_raw_data);
+	delete(bottom_tile_mesh);
+	delete(top_tile_mesh);
+
+	delete(map_atlas);
 }
 
 void MapEditorScene::Update(Controler * controler, double timeElapse) {
 	Scene::Update(controler, timeElapse);
 }
 
+void MapEditorScene::RenderMapGrid(BaseRenderer * renderer) {
+	GridRawDataV2 *grid_data = map_atlas_region_display[0]->file_data;
+	v3 grid_offset = grid_data->CalculateGridOffset();
+	v3 possition_cursor = v3(0.f) - grid_offset;
+
+	for (int grid_index = 0; grid_index < 9; grid_index++) {
+		if (grid_index % 3 == 0 && grid_index != 0) {
+			possition_cursor.y += grid_offset.y;
+			possition_cursor.x -= grid_offset.x * 3;
+		}
+		if (map_atlas_region_edited[grid_index] == true) {
+			GridRawDataV2 *grid = map_atlas_region_display[grid_index]->file_data;
+			
+					v3 tile_possition;
+					v3 scale = v3(1.f);
+			//		PGGridRawData *grid = region_display[grid_index]->grid;
+			//		v3 possition;
+			//		v3 scale;
+					for (int grid_index = 0;
+						grid_index < grid->Grid_size.x*grid->Grid_size.y;
+						grid_index++) {
+						tile_possition = possition_cursor + v3(grid->grid_pos_data[grid_index]);
+						
+						
+						//renderer->model_base_shader_program->Render(grid->bottom, tile_possition, scale);
+			//			scale = v3(grid->Tile_size, grid->Tile_size, grid->grid_height_data[grid_index]);
+			//			
+			//			if (grid->selected_indexes[grid_index] == true) {
+			//				renderer->cubeMesh->Render(v3(possition.x, possition.y, scale.z), v3(0.1f, 0.1f, 0.1f), scene_light.diffuse);
+			//			}
+			//			
+			//			renderer->materialHexagoneMesh->Render(possition, scale, &grid->grid_material_data[grid_index]);
+			//			
+			//			if (grid->tile_type[grid_index] == 1) {
+			//				renderer->model_renderer->Render(test_model3, v3(possition.x, possition.y, scale.z), v3(1.f, 1.f, 1.f));
+			//			}
+			//			if (grid->tile_type[grid_index] == 2) {
+			//				renderer->model_renderer->Render(test_model, v3(possition.x, possition.y, scale.z), v3(1.f, 1.f, 1.f));
+			//			}
+					}
+		}
+		else {
+			if (map_atlas_region_display[grid_index] != nullptr) {
+				renderer->map_shader_program->Render(map_atlas_region_display[grid_index]->region_mesh, &possition_cursor);
+			}
+		}
+		possition_cursor.x += grid_offset.x;
+	}
+}
 void MapEditorScene::Render(BaseRenderer * renderer) {
 	Scene::Render(renderer);
 
@@ -40,60 +97,57 @@ void MapEditorScene::Render(BaseRenderer * renderer) {
 
 	renderer->axisMesh->Render(v3(0.f, 0.f, 0.f), v4(0.f, 0.f, 1.f, 1.f));
 	renderer->cubeMesh->Render(v3(scene_light.position.x, scene_light.position.y, scene_light.position.z), v3(0.1f, 0.1f, 0.1f), scene_light.diffuse);
-
-//	renderer->map_shader_program->Render(region_mesh, &v3(0.f, 0.f, 13.f));
+	renderer->model_base_shader_program->Render(top_tile_mesh, &v3(0, 0, 5), test_mat);
+	renderer->model_mtl_shader_program->Render(sphere_mesh, &v3(0, 0, 8), nullptr);
+	renderer->model_mtl_shader_program->Render(sphere_mesh,&v3(0,0,5), test_mat);
+	RenderMapGrid(renderer);
 	
-	renderer->map_shader_program->Render(mesh_map_test, &v3(0.f, 0.f, 10.f));
 	
-	
-	
-	renderer->model_base_shader_program->Render(test2_model_mesh, &v3(0.f, 0.f, 5.f),&v4(1.f, 0.f, 1.f, 1.f));
-
 	v3 selected_item_marker_color = v3(1.f,0.f, 0.f);
 	v3 selected_item_marker_scale = v3(1.f, 1.f, 1.f);
 
-	PGGridRawData *grid_data = region_display[4]->grid;
-	v3 possition_offset = v3(grid_data->CalculateNextMapOffetPossition(1), grid_data->CalculateNextMapOffetPossition(2), 0.f);
-	v3 possition_cursor = v3(0.f) - possition_offset;
-	for (int grid_index = 0; grid_index < 9; grid_index++) {
-		if (grid_index % 3 == 0 && grid_index != 0) {
-			possition_cursor.y += possition_offset.y;
-			possition_cursor.x -= possition_offset.x * 3;
-		}
-		if (region_edited[grid_index] == true) {
-			PGGridRawData *grid = region_display[grid_index]->grid;
-			v3 possition;
-			v3 scale;
-			for (int grid_index = 0;
-				grid_index < grid->Grid_size.x*grid->Grid_size.y;
-				grid_index++) {
-				possition = possition_cursor + v3(grid->grid_pos_data[grid_index]);
-				scale = v3(grid->Tile_size, grid->Tile_size, grid->grid_height_data[grid_index]);
-				
-				if (grid->selected_indexes[grid_index] == true) {
-					renderer->cubeMesh->Render(v3(possition.x, possition.y, scale.z), v3(0.1f, 0.1f, 0.1f), scene_light.diffuse);
-				}
-				
-				renderer->materialHexagoneMesh->Render(possition, scale, &grid->grid_material_data[grid_index]);
-				
-				if (grid->tile_type[grid_index] == 1) {
-					renderer->model_renderer->Render(test_model3, v3(possition.x, possition.y, scale.z), v3(1.f, 1.f, 1.f));
-				}
-				if (grid->tile_type[grid_index] == 2) {
-					renderer->model_renderer->Render(test_model, v3(possition.x, possition.y, scale.z), v3(1.f, 1.f, 1.f));
-				}
-			}
-		}
-		else {
-			if (region_display[grid_index] != nullptr) {
-				renderer->map_shader_program->Render(region_display[grid_index]->mesh, &possition_cursor);
-				
-			}
-		}
+	//PGGridRawData *grid_data = region_display[4]->grid;
+	//v3 possition_offset = v3(grid_data->CalculateNextMapOffetPossition(1), grid_data->CalculateNextMapOffetPossition(2), 0.f);
+	//v3 possition_cursor = v3(0.f) - possition_offset;
+	//for (int grid_index = 0; grid_index < 9; grid_index++) {
+	//	if (grid_index % 3 == 0 && grid_index != 0) {
+	//		possition_cursor.y += possition_offset.y;
+	//		possition_cursor.x -= possition_offset.x * 3;
+	//	}
+	//	if (region_edited[grid_index] == true) {
+	//		PGGridRawData *grid = region_display[grid_index]->grid;
+	//		v3 possition;
+	//		v3 scale;
+	//		for (int grid_index = 0;
+	//			grid_index < grid->Grid_size.x*grid->Grid_size.y;
+	//			grid_index++) {
+	//			possition = possition_cursor + v3(grid->grid_pos_data[grid_index]);
+	//			scale = v3(grid->Tile_size, grid->Tile_size, grid->grid_height_data[grid_index]);
+	//			
+	//			if (grid->selected_indexes[grid_index] == true) {
+	//				renderer->cubeMesh->Render(v3(possition.x, possition.y, scale.z), v3(0.1f, 0.1f, 0.1f), scene_light.diffuse);
+	//			}
+	//			
+	//			renderer->materialHexagoneMesh->Render(possition, scale, &grid->grid_material_data[grid_index]);
+	//			
+	//			if (grid->tile_type[grid_index] == 1) {
+	//				renderer->model_renderer->Render(test_model3, v3(possition.x, possition.y, scale.z), v3(1.f, 1.f, 1.f));
+	//			}
+	//			if (grid->tile_type[grid_index] == 2) {
+	//				renderer->model_renderer->Render(test_model, v3(possition.x, possition.y, scale.z), v3(1.f, 1.f, 1.f));
+	//			}
+	//		}
+	//	}
+	//	else {
+	//		if (region_display[grid_index] != nullptr) {
+	//			renderer->map_shader_program->Render(region_display[grid_index]->mesh, &possition_cursor);
+	//			
+	//		}
+	//	}
 
-		possition_cursor.x += possition_offset.x;
+	//	possition_cursor.x += possition_offset.x;
 
-	}
+	//}
 
 }
 
@@ -109,59 +163,40 @@ void MapEditorScene::Build(MousePicker * mouse_picker) {
 	);
 	this->Projection_Matrice = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 150.0f);
 
-	test_model = new RawModelData("Asset/RawOBJ/city_1_0.obj");
-	test_model->LoadIntoVAO();
 
-	test_model3 = new RawModelData("Asset/RawOBJ/tree_2_0.obj");
-	test_model3->LoadIntoVAO();
+	material_file = new FileMtlRawDataV2();
+	material_file->LoadFromFile("Asset/Map_Data/Asset/atlas_material_map.mtl");
 
-	test_model2 = new RawModelData("Asset/RawOBJ/spere2.obj");
-	test_model2->LoadIntoVAO();
 
+	top_tile_raw_data = new ModelRawDataV1();
+	top_tile_raw_data->LoadFromFile("Asset/Map_Data/Asset/tile_top_type_1.obj");
+
+	bottom_tile_raw_data = new ModelRawDataV1();
+	bottom_tile_raw_data->LoadFromFile("Asset/Map_Data/Asset/tile_bottom2.obj");
+
+	top_tile_mesh = new ModelMeshV1(top_tile_raw_data);
+	top_tile_mesh->Build();
+
+	bottom_tile_mesh = new ModelMeshV1(bottom_tile_raw_data);
+	bottom_tile_mesh->Build();
+
+	ModelRawDataV1* spher_data = new ModelRawDataV1();
+	spher_data->LoadFromFile("Asset/RawOBJ/spere2.obj");
+	sphere_mesh = new ModelMeshV1(spher_data);
+	sphere_mesh->Build();
+	delete(spher_data);
 
 	
-	/*grid_data_V2 = new GridRawDataV2(v2(10, 10), 1.f);
-	grid_data_V2->SaveToFile("Asset/map/TestMapV2.mmap");*/
-	//delete(grid_data_V2);
-	grid_data_V2 = new GridRawDataV2();
-	grid_data_V2->LoadFromFile("Asset/map/layout_1.mmap");
-	
-	mesh_map_test = new HexaGridMapMeshV2(grid_data_V2);
-	mesh_map_test->Build();
-	//material_Test = new FileMtlRawDataV2();
-	//material_Test->LoadFromFile("Asset/map/Asset/base_material.mtl");
-	//delete(material_Test);
-
-
-	modele_test2 = new ModelRawDataV1();
-	modele_test2->LoadFromFile("Asset/map/Asset/tile_top_type_2.obj");
-
-
-	test2_model_mesh = new ModelMeshV1(modele_test2);
-	test2_model_mesh->Build();
-
-	delete(modele_test2);
-
-
 	int edit_target = 171;
-	//Load atlas
-	test_atlas = new PGMapAtlas("Asset/map/AtlasMap.txt");
-	//Load require region data from their file using the new loaded atlas
-	test_atlas->LoadRegionsAndFillDisplayTemplate(edit_target, &region_display[0]);
-	region_edited[0] = true;
-	region_edited[1] = true;
-	region_edited[2] = true;
-	region_edited[3] = true;
-		region_edited[4] = true;
-	region_edited[5] = true;
-	//region_edited[6] = true;
-	//region_edited[7] = true;
-	//region_edited[8] = true;
+	//Load V2 of WorldAtlas
+	map_atlas = new MapAtlasRawDataV1("Asset/Map_Data/AtlasMapV2.txt");
+	map_atlas->LoadFromFile();
+	map_atlas->LoadRegionsAndFillDisplayTemplate(edit_target,&map_atlas_region_display[0]);
+	map_atlas_region_edited[0] = true;
+
 	
-	
-	region_mesh = new HexaGridMapMesh(region_display[0]->grid);
-	region_mesh->Build();
-	
+
+	test_mat = material_file->FindByNameId(1);
 
 	this->ShouldRender = true;
 
@@ -180,16 +215,16 @@ void MapEditorScene::HandleTilePicking(Controler * controler) {
 		r32 z_offset = 0.f;
 		v3 result_point = v3(0.f);
 		world_ray = Mouse_Picker->CastRay(controler, &this->Projection_Matrice, this->scene_camera->GetViewMatrice());
-		PGGridRawData *grid_data = region_display[4]->grid;
-		v3 possition_offset = v3(grid_data->CalculateNextMapOffetPossition(1), grid_data->CalculateNextMapOffetPossition(2), 0.f);
+		GridRawDataV2 *grid_data = map_atlas_region_display[4]->file_data;
+		v3 possition_offset = grid_data->CalculateGridOffset();
 		v3 possition_cursor = v3(0.f) - possition_offset;
 		for (int i = 0; i < 9; i++) {
 			if (i % 3 == 0 && i != 0) {
 				possition_cursor.y += possition_offset.y;
 				possition_cursor.x -= possition_offset.x * 3;
 			}
-			if (region_edited[i] == true) {
-				PGGridRawData *grid = region_display[i]->grid;
+			if (map_atlas_region_edited[i] == true) {
+				GridRawDataV2 *grid = map_atlas_region_display[i]->file_data;
 				for (int grid_index = 0;
 					grid_index < grid->Grid_size.x*grid->Grid_size.y;
 					grid_index++) {
@@ -296,8 +331,8 @@ void MapEditorScene::HandleControler(Controler * controler) {
 	if (controler->GetKey(PGKey_Left_Ctrl)->IsPress == true) {
 		if (controler->IsRelease(PGKey_S) == true) {
 			for (int i = 0; i < 9; i++) {
-				if (region_edited[i] == true) {
-					region_display[i]->grid->SaveToFile(region_display[i]->FilePath->data_ptr);
+				if (map_atlas_region_edited[i] == true) {
+					map_atlas_region_display[i]->file_data->SaveToFile(map_atlas_region_display[i]->File_Path->CharAt());
 				}
 			}
 
@@ -317,8 +352,8 @@ void MapEditorScene::HandleControler(Controler * controler) {
 			//*************************************************************************************
 			if (controler->IsRelease(PGKey_C) == true) {
 				for (int i = 0; i < 9; i++) {
-					if (region_edited[i] == true) {
-						PGGridRawData *grid = region_display[i]->grid;
+					if (map_atlas_region_edited[i] == true) {
+						GridRawDataV2 *grid = map_atlas_region_display[i]->file_data;
 						for (int grid_index = 0;
 							grid_index < grid->Grid_size.x*grid->Grid_size.y;
 							grid_index++) {
@@ -330,75 +365,34 @@ void MapEditorScene::HandleControler(Controler * controler) {
 			//*************************************************************************************
 
 			break; }
-		case Mode_Edit_Tile_Material:
+		case Mode_Edit_Tile_Material: {
 			HandleCameraMovement(controler);
 			HandleTilePicking(controler);
-			if (controler->IsRelease(PGKey_1) == true) {
-				for (int i = 0; i < 9; i++) {
-					if (region_edited[i] == true) {
-						PGGridRawData *grid = region_display[i]->grid;
-						for (int grid_index = 0;
-							grid_index < grid->Grid_size.x*grid->Grid_size.y;
-							grid_index++) {
-							if (grid->selected_indexes[grid_index] == true) {
-								grid->grid_material_data[grid_index] = Material_Green;
-							}
-						}
-					}
-				}
-			}
-			if (controler->IsRelease(PGKey_2) == true) {
-				for (int i = 0; i < 9; i++) {
-					if (region_edited[i] == true) {
-						PGGridRawData *grid = region_display[i]->grid;
-						for (int grid_index = 0;
-							grid_index < grid->Grid_size.x*grid->Grid_size.y;
-							grid_index++) {
-							if (grid->selected_indexes[grid_index] == true) {
-								grid->grid_material_data[grid_index] = Material_Brown_1;
-							}
-						}
-					}
-				}
-			}
-			if (controler->IsRelease(PGKey_3) == true) {
-				for (int i = 0; i < 9; i++) {
-					if (region_edited[i] == true) {
-						PGGridRawData *grid = region_display[i]->grid;
-						for (int grid_index = 0;
-							grid_index < grid->Grid_size.x*grid->Grid_size.y;
-							grid_index++) {
-							if (grid->selected_indexes[grid_index] == true) {
-								grid->grid_material_data[grid_index] = Material_Gray;
-							}
-						}
-					}
-				}
-			}
-			if (controler->IsRelease(PGKey_4) == true) {
-				for (int i = 0; i < 9; i++) {
-					if (region_edited[i] == true) {
-						PGGridRawData *grid = region_display[i]->grid;
-						for (int grid_index = 0;
-							grid_index < grid->Grid_size.x*grid->Grid_size.y;
-							grid_index++) {
-							if (grid->selected_indexes[grid_index] == true) {
-								grid->grid_material_data[grid_index] = Material_Blue;
-							}
-						}
-					}
-				}
-			}
-			break;
+			//if (controler->IsRelease(PGKey_1) == true) {
+			//	for (int i = 0; i < 9; i++) {
+			//		if (map_atlas_region_edited[i] == true) {
+			//			GridRawDataV2 *grid = map_atlas_region_display[i]->file_data;
+			//			for (int grid_index = 0;
+			//				grid_index < grid->Grid_size.x*grid->Grid_size.y;
+			//				grid_index++) {
+			//				if (grid->selected_indexes[grid_index] == true) {
+			//					//Do shit here
+			//				}
+			//			}
+			//		}
+			//	}
+			//}
+			break;}
 		case Mode_Edit_Tile_Height:{
 			HandleCameraMovement(controler);
 			HandleTilePicking(controler);
+			//Average selected tile height and set that height to them
 			if (controler->IsRelease(PGKey_1) == true) {
 				float height_count = 0.f;
 				float element_count = 0.f;
 				for (int i = 0; i < 9; i++) {
-					if (region_edited[i] == true) {
-						PGGridRawData *grid = region_display[i]->grid;
+					if (map_atlas_region_edited[i] == true) {
+						GridRawDataV2 *grid = map_atlas_region_display[i]->file_data;
 						for (int grid_index = 0; grid_index < grid->Grid_size.x*grid->Grid_size.y; grid_index++) {
 							if (grid->selected_indexes[grid_index] == true) {
 								height_count += grid->grid_height_data[grid_index];
@@ -417,8 +411,8 @@ void MapEditorScene::HandleControler(Controler * controler) {
 			}
 			if (controler->IsRelease(PGKey_G) == true) {
 				for (int i = 0; i < 9; i++) {
-					if (region_edited[i] == true) {
-						PGGridRawData *grid = region_display[i]->grid;
+					if (map_atlas_region_edited[i] == true) {
+						GridRawDataV2 *grid = map_atlas_region_display[i]->file_data;
 						for (int grid_index = 0;grid_index < grid->Grid_size.x*grid->Grid_size.y;grid_index++) {
 							if (grid->selected_indexes[grid_index] == true) {
 								grid->grid_height_data[grid_index] -= 0.1f;
@@ -430,8 +424,8 @@ void MapEditorScene::HandleControler(Controler * controler) {
 			}
 			if (controler->IsRelease(PGKey_T) == true) {
 				for (int i = 0; i < 9; i++) {
-					if (region_edited[i] == true) {
-						PGGridRawData *grid = region_display[i]->grid;
+					if (map_atlas_region_edited[i] == true) {
+						GridRawDataV2 *grid = map_atlas_region_display[i]->file_data;
 						for (int grid_index = 0;
 							grid_index < grid->Grid_size.x*grid->Grid_size.y;
 							grid_index++) {
@@ -445,50 +439,7 @@ void MapEditorScene::HandleControler(Controler * controler) {
 			}
 			break; }
 		case Mode_Edit_Tile_Model:{
-			if (controler->IsRelease(PGKey_1) == true) {
-				for (int i = 0; i < 9; i++) {
-					if (region_edited[i] == true) {
-						PGGridRawData *grid = region_display[i]->grid;
-						for (int grid_index = 0;
-							grid_index < grid->Grid_size.x*grid->Grid_size.y;
-							grid_index++) {
-							if (grid->selected_indexes[grid_index] == true) {
-								grid->tile_type[grid_index] = 0;
-							}
-						}
-					}
-				}
-			}
-
-			if (controler->IsRelease(PGKey_2) == true) {
-				for (int i = 0; i < 9; i++) {
-					if (region_edited[i] == true) {
-						PGGridRawData *grid = region_display[i]->grid;
-						for (int grid_index = 0;
-							grid_index < grid->Grid_size.x*grid->Grid_size.y;
-							grid_index++) {
-							if (grid->selected_indexes[grid_index] == true) {
-								grid->tile_type[grid_index] = 1;
-							}
-						}
-					}
-				}
-			}
-
-			if (controler->IsRelease(PGKey_3) == true) { //Align all tile height
-				for (int i = 0; i < 9; i++) {
-					if (region_edited[i] == true) {
-						PGGridRawData *grid = region_display[i]->grid;
-						for (int grid_index = 0;
-							grid_index < grid->Grid_size.x*grid->Grid_size.y;
-							grid_index++) {
-							if (grid->selected_indexes[grid_index] == true) {
-								grid->tile_type[grid_index] = 2;
-							}
-						}
-					}
-				}
-			}
+			
 			break; }
 		default: {current_mode = Mode_Camera_Move;
 			break; }
