@@ -98,8 +98,11 @@ void MapEditorScene::Render(BaseRenderer * renderer) {
 	renderer->axisMesh->Render(v3(0.f, 0.f, 0.f), v4(0.f, 0.f, 1.f, 1.f));
 	renderer->cubeMesh->Render(v3(scene_light.position.x, scene_light.position.y, scene_light.position.z), v3(0.1f, 0.1f, 0.1f), scene_light.diffuse);
 	renderer->model_base_shader_program->Render(top_tile_mesh, &v3(0, 0, 5), test_mat);
+
 	renderer->model_mtl_shader_program->Render(sphere_mesh, &v3(0, 0, 8), nullptr);
+
 	renderer->model_mtl_shader_program->Render(sphere_mesh,&v3(0,0,5), test_mat);
+
 	RenderMapGrid(renderer);
 	
 	

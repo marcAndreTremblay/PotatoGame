@@ -47,7 +47,7 @@ PG_SHADER(const char* map_hexa_vertex_shader = GLSL330(
 		Matl.shininess = shininess.x;
 		gl_Position = WorldProjection  * WorldView * Vertex_World_Possiton;
 		FragPos = vec3(WorldView*(Translate)* vertex_position);
-		Normal = mat3(transpose(inverse(WorldView /**  Translate*/))) * vertex_normal;
+		Normal = mat3(transpose(inverse(WorldView ))) * vertex_normal;
 	}
 ));
 #endif

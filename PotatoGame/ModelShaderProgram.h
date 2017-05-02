@@ -74,7 +74,11 @@ PG_SHADER(const char* base_model_vertex_shader = GLSL330(
 
 
 	void main() {
-		Matl = OverridingMtl;
+		Matl.ambient = OverridingMtl.ambient;
+		Matl.diffuse = OverridingMtl.diffuse;
+		Matl.specular = OverridingMtl.specular;
+		Matl.shininess = OverridingMtl.shininess;
+
 		Vertex_World_Possiton = (Translate)* vertex_position;
 		gl_Position = WorldProjection  * WorldView * Vertex_World_Possiton;
 		FragPos = vec3(WorldView*(Translate)* vertex_position);
@@ -152,7 +156,10 @@ PG_SHADER(const char* model_mtl_vertex_shader = GLSL330(
 
 	void main() {
 		if (IsOverringMtl == 1) 			{
-			Matl = OverridingMtl;
+			Matl.ambient = OverridingMtl.ambient;
+			Matl.diffuse = OverridingMtl.diffuse;
+			Matl.specular = OverridingMtl.specular;
+			Matl.shininess = OverridingMtl.shininess;
 		}
 		else {
 			Matl.ambient = ambient;
