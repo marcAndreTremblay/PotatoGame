@@ -41,6 +41,8 @@ TestResult.xml
 [Rr]eleasePS/
 dlldata.c
 
+*.sdf
+
 # DNX
 project.lock.json
 artifacts/
@@ -49,7 +51,7 @@ artifacts/
 *_i.h
 *.ilk
 *.meta
-*.obj
+#*.obj
 *.pch
 *.pdb
 *.sdf
