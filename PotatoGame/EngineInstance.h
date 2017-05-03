@@ -20,6 +20,15 @@ using namespace PG::Core;
 using namespace PG::Engine;
 namespace PG {
 	namespace Engine {
+
+		static void glfw_error_callback(int error, const char* description) {
+			fprintf(stderr, description);
+		}
+		static void glfw_window_size_callback(GLFWwindow* window, int xpos, int ypos) {
+			GameWindow* test = (GameWindow*)glfwGetWindowUserPointer(window);
+			test->SetWindowSize(xpos, ypos);
+		}
+
 		class EngineInstance : public BuildableObject {
 		protected:
 			Font *Default_Engine_Font; //Note(Marc): Unmanaged ptr
@@ -145,9 +154,9 @@ namespace PG {
 			}
 			virtual void EngineInstance::Build() override {
 				BuildableObject::StartBuilding();
-
-
-
+				//Set callBack
+				glfwSetErrorCallback(glfw_error_callback);
+				glfwSetFramebufferSizeCallback(this->Game_Window->Gl_Window, glfw_window_size_callback);
 				BuildableObject::EndBuilding();
 			}
 		};

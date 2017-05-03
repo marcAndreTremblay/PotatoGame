@@ -4,9 +4,7 @@
 #include "Core.h"
 using namespace PG::Core;
 
-static void glfw_error_callback(int error, const char* description) {
-	fprintf(stderr, description);
-}
+
 
 namespace PG {
 	namespace Engine {
@@ -21,12 +19,12 @@ namespace PG {
 			GLFWmonitor *GL_Monitor;
 			GameWindow(bool _IsFullScreen = true, int _WindowWidth = 0, int _WindowHeight = 0) {
 				if (glfwInit() != GL_FALSE) {
-					glfwSetErrorCallback(glfw_error_callback);
+					
 
 
-					glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
-					glfwWindowHint(GLFW_SAMPLES, 4);
-					glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+					glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
+					glfwWindowHint(GLFW_SAMPLES,4); //Target 9 or 16?
+					glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 					glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 					glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
@@ -38,11 +36,11 @@ namespace PG {
 					glfwWindowHint(GLFW_GREEN_BITS, mode->greenBits);
 					glfwWindowHint(GLFW_BLUE_BITS, mode->blueBits);
 					glfwWindowHint(GLFW_REFRESH_RATE, mode->refreshRate);
-
+					
 					if (_IsFullScreen == true) {
 						this->WindowWidth = mode->width;
 						this->WindowHeight = mode->height;
-						this->Gl_Window = glfwCreateWindow(this->WindowWidth, this->WindowHeight, "Potato", glfwGetPrimaryMonitor(), NULL); //Full screen
+						this->Gl_Window = glfwCreateWindow(this->WindowWidth, this->WindowHeight, "Potato", this->GL_Monitor, NULL); //Full screen
 					}
 					else {
 						this->WindowWidth = _WindowWidth;
@@ -51,6 +49,8 @@ namespace PG {
 						glfwSetWindowPos(this->Gl_Window, (mode->width / 2) - (this->WindowWidth / 2), (mode->height / 2) - (this->WindowHeight / 2));
 					}
 					if (this->Gl_Window != GL_FALSE) {
+						glfwSetWindowUserPointer(Gl_Window, (void*)this);
+						
 						glfwMakeContextCurrent(this->Gl_Window);
 						glfwSetInputMode(this->Gl_Window, GLFW_STICKY_KEYS, GL_TRUE);
 						glfwSetCursorPos(this->Gl_Window, this->WindowWidth / 2, this->WindowHeight / 2);
