@@ -47,6 +47,7 @@ private:
 	ModelRawDataV1* top_tile_raw_data;
 
 	MaterielRawData* test_mat;
+	MaterielRawData* selected_mat;
 
 	//only create the requirement mesh for the edited map
 	ModelMeshV1* bottom_tile_mesh;

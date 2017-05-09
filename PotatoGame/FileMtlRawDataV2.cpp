@@ -121,3 +121,7 @@ MaterielRawData * FileMtlRawDataV2::FindByNameId(int target_id) {
 	}
 	return nullptr;
 }
+
+int FileMtlRawDataV2::Count() {
+	return RawMateriels->element_count;
+}

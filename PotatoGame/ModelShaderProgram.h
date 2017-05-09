@@ -32,6 +32,7 @@ class ModelShaderProgram :
 private:
 	GLuint Unif_Translate;
 	
+
 	GLuint Unif_Mat_Ambient;
 	GLuint Unif_Mat_Diffuse;
 	GLuint Unif_Mat_Specular;
@@ -56,6 +57,8 @@ PG_SHADER(const char* base_model_vertex_shader = GLSL330(
 		float shininess;
 	};
 
+
+	uniform mat4 Scale;
 	uniform mat4 Translate; //Note(Marc): will translate all the world space coord of the map
 	uniform PGMaterial OverridingMtl;
 

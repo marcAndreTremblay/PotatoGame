@@ -55,30 +55,20 @@ void MapEditorScene::RenderMapGrid(BaseRenderer * renderer) {
 			
 					v3 tile_possition;
 					v3 scale = v3(1.f);
-			//		PGGridRawData *grid = region_display[grid_index]->grid;
-			//		v3 possition;
-			//		v3 scale;
+					int* mat_data = grid->GetTopMaterialPtr();
+					r32* height_data = grid->GetHeightArrayPtr();
 					for (int grid_index = 0;
 						grid_index < grid->Grid_size.x*grid->Grid_size.y;
 						grid_index++) {
 						tile_possition = possition_cursor + v3(grid->grid_pos_data[grid_index]);
-						
-						
-						//renderer->model_base_shader_program->Render(grid->bottom, tile_possition, scale);
-			//			scale = v3(grid->Tile_size, grid->Tile_size, grid->grid_height_data[grid_index]);
-			//			
-			//			if (grid->selected_indexes[grid_index] == true) {
-			//				renderer->cubeMesh->Render(v3(possition.x, possition.y, scale.z), v3(0.1f, 0.1f, 0.1f), scene_light.diffuse);
-			//			}
-			//			
-			//			renderer->materialHexagoneMesh->Render(possition, scale, &grid->grid_material_data[grid_index]);
-			//			
-			//			if (grid->tile_type[grid_index] == 1) {
-			//				renderer->model_renderer->Render(test_model3, v3(possition.x, possition.y, scale.z), v3(1.f, 1.f, 1.f));
-			//			}
-			//			if (grid->tile_type[grid_index] == 2) {
-			//				renderer->model_renderer->Render(test_model, v3(possition.x, possition.y, scale.z), v3(1.f, 1.f, 1.f));
-			//			}
+						tile_possition.z = height_data[grid_index];
+						if (grid->selected_indexes[grid_index] == true) {
+							renderer->model_base_shader_program->Render(top_tile_mesh, &tile_possition, grid->mtl_file->FindByNameId(mat_data[grid_index]));
+						}	
+						else {
+							renderer->model_base_shader_program->Render(top_tile_mesh, &tile_possition, test_mat);
+
+						}
 					}
 		}
 		else {
@@ -97,60 +87,15 @@ void MapEditorScene::Render(BaseRenderer * renderer) {
 
 	renderer->axisMesh->Render(v3(0.f, 0.f, 0.f), v4(0.f, 0.f, 1.f, 1.f));
 	renderer->cubeMesh->Render(v3(scene_light.position.x, scene_light.position.y, scene_light.position.z), v3(0.1f, 0.1f, 0.1f), scene_light.diffuse);
-	renderer->model_base_shader_program->Render(top_tile_mesh, &v3(0, 0, 5), test_mat);
 
-	renderer->model_mtl_shader_program->Render(sphere_mesh, &v3(0, 0, 8), nullptr);
-
-	renderer->model_mtl_shader_program->Render(sphere_mesh,&v3(0,0,5), test_mat);
 
 	RenderMapGrid(renderer);
-	
-	
-	v3 selected_item_marker_color = v3(1.f,0.f, 0.f);
-	v3 selected_item_marker_scale = v3(1.f, 1.f, 1.f);
 
-	//PGGridRawData *grid_data = region_display[4]->grid;
-	//v3 possition_offset = v3(grid_data->CalculateNextMapOffetPossition(1), grid_data->CalculateNextMapOffetPossition(2), 0.f);
-	//v3 possition_cursor = v3(0.f) - possition_offset;
-	//for (int grid_index = 0; grid_index < 9; grid_index++) {
-	//	if (grid_index % 3 == 0 && grid_index != 0) {
-	//		possition_cursor.y += possition_offset.y;
-	//		possition_cursor.x -= possition_offset.x * 3;
-	//	}
-	//	if (region_edited[grid_index] == true) {
-	//		PGGridRawData *grid = region_display[grid_index]->grid;
-	//		v3 possition;
-	//		v3 scale;
-	//		for (int grid_index = 0;
-	//			grid_index < grid->Grid_size.x*grid->Grid_size.y;
-	//			grid_index++) {
-	//			possition = possition_cursor + v3(grid->grid_pos_data[grid_index]);
-	//			scale = v3(grid->Tile_size, grid->Tile_size, grid->grid_height_data[grid_index]);
-	//			
-	//			if (grid->selected_indexes[grid_index] == true) {
-	//				renderer->cubeMesh->Render(v3(possition.x, possition.y, scale.z), v3(0.1f, 0.1f, 0.1f), scene_light.diffuse);
-	//			}
-	//			
-	//			renderer->materialHexagoneMesh->Render(possition, scale, &grid->grid_material_data[grid_index]);
-	//			
-	//			if (grid->tile_type[grid_index] == 1) {
-	//				renderer->model_renderer->Render(test_model3, v3(possition.x, possition.y, scale.z), v3(1.f, 1.f, 1.f));
-	//			}
-	//			if (grid->tile_type[grid_index] == 2) {
-	//				renderer->model_renderer->Render(test_model, v3(possition.x, possition.y, scale.z), v3(1.f, 1.f, 1.f));
-	//			}
-	//		}
-	//	}
-	//	else {
-	//		if (region_display[grid_index] != nullptr) {
-	//			renderer->map_shader_program->Render(region_display[grid_index]->mesh, &possition_cursor);
-	//			
-	//		}
-	//	}
+	for (int i = 0; i < material_file->Count(); i++) {
+		MaterielRawData* yrdy = material_file->FindByNameId(i);
+		renderer->model_mtl_shader_program->Render(sphere_mesh, &v3(5, i*3, 5), yrdy);
 
-	//	possition_cursor.x += possition_offset.x;
-
-	//}
+	}
 
 }
 
@@ -201,7 +146,7 @@ void MapEditorScene::Build(MousePicker * mouse_picker) {
 	
 
 	test_mat = material_file->FindByNameId(1);
-
+	selected_mat = material_file->FindByNameId(2);
 	this->ShouldRender = true;
 
 
@@ -306,7 +251,7 @@ void MapEditorScene::HandleCameraMovement(Controler * controler) {
 void MapEditorScene::HandleControler(Controler * controler) {
 	Scene::HandleControler(controler);
 	
-
+	HandleTilePicking(controler);
 
 	if (controler->IsRelease(PGKey_F1) == true) {
 		current_mode = Mode_Camera_Move;

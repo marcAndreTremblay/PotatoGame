@@ -37,8 +37,9 @@ public:
 	FileMtlRawDataV2();
 	virtual ~FileMtlRawDataV2();
 	void LoadFromFile(char* _file_path);
-	MaterielRawData* FileMtlRawDataV2::FindByNameRef(char* name);
-	MaterielRawData* FileMtlRawDataV2::FindByNameId(int target_id);
+	int Count();
+	MaterielRawData* FindByNameRef(char* name);
+	MaterielRawData* FindByNameId(int target_id);
 };
 #endif //FILE_MTL_RAW_DATA_V2_H
 

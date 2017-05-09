@@ -37,7 +37,7 @@ public:
 	}
 	void PGAtlasRegion::LoadData() {
 		grid = new PGGridRawData(v2(10, 10), 1.f);
-		grid->LoadFromFile(FilePath->CharAt(0));
+		grid->LoadFromFile(FilePath->CharAt());
 		mesh = new HexaGridMapMesh(grid);
 		mesh->Build();
 		this->IsLoaded = true;
