@@ -55,20 +55,23 @@ void MapEditorScene::RenderMapGrid(BaseRenderer * renderer) {
 			
 					v3 tile_possition;
 					v3 scale = v3(1.f);
-					int* mat_data = grid->GetTopMaterialPtr();
+					int* top_tile_data = grid->GetTopMaterialPtr();
 					r32* height_data = grid->GetHeightArrayPtr();
+					int* bottom_tile_data = grid->GetBottomMaterialPtr();
 					for (int grid_index = 0;
 						grid_index < grid->Grid_size.x*grid->Grid_size.y;
 						grid_index++) {
 						tile_possition = possition_cursor + v3(grid->grid_pos_data[grid_index]);
 						tile_possition.z = height_data[grid_index];
 						if (grid->selected_indexes[grid_index] == true) {
-							renderer->model_base_shader_program->Render(top_tile_mesh, &tile_possition, grid->mtl_file->FindByNameId(mat_data[grid_index]));
+							renderer->model_base_shader_program->Render(top_tile_mesh, &tile_possition, grid->mtl_file->FindByNameId(0));
 						}	
 						else {
-							renderer->model_base_shader_program->Render(top_tile_mesh, &tile_possition, test_mat);
+							renderer->model_base_shader_program->Render(top_tile_mesh, &tile_possition, grid->mtl_file->FindByNameId(top_tile_data[grid_index]));
 
 						}
+						tile_possition.z = 0;
+						renderer->model_base_shader_program->Render(bottom_tile_mesh, &tile_possition, grid->mtl_file->FindByNameId(bottom_tile_data[grid_index]));
 					}
 		}
 		else {
@@ -251,7 +254,7 @@ void MapEditorScene::HandleCameraMovement(Controler * controler) {
 void MapEditorScene::HandleControler(Controler * controler) {
 	Scene::HandleControler(controler);
 	
-	HandleTilePicking(controler);
+	
 
 	if (controler->IsRelease(PGKey_F1) == true) {
 		current_mode = Mode_Camera_Move;

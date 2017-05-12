@@ -31,7 +31,7 @@ public:
 	r32* GetHeightArrayPtr();
 	int* GetTopMaterialPtr();
 	int* GetBottomMaterialPtr();
-
+	
 	v2 Grid_size;
 	r32 Tile_size;
 	v4* grid_pos_data = nullptr;

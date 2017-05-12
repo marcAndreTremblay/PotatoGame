@@ -3878,13 +3878,6 @@ release\mainwindow.obj: mainwindow.cpp mainwindow.h \
 		CustomWidget/gameobjectpickerWidget.h \
 		C:\Qt\5.8\msvc2013\include\QtWidgets\QMainWindow \
 		ui_mainwindow.h \
-		C:\Qt\5.8\msvc2013\include\QtWidgets\QAction \
-		C:\Qt\5.8\msvc2013\include\QtWidgets\QApplication \
-		C:\Qt\5.8\msvc2013\include\QtWidgets\QButtonGroup \
-		C:\Qt\5.8\msvc2013\include\QtWidgets\QHeaderView \
-		C:\Qt\5.8\msvc2013\include\QtWidgets\QMenuBar \
-		C:\Qt\5.8\msvc2013\include\QtWidgets\QStatusBar \
-		C:\Qt\5.8\msvc2013\include\QtWidgets\QToolBar \
 		CustomWidget/meditortabwidget.h \
 		CustomWidget/peditorbasetabwidget.h \
 		C:\Qt\5.8\msvc2013\include\QtWidgets\QLabel \

@@ -74,14 +74,16 @@ namespace PG {
 			int GameWindow::GetWidth() {
 				return this->WindowWidth;
 			}
+			void GameWindow::SetWindowPossition() {
+				//Center
+				//	const GLFWvidmode* mode = glfwGetVideoMode(this->GL_Monitor);
+				//	glfwSetWindowPos(this->Gl_Window, (mode->width / 2) - (this->WindowWidth / 2), (mode->height / 2) - (this->WindowHeight / 2));
+			}
 			void GameWindow::SetWindowSize(int width, int height) {
 				this->WindowWidth = width;
 				this->WindowHeight = height;
-				const GLFWvidmode* mode = glfwGetVideoMode(this->GL_Monitor);
-
 				glViewport(0, 0, this->WindowWidth, this->WindowHeight);
-				glfwSetWindowSize(this->Gl_Window, this->WindowWidth, this->WindowHeight);
-				glfwSetWindowPos(this->Gl_Window, (mode->width / 2) - (this->WindowWidth / 2), (mode->height / 2) - (this->WindowHeight / 2));
+				glfwSetWindowSize(this->Gl_Window, this->WindowWidth, this->WindowHeight);			
 				ortho = glm::ortho<r32>(0.0f, static_cast<r32>(this->WindowWidth), static_cast<r32>(this->WindowHeight), 0.0f, -1.0f, 1.0f);
 			}
 		};

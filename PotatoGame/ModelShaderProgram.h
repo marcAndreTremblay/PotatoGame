@@ -14,6 +14,7 @@ class ModelMtlShaderProgram :
 	public ShaderProgram {
 private:
 	GLuint Unif_Translate;
+	GLuint Unif_Scale;
 	GLuint Unif_IsOverringMtl;
 	
 	GLuint Unif_Mat_Ambient;
@@ -31,7 +32,7 @@ class ModelShaderProgram :
 	public ShaderProgram {
 private:
 	GLuint Unif_Translate;
-	
+	GLuint Unif_Scale;
 
 	GLuint Unif_Mat_Ambient;
 	GLuint Unif_Mat_Diffuse;
@@ -82,7 +83,7 @@ PG_SHADER(const char* base_model_vertex_shader = GLSL330(
 		Matl.specular = OverridingMtl.specular;
 		Matl.shininess = OverridingMtl.shininess;
 
-		Vertex_World_Possiton = (Translate)* vertex_position;
+		Vertex_World_Possiton = (Translate*Scale)* vertex_position;
 		gl_Position = WorldProjection  * WorldView * Vertex_World_Possiton;
 		FragPos = vec3(WorldView*(Translate)* vertex_position);
 		Normal = mat3(transpose(inverse(WorldView))) * vertex_normal;
@@ -138,7 +139,7 @@ PG_SHADER(const char* model_mtl_vertex_shader = GLSL330(
 		vec3 specular;
 		float shininess;
 	};
-
+	uniform mat4 Scale;
 	uniform mat4 Translate; //Note(Marc): will translate all the world space coord of the map
 	uniform int IsOverringMtl;
 	uniform PGMaterial OverridingMtl;
