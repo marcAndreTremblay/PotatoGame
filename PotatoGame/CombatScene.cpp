@@ -2,7 +2,7 @@
 #include "CombatScene.h"
 
 
-CombatScene::CombatScene() {
+CombatScene::CombatScene(MousePicker* mouse_picker) : Scene(mouse_picker){
 
 }
 
@@ -18,8 +18,8 @@ void CombatScene::Render(BaseRenderer * renderer) {
 	Scene::Render(renderer);
 }
 
-void CombatScene::Build(MousePicker * mouse_picker) {
-	Scene::Build(mouse_picker);
+void CombatScene::Build() {
+	Scene::Build();
 	this->Set_Name("Combat_Scene");
 	this->scene_camera = new Camera(
 		v3(-15, -15, 15), //Possition

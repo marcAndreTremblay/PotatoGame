@@ -10,11 +10,11 @@
 
 class CombatScene :	public Scene {
 public:
-	CombatScene();
+	CombatScene(MousePicker* mouse_picker);
 	virtual ~CombatScene();
 	virtual void Update(Controler *controler, double timeElapse);
 	virtual void Render(BaseRenderer *renderer);
-	virtual void Build(MousePicker* mouse_picker);
+	virtual void Build();
 	void HandleControler(Controler *controler);
 	
 };

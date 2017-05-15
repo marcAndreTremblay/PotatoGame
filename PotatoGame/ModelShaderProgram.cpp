@@ -43,7 +43,36 @@ void ModelMtlShaderProgram::Render(ModelMeshV1 * mesh, v3 * possition, MaterielR
 		}
 	}
 	else {	
+
 	}
+}
+void ModelMtlShaderProgram::Render(ModelMeshV1 * mesh, v3 * possition, v3 * scale, MaterielRawData * mtl) {
+	if (this->IsInitialize == true) {
+		if (mesh->Mode == Vertices_Normal_Material) {
+			this->Use();
+			//Vertex shader uniform variable
+			glUniformMatrix4fv(this->Unif_Translate, 1, GL_FALSE, &glm::translate(m4(1.f), *possition)[0][0]);
+			glUniformMatrix4fv(this->Unif_Scale, 1, GL_FALSE, &glm::scale(m4(1.f),*scale)[0][0]);
+			if (mtl != nullptr) {
+				glUniform1i(this->Unif_IsOverringMtl, 1);
+				//// Set material properties
+				glUniform3fv(Unif_Mat_Ambient, 1, &mtl->Ambient[0]);
+				glUniform3fv(Unif_Mat_Diffuse, 1, &mtl->Diffuse[0]);
+				glUniform3fv(Unif_Mat_Specular, 1, &mtl->Specular[0]);
+				glUniform1f(Unif_Mat_Shinniness, mtl->Shininess);
+			}
+			else {
+				glUniform1i(this->Unif_IsOverringMtl, 0);
+			}
+
+			mesh->BindVAO();
+			glDrawArrays(GL_TRIANGLES, 0, mesh->GetVeticesCount());
+		}
+	}
+	else {
+
+	}
+
 }
 //********************************************************************************************
 //********************************************************************************************
@@ -70,6 +99,22 @@ void ModelShaderProgram::Render(ModelMeshV1 * mesh, v3 * possition, MaterielRawD
 		//Vertex shader uniform variable
 		glUniformMatrix4fv(this->Unif_Translate, 1, GL_FALSE, &glm::translate(m4(1.f), *possition)[0][0]);
 		glUniformMatrix4fv(this->Unif_Scale, 1, GL_FALSE, &glm::scale(m4(1.f), v3(1.f))[0][0]);
+		glUniform3fv(Unif_Mat_Ambient, 1, &mtl->Ambient[0]);
+		glUniform3fv(Unif_Mat_Diffuse, 1, &mtl->Diffuse[0]);
+		glUniform3fv(Unif_Mat_Specular, 1, &mtl->Specular[0]);
+		glUniform1f(Unif_Mat_Shinniness, mtl->Shininess);
+		mesh->BindVAO();
+		glDrawArrays(GL_TRIANGLES, 0, mesh->GetVeticesCount());
+	}
+	else {
+	}
+}
+void ModelShaderProgram::Render(ModelMeshV1 * mesh, v3 * possition, v3 * scale, MaterielRawData * mtl) {
+	if (this->IsInitialize == true && mesh->Mode == Vertices_Normal) {
+		this->Use();
+		//Vertex shader uniform variable
+		glUniformMatrix4fv(this->Unif_Translate, 1, GL_FALSE, &glm::translate(m4(1.f), *possition)[0][0]);
+		glUniformMatrix4fv(this->Unif_Scale, 1, GL_FALSE, &glm::scale(m4(1.f), *scale)[0][0]);
 		glUniform3fv(Unif_Mat_Ambient, 1, &mtl->Ambient[0]);
 		glUniform3fv(Unif_Mat_Diffuse, 1, &mtl->Diffuse[0]);
 		glUniform3fv(Unif_Mat_Specular, 1, &mtl->Specular[0]);

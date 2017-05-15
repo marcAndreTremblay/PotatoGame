@@ -2,7 +2,7 @@
 #include "MapEditorScene.h"/
 
 
-MapEditorScene::MapEditorScene() {
+MapEditorScene::MapEditorScene(MousePicker* mouse_picker) : Scene(mouse_picker){
 	current_mode = Mode_Camera_Move;
 	this->time = 0.1f;
 	this->tempo_var = 0.1f;
@@ -38,6 +38,8 @@ MapEditorScene::~MapEditorScene() {
 
 void MapEditorScene::Update(Controler * controler, double timeElapse) {
 	Scene::Update(controler, timeElapse);
+	time += timeElapse;
+
 }
 
 void MapEditorScene::RenderMapGrid(BaseRenderer * renderer) {
@@ -58,9 +60,8 @@ void MapEditorScene::RenderMapGrid(BaseRenderer * renderer) {
 					int* top_tile_data = grid->GetTopMaterialPtr();
 					r32* height_data = grid->GetHeightArrayPtr();
 					int* bottom_tile_data = grid->GetBottomMaterialPtr();
-					for (int grid_index = 0;
-						grid_index < grid->Grid_size.x*grid->Grid_size.y;
-						grid_index++) {
+					for (int grid_index = 0; grid_index < grid->Grid_size.x*grid->Grid_size.y;grid_index++) {	
+
 						tile_possition = possition_cursor + v3(grid->grid_pos_data[grid_index]);
 						tile_possition.z = height_data[grid_index];
 						if (grid->selected_indexes[grid_index] == true) {
@@ -70,8 +71,8 @@ void MapEditorScene::RenderMapGrid(BaseRenderer * renderer) {
 							renderer->model_base_shader_program->Render(top_tile_mesh, &tile_possition, grid->mtl_file->FindByNameId(top_tile_data[grid_index]));
 
 						}
-						tile_possition.z = 0;
-						renderer->model_base_shader_program->Render(bottom_tile_mesh, &tile_possition, grid->mtl_file->FindByNameId(bottom_tile_data[grid_index]));
+						tile_possition.z = 0.f;
+						renderer->model_base_shader_program->Render(bottom_tile_mesh, &tile_possition,&v3(1.f, 1.f, height_data[grid_index]), grid->mtl_file->FindByNameId(bottom_tile_data[grid_index]));
 					}
 		}
 		else {
@@ -90,7 +91,8 @@ void MapEditorScene::Render(BaseRenderer * renderer) {
 
 	renderer->axisMesh->Render(v3(0.f, 0.f, 0.f), v4(0.f, 0.f, 1.f, 1.f));
 	renderer->cubeMesh->Render(v3(scene_light.position.x, scene_light.position.y, scene_light.position.z), v3(0.1f, 0.1f, 0.1f), scene_light.diffuse);
-
+	 
+	
 
 	RenderMapGrid(renderer);
 
@@ -102,8 +104,8 @@ void MapEditorScene::Render(BaseRenderer * renderer) {
 
 }
 
-void MapEditorScene::Build(MousePicker * mouse_picker) {
-	Scene::Build(mouse_picker);
+void MapEditorScene::Build() {
+	Scene::Build();
 
 	this->Set_Name("GridEditorScene");
 

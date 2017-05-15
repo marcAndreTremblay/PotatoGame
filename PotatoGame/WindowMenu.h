@@ -18,8 +18,8 @@ using namespace PG::Engine;
 #include "Button.h"
 
 using namespace PG::Engine;
-namespace PG {
-	namespace GUI {
+using namespace PG::GUI;
+
 		class WindowMenu : public UIElement {
 		protected:
 			r32 menu_button_default_size = 16.f;
@@ -68,10 +68,7 @@ namespace PG {
 
 			}
 			virtual bool WindowMenu::Update(Controler *controler, double timeElapse, v3 *mouse_ui_possition) {
-				bool isChildActive = false;
-				if (this->State != UIState_Moving) {
-					isChildActive = UIElement::Update(controler, timeElapse, mouse_ui_possition);
-				}
+				bool isChildActive = UIElement::Update(controler, timeElapse, mouse_ui_possition);
 				if (isChildActive == false) {
 					switch (this->State) {
 					case UIState_Hot:{
@@ -119,7 +116,5 @@ namespace PG {
 
 			}
 		};
-	}
-}
 
 #endif

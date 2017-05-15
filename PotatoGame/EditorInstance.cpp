@@ -41,9 +41,9 @@ void EditorInstance::Build() {
 
 
 	//Build the first scene
-	MapEditorScene* terrain_editor_scene = new MapEditorScene();
+	MapEditorScene* terrain_editor_scene = new MapEditorScene(this->Mouse_Picker);
 	terrain_editor_scene->Set_Id(1);
-	terrain_editor_scene->Build(this->Mouse_Picker);
+	terrain_editor_scene->Build();
 	this->LoadedScenes->Add(terrain_editor_scene);
 
 	this->CurrentViewedScene = terrain_editor_scene;

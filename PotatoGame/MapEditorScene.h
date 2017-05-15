@@ -59,16 +59,18 @@ private:
 	double time;
 	double tempo_var;
 	MapEditorMode current_mode;
-	//Man is a master of his own fate, not the god. 
-	//The gods are men's creation to give answer that they are to 
-	//	afraid to give themself
+/*
+	I don't believe in the gods' existence.\n
+	Man is the master of his own fate, not the gods.\n
+	The gods are man's creation, to give answers that they are too afraid to give themselves."
+*/
 	void RenderMapGrid(BaseRenderer * renderer);
 public:
-	MapEditorScene();
+	MapEditorScene(MousePicker* mouse_picker);
 	virtual ~MapEditorScene();
 	void Update(Controler *controler, double timeElapse);
 	void Render(BaseRenderer *renderer);
-	void Build(MousePicker* mouse_picker);
+	void Build();
 	void HandleTilePicking(Controler * controler);
 	void HandleCameraMovement(Controler * controler);
 	void HandleControler(Controler *controler);

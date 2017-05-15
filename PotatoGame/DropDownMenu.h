@@ -110,16 +110,11 @@ namespace PG {
 				this->element_y_offest = 0.f;
 				this->Element_list = new List<GUISelectNode>(true);
 				this->selected = nullptr;
-				element_size = v2(190, 20);
-				GUISelectNode *element_1 = new GUISelectNode();
-				selected = element_1;
+				
+				
 				_Font = font;
 
-				this->AddElement(element_1);
-				this->AddElement(new GUIStringNode("Test 1\n", font));
-				this->AddElement(new GUIStringNode("Test 2\n", font));
-				this->AddElement(new GUIStringNode("Test 3\n", font));
-				this->AddElement(new GUIStringNode("Test 4\n", font));
+
 			}
 			~DropDownMenu() {
 				delete(Element_list);
@@ -203,7 +198,10 @@ namespace PG {
 				element->AddListener(this);
 				Element_list->Add(element);
 			}
-
+			virtual void DropDownMenu::SetSize(v2 size) override{
+				UIElement::SetSize(size);
+				element_size = size - element_margin - element_margin;
+			}
 			virtual void DropDownMenu::OnEvent(GUIEvent *event) override {
 				if (event->code == GUIEvent_Element_Select) {
 					selected = (GUISelectNode*)event->sender;

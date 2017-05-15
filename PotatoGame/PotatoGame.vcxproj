@@ -169,6 +169,7 @@
     <ClInclude Include="ShaderProgram.h" />
     <ClInclude Include="TextBox.h" />
     <ClInclude Include="TextMesh.h" />
+    <ClInclude Include="TileEditorUIWindow.h" />
     <ClInclude Include="WindowMenu.h" />
     <ClInclude Include="Label.h" />
     <ClInclude Include="Shader.h" />
@@ -228,6 +229,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="TileEditorUIWindow.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

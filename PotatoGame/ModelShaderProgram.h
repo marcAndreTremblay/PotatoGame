@@ -21,11 +21,13 @@ private:
 	GLuint Unif_Mat_Diffuse;
 	GLuint Unif_Mat_Specular;
 	GLuint Unif_Mat_Shinniness;
+
 public:
 	ModelMtlShaderProgram();
 	virtual ~ModelMtlShaderProgram();
 	 void Init();
 	 void Render(ModelMeshV1 * mesh, v3 *possition, MaterielRawData* mtl);
+	 void Render(ModelMeshV1 * mesh, v3 *possition, v3 *scale , MaterielRawData* mtl);
 };
 
 class ModelShaderProgram :
@@ -43,6 +45,7 @@ public:
 	virtual ~ModelShaderProgram();
 	void Init();
 	void Render(ModelMeshV1 * mesh, v3 *possition, MaterielRawData *color);
+	void Render(ModelMeshV1 * mesh, v3 *possition, v3 *scale, MaterielRawData* mtl);
 };
 //Shader for model  todo(Marc): Make the lighting work for this shit
 //Vertex shader

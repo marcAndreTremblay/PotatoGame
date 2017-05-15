@@ -26,6 +26,8 @@ using namespace PG::Engine;
 #include "WindowMenu.h"
 #include "TextBox.h"
 
+#include "TileEditorUIWindow.h"
+
 namespace PG {
 	namespace GUI {
 		class GUICanvas : public BuildableObject {
@@ -53,6 +55,8 @@ namespace PG {
 				this->Mouse_Picker = _mouse_picker;
 				this->Game_Window = game_window;
 
+				TileEditorUIWindow *tile_editor_menu_window = new TileEditorUIWindow(asset_manager);
+				this->Element_list->Add(tile_editor_menu_window);
 
 				WindowMenu *menu_window = new WindowMenu();
 				menu_window->SetSize(v2(300.f, 900.f));
@@ -138,11 +142,15 @@ namespace PG {
 				bool IsActif = false;
 				v3 mouse_ui_space = this->Mouse_Picker->TranformWindowStoUIS(controler, this->Game_Window->GetOrtho());
 				for (ListNode<UIElement> *c_node = Element_list->GetHead(); c_node != nullptr; c_node = c_node->GetNext()) {
-
 					UIElement* current_ui_element = c_node->GetData();
-					IsActif = current_ui_element->Update(controler, timeElapse, &mouse_ui_space);
-					if (IsActif == false) {
-						IsActif = current_ui_element->IsActif();
+					if (IsActif == true) {
+						break;
+					}
+					else {
+						IsActif = current_ui_element->Update(controler, timeElapse, &mouse_ui_space);
+						if (IsActif == false) {
+							IsActif = current_ui_element->IsActif();
+						}
 					}
 				}
 				return IsActif;

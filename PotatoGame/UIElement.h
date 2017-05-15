@@ -79,12 +79,14 @@ namespace PG {
 					bool isChildActive = false;
 					for (ListNode<UIElement> *c_node = Child_list->GetHead(); c_node != nullptr; c_node = c_node->GetNext()) {
 						UIElement* current_ui_element = c_node->GetData();
-						if (current_ui_element->Update(controler, timeElapse, mouse_ui_possition) == true) {
-							isChildActive = true;
-						}
-						else {
-							if (current_ui_element->IsActif() == true) {
+						if (isChildActive == false) {
+							if (current_ui_element->Update(controler, timeElapse, mouse_ui_possition) == true) {
 								isChildActive = true;
+							}
+							else {
+								if (current_ui_element->IsActif() == true) {
+									isChildActive = true;
+								}
 							}
 						}
 					}

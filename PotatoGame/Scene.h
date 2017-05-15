@@ -32,8 +32,9 @@ namespace PG {
 			bool ShouldUpdate;
 			bool ShouldHandleControler;
 			bool ShouldRender;
-			Scene() :
+			Scene(MousePicker* mouse_picker) :
 				EngineObject() {
+				this->Mouse_Picker = mouse_picker;
 				this->scene_camera = nullptr;
 				this->ShouldUpdate = true;
 				this->ShouldRender = true;
@@ -56,13 +57,14 @@ namespace PG {
 				if (this->ShouldUpdate == false) return false;
 				return true;
 			}
-			virtual void Scene::Build(MousePicker* mouse_picker) {
+			virtual void Scene::Build() {
 				this->BuildableObject::StartBuilding();
-				this->Mouse_Picker = mouse_picker;
+				
 
 				this->BuildableObject::EndBuilding();
 			}
 			virtual void Scene::Render(BaseRenderer *renderer) {
+				//Note(Marc): Push the new world view matrix and world projection
 				renderer->SetWorldView(this->scene_camera->GetViewMatrice());
 				renderer->SetWorldProjection(&this->Projection_Matrice);
 

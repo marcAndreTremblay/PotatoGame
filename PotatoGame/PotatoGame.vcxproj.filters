@@ -252,6 +252,9 @@
     <ClInclude Include="MapAtlasRawDataV1.h">
       <Filter>Header Files\GameEditor\FileData</Filter>
     </ClInclude>
+    <ClInclude Include="TileEditorUIWindow.h">
+      <Filter>Header Files\GameEditor\Gui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -304,6 +307,9 @@
     </ClCompile>
     <ClCompile Include="MapAtlasRawDataV1.cpp">
       <Filter>Header Files\GameEditor\FileData</Filter>
+    </ClCompile>
+    <ClCompile Include="TileEditorUIWindow.cpp">
+      <Filter>Header Files\GameEditor\Gui</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
