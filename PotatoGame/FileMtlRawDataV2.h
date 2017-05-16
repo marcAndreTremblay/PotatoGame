@@ -29,6 +29,10 @@ public:
 
 };
 
+/*
+File Format :
+
+*/
 class FileMtlRawDataV2 {
 	Str *File_Path;
 	List<MaterielRawData> *RawMateriels;

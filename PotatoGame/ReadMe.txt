@@ -1,4 +1,4 @@
-========================================================================
+=============================================u===========================
     CONSOLE APPLICATION : PotatoGame Project Overview
 ========================================================================
 
@@ -33,6 +33,29 @@ StdAfx.h, StdAfx.cpp
 
 /////////////////////////////////////////////////////////////////////////////
 Other notes:
+TODO(GameEditor)
+	- Add a tab for in game item management
+	- Add house file manager editor
+	- Add a oepngGL widget
+TODO(Game):
+	- Map entities selection
+	- Player entities movement
+	- (FF) Simple AI with Map entitites
+TODO(MapEditor):
+	- Refactor the File model class so it's more generic for aall custom file'
+	- Make the UI More robust, now prety bad
+		- Make the UI and the scene , and game instance capable of talking to each other ... 
+			- Implement map editor fonctionality into the UI
+	- Add a file format description for each custom file format
+	- Implement a Animation system 
+		- Implement a File loading scene with a loading display
 
+TODO(Engine)
+	- Implement a particle system , with physic ? 
+	- Add debugger singleton for all debug output
+	- Use Muthi-thread for the Update and Render
+	- Create a Job System for prrallelize file loading and other loading
+	- Refector the canvas to own by the engine instance
+		- (FF)Implement a in engine console , extend a UI element and addd it to the engine canvas canvas
 
 /////////////////////////////////////////////////////////////////////////////

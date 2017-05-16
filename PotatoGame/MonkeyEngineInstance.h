@@ -1,4 +1,4 @@
-#pragma once
+
 #ifndef MONKEYENGINEINSTANCE_H
 #define MONKEYENGINEINSTANCE_H
 

@@ -160,6 +160,7 @@
     <ClInclude Include="MapAtlasRawDataV1.h" />
     <ClInclude Include="MapEditorScene.h" />
     <ClInclude Include="FileMtlRawDataV2.h" />
+    <ClInclude Include="ModelAtlasFile.h" />
     <ClInclude Include="ModelMeshV1.h" />
     <ClInclude Include="ModelRawDataV1.h" />
     <ClInclude Include="ModelShaderProgram.h" />
@@ -218,6 +219,7 @@
     <ClCompile Include="MapAtlasRawDataV1.cpp" />
     <ClCompile Include="MapEditorScene.cpp" />
     <ClCompile Include="FileMtlRawDataV2.cpp" />
+    <ClCompile Include="ModelAtlasFile.cpp" />
     <ClCompile Include="ModelMeshV1.cpp" />
     <ClCompile Include="ModelRawDataV1.cpp" />
     <ClCompile Include="ModelShaderProgram.cpp" />

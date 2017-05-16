@@ -2,13 +2,17 @@
 #define GRID_RAW_DATA_V2_H
 
 #include "Core.h"
+#include "String.h"
 #include "PGShaderSources.h"
 #include "FileMtlRawDataV2.h"
 #include "ModelRawDataV1.h"
 using namespace PG::Core;
 
 
+/*
+	File Format :
 
+*/
 class GridRawDataV2 {
 private:
 	Str* mtl_file_path;

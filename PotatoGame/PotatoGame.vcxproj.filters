@@ -255,6 +255,9 @@
     <ClInclude Include="TileEditorUIWindow.h">
       <Filter>Header Files\GameEditor\Gui</Filter>
     </ClInclude>
+    <ClInclude Include="ModelAtlasFile.h">
+      <Filter>Header Files\GameEditor\FileData</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -310,6 +313,9 @@
     </ClCompile>
     <ClCompile Include="TileEditorUIWindow.cpp">
       <Filter>Header Files\GameEditor\Gui</Filter>
+    </ClCompile>
+    <ClCompile Include="ModelAtlasFile.cpp">
+      <Filter>Header Files\GameEditor\FileData</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

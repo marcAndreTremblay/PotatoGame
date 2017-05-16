@@ -144,13 +144,13 @@ namespace PG {
 				for (ListNode<UIElement> *c_node = Element_list->GetHead(); c_node != nullptr; c_node = c_node->GetNext()) {
 					UIElement* current_ui_element = c_node->GetData();
 					if (IsActif == true) {
-						break;
+						return true;
 					}
 					else {
 						IsActif = current_ui_element->Update(controler, timeElapse, &mouse_ui_space);
-						if (IsActif == false) {
+					
 							IsActif = current_ui_element->IsActif();
-						}
+						
 					}
 				}
 				return IsActif;
