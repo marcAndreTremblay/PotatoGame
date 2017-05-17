@@ -156,6 +156,7 @@
     <ClInclude Include="HexaGridMapMesh.h" />
     <ClInclude Include="HexaGridMapMeshV2.h" />
     <ClInclude Include="HexaGridMapShaderProgram.h" />
+    <ClInclude Include="IAnimation.h" />
     <ClInclude Include="ImageBox.h" />
     <ClInclude Include="MapAtlasRawDataV1.h" />
     <ClInclude Include="MapEditorScene.h" />
@@ -209,12 +210,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BaseMesh.cpp" />
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CombatScene.cpp" />
     <ClCompile Include="EditorInstance.cpp" />
     <ClCompile Include="GridRawDataV2.cpp" />
     <ClCompile Include="HexaGridMapMesh.cpp" />
     <ClCompile Include="HexaGridMapMeshV2.cpp" />
     <ClCompile Include="HexaGridMapShaderProgram.cpp" />
+    <ClCompile Include="IAnimation.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MapAtlasRawDataV1.cpp" />
     <ClCompile Include="MapEditorScene.cpp" />

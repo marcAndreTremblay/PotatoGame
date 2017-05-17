@@ -70,6 +70,9 @@
     <Filter Include="Header Files\GameEditor\FileData">
       <UniqueIdentifier>{aefee0ac-8c3b-4a69-9a31-632ee2f229ed}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\PG\Engine\Animation">
+      <UniqueIdentifier>{69f41a1a-cfee-43a7-b6b7-f4c0e5c868b8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -258,6 +261,9 @@
     <ClInclude Include="ModelAtlasFile.h">
       <Filter>Header Files\GameEditor\FileData</Filter>
     </ClInclude>
+    <ClInclude Include="IAnimation.h">
+      <Filter>Header Files\PG\Engine\Animation</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -316,6 +322,12 @@
     </ClCompile>
     <ClCompile Include="ModelAtlasFile.cpp">
       <Filter>Header Files\GameEditor\FileData</Filter>
+    </ClCompile>
+    <ClCompile Include="IAnimation.cpp">
+      <Filter>Header Files\PG\Engine\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -4,10 +4,14 @@
 
 #include "stdafx.h"
 #include "Core.h"
+#include "IAnimation.h"
 
 using namespace PG::Core;
 namespace PG {
 	namespace Engine {
+
+		
+
 		class Camera {
 		protected:
 		private:
@@ -51,6 +55,16 @@ namespace PG {
 				this->Possition.x = ((tempoX - origin.x) * cosf(rad_angle) - (tempoX - origin.y)* sinf(rad_angle)) + origin.x;
 			}
 		};
+
+		class CameraAnimation : public IAnimation {
+			private:
+				Camera * animated_camera; //<- Not owned
+			public:
+				CameraAnimation(Camera * camera_animated);
+				~CameraAnimation();
+				void Update(double delta_time);
+		};
+
 
 	}
 }

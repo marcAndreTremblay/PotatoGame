@@ -1,12 +1,19 @@
 #if !defined(IANIMATION_H)
 #define IANIMATION_H
 
-/*	Interface 
-	Generic Animation in the engine*/
+#include "Entity.h"
+
+/*Interface Generic Animation in the engine*/
 class IAnimation {
+private:
 	IAnimation();
-	~IAnimation();
-	void Update(double delta_time);
+public:
+	virtual ~IAnimation();
+	virtual void Update(double delta_time);
+
+	
 };
+
+
 
 #endif 
