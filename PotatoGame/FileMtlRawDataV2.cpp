@@ -95,7 +95,7 @@ void FileMtlRawDataV2::LoadFromFile(char * _file_path) {
 					//printf("\t\tMaterial Specular : %f,%f,%f \n", last_new_mat->Specular.x, last_new_mat->Specular.y, last_new_mat->Specular.z);
 				}
 			}
-
+			
 
 		}
 	}

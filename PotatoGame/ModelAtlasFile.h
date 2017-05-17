@@ -37,19 +37,24 @@ using namespace PG::Core;
 		n file_name.obj
 */
 struct AtlasModelData {
-	int count;
+	int id;
 	Str* path;
 	AtlasModelData() {
 		path = nullptr;
-		count = -1;
+		id = -1;
 	}
 	AtlasModelData(int id,char *file) {
 		path = new Str(file);
-		count = id;
+		id = id;
 	}
 	~AtlasModelData() {
 		delete(path);
 	}
+};
+enum AtlasCategorie{
+	Tile_Model=0,
+	Tile_Top = 1,
+	Tile_Bottom = 2
 };
 class ModelAtlasFile {
 private:
@@ -62,6 +67,8 @@ public:
 	ModelAtlasFile(char *file_path);
 	virtual ~ModelAtlasFile();
 	void LoadFromFile();
+
+	AtlasModelData* FetchTileModelFilePath(AtlasCategorie categorie,int id);
 };
 #endif
 

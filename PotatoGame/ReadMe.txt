@@ -50,7 +50,8 @@ TODO(MapEditor):
 	- Implement a Animation system 
 		- Implement a File loading scene with a loading display
 
-TODO(Engine)
+TODO(Engine):
+	- Do ground work for scene transition
 	- Implement a particle system , with physic ? 
 	- Add debugger singleton for all debug output
 	- Use Muthi-thread for the Update and Render
@@ -59,3 +60,8 @@ TODO(Engine)
 		- (FF)Implement a in engine console , extend a UI element and addd it to the engine canvas canvas
 
 /////////////////////////////////////////////////////////////////////////////
+
+
+
+
+Film_Info -> Role: ( acteur_id , str)

@@ -109,3 +109,28 @@ void ModelAtlasFile::LoadFromFile() {
 	}
 	printf("Loading | Model Atlas file | End\n");
 }
+
+AtlasModelData * ModelAtlasFile::FetchTileModelFilePath(AtlasCategorie categorie, int id) {
+	ListNode<AtlasModelData> *c_node;
+	switch (categorie) {
+		case Tile_Model: { 
+			c_node = this->tile_model_file_path->GetHead();
+			break; }
+		case Tile_Top: {
+			c_node = this->top_tile_file_path->GetHead();
+			break; }
+		case Tile_Bottom: {
+			c_node = this->bottom_tile_file_path->GetHead();
+			break; }
+	default:
+		break;
+	}
+
+	for (c_node; c_node != nullptr; c_node = c_node->GetNext()) {
+		AtlasModelData* current_element = c_node->GetData();
+		if (current_element->id == id) {
+			return current_element;
+		}
+	}
+	return nullptr;
+}
