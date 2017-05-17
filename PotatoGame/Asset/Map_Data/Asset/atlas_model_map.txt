@@ -1,15 +1,15 @@
-[TILE BOTTOM]
-Count:1
-1:tile_bottom2.obj
+[TILE_BOTTOM]
+Count: 1
+1 tile_bottom2.obj
 
-[TILE TOP]
-Count:2
-1:tile_top_type_1.obj
-2:tile_top_type_2.obj
+[TILE_TOP]
+Count: 2
+1 tile_top_type_1.obj
+2 tile_top_type_2.obj
 
-[NOT FOUND]
-1:not_found.obj
+[NOT_FOUND]
+1 not_found.obj
 
-[TILE MODEL]
-Count:1
-1:forest.obj
+[TILE_MODEL]
+Count: 1
+1 forest.obj

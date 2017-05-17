@@ -21,7 +21,8 @@ void FileMtlRawDataV2::LoadFromFile(char * _file_path) {
 	printf("\tFile path : %s\n", File_Path->CharAt());
 	FILE * file = fopen(File_Path->CharAt(), "rb");
 	MaterielRawData *last_new_mat;
-	int id = 0; if (file != nullptr) {
+	int id = 0; 
+	if (file != nullptr) {
 		char lineHeader[128];
 		while (1) {
 			int res = fscanf(file, "%s", lineHeader);

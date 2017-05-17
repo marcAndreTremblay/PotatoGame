@@ -9,6 +9,9 @@ MapAtlasRawDataV1::MapAtlasRawDataV1(char *file_path) {
 	Regions = new List<MapAtlasRegion>(true);
 	Atlas_File_Path = new Str(file_path);
 	regions_file_folder = Str::ExtractFolderPath(Atlas_File_Path);
+
+
+	
 }
 
 MapAtlasRawDataV1::~MapAtlasRawDataV1() {

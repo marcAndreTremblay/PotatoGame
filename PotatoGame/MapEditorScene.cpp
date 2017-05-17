@@ -24,6 +24,8 @@ MapEditorScene::MapEditorScene(MousePicker* mouse_picker) : Scene(mouse_picker){
 	bottom_tile_mesh = nullptr;
 	top_tile_mesh = nullptr;
 	sphere_mesh = nullptr;
+
+	Model_Atlas_File = nullptr;
 }
 
 
@@ -32,7 +34,7 @@ MapEditorScene::~MapEditorScene() {
 	delete(bottom_tile_raw_data);
 	delete(bottom_tile_mesh);
 	delete(top_tile_mesh);
-
+	delete(Model_Atlas_File);
 	delete(map_atlas);
 }
 
@@ -117,6 +119,10 @@ void MapEditorScene::Build() {
 	//Todo(): Maybe we should test if we should calculate the aspect racio from the physical screen size or perharp with the window size???
 	this->Projection_Matrice = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 150.0f);
 
+
+
+	Model_Atlas_File = new ModelAtlasFile("Asset/Map_Data/Asset/atlas_model_map.txt");
+	Model_Atlas_File->LoadFromFile();
 
 	material_file = new FileMtlRawDataV2();
 	material_file->LoadFromFile("Asset/Map_Data/Asset/atlas_material_map.mtl");

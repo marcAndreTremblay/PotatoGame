@@ -9,6 +9,7 @@ using namespace PG::Core;
 
 #include "GridRawDataV2.h"
 #include "HexaGridMapMeshV2.h"
+#include "ModelAtlasFile.h"
 
 class MapAtlasRegion {
 private :
@@ -31,6 +32,8 @@ class MapAtlasRawDataV1 {
 	FileMtlRawDataV2* Material_file;
 	
 	Str *Model_File_Path;
+	
+
 	Str *Atlas_File_Path;
 	List<MapAtlasRegion> *Regions;
 	Str *regions_file_folder;

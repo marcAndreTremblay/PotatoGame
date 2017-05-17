@@ -14,6 +14,10 @@ namespace PG {
 		public:
 			char *data_ptr = nullptr;
 			int char_count;
+			Str() {
+				data_ptr = nullptr;
+				char_count = 0;
+			}
 			Str(int s_char) {
 				char_count = s_char + 1;
 				this->data_ptr = (char*)malloc(sizeof(char)*this->char_count);
@@ -42,8 +46,7 @@ namespace PG {
 				}
 				*dest_str = ENDSTR;
 			}
-			~Str() {
-				free(data_ptr);
+			~Str() { free(data_ptr); 
 			}
 			bool Str::Compare(Str* other) {
 				if (this->char_count != other->char_count) return false;
