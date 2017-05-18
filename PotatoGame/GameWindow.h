@@ -21,7 +21,7 @@ namespace PG {
 				if (glfwInit() != GL_FALSE) {
 					
 
-
+					
 					glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
 					glfwWindowHint(GLFW_SAMPLES,4); //Target 9 or 16?
 					glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);

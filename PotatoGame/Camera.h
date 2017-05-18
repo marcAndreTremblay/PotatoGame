@@ -59,8 +59,13 @@ namespace PG {
 		class CameraAnimation : public IAnimation {
 			private:
 				Camera * animated_camera; //<- Not owned
+
+				v3 nor_direction;
+				r32 speed; //Unit / s
+				double cpt_timer;
+				double interval_timer;
 			public:
-				CameraAnimation(Camera * camera_animated);
+				CameraAnimation(Camera * camera);
 				~CameraAnimation();
 				void Update(double delta_time);
 		};

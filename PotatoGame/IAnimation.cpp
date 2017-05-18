@@ -9,3 +9,4 @@ IAnimation::~IAnimation() {
 
 void IAnimation::Update(double delta_time) {
 }
+

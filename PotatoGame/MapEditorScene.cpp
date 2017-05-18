@@ -116,6 +116,7 @@ void MapEditorScene::Build() {
 		v3(0, 0, 0), //look at
 		v3(0, 0, 1)	 //up
 	);
+	animation_test = new CameraAnimation(scene_camera);
 	//Todo(): Maybe we should test if we should calculate the aspect racio from the physical screen size or perharp with the window size???
 	this->Projection_Matrice = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 150.0f);
 

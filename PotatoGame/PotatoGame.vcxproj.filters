@@ -264,6 +264,12 @@
     <ClInclude Include="IAnimation.h">
       <Filter>Header Files\PG\Engine\Animation</Filter>
     </ClInclude>
+    <ClInclude Include="AnimatorManager.h">
+      <Filter>Header Files\PG\Engine\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="Debugger.h">
+      <Filter>Header Files\PG\Engine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -327,7 +333,13 @@
       <Filter>Header Files\PG\Engine\Animation</Filter>
     </ClCompile>
     <ClCompile Include="Camera.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Header Files\PG\Engine\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimatorManager.cpp">
+      <Filter>Header Files\PG\Engine\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="Debugger.cpp">
+      <Filter>Header Files\PG\Engine</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

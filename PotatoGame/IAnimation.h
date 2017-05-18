@@ -6,12 +6,11 @@
 /*Interface Generic Animation in the engine*/
 class IAnimation {
 private:
+protected:
 	IAnimation();
 public:
 	virtual ~IAnimation();
 	virtual void Update(double delta_time);
-
-	
 };
 
 
