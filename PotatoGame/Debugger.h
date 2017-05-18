@@ -1,5 +1,7 @@
 #pragma once
 class Debug {
+private:
+	int id;
 
 public:
 	static Debug& Instance();

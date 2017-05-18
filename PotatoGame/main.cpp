@@ -11,6 +11,9 @@ int main(int argc, char **argv)
 {
 	Quaternion *t = new Quaternion();
 
+	
+	Debug::Instance().Write("Game starting\n");
+	Debug::Instance().Write("Game starting\n");
 	Debug::Instance().Write("Game starting\n");
 
 	EditorInstance* main_instance = new EditorInstance();

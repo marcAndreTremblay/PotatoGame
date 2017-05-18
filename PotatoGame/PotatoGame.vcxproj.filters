@@ -73,6 +73,9 @@
     <Filter Include="Header Files\PG\Engine\Animation">
       <UniqueIdentifier>{69f41a1a-cfee-43a7-b6b7-f4c0e5c868b8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\GameEditor\Animation">
+      <UniqueIdentifier>{d9e541b4-fded-4cd7-9612-015deadb092c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
