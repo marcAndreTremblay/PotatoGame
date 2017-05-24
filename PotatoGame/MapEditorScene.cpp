@@ -7,7 +7,7 @@ MapEditorScene::MapEditorScene(MousePicker* mouse_picker) : Scene(mouse_picker){
 	this->time = 0.1f;
 	this->tempo_var = 0.1f;
 	this->scene_light = PGLight();
-	this->scene_light.position = v4(15.f, 15.f, 14.f, 1.f);
+	this->scene_light.position = v4(0.f, 0.f, 0.f, 1.f);
 
 	this->scene_light.diffuse = v4(1.f, 1.f, 1.f, 1.f);
 	this->scene_light.ambient = v4(0.6f, 0.6f, 0.6f, 1.f);
@@ -36,6 +36,7 @@ MapEditorScene::~MapEditorScene() {
 	delete(top_tile_mesh);
 	delete(Model_Atlas_File);
 	delete(map_atlas);
+	delete(solar_data);
 }
 
 void MapEditorScene::Update(Controler * controler, double timeElapse) {
@@ -43,7 +44,18 @@ void MapEditorScene::Update(Controler * controler, double timeElapse) {
 	time += timeElapse;
 
 }
+void MapEditorScene::RenderSolarSystem(BaseRenderer * renderer) {
+	solar_data->bodies_list->GetHead();
 
+	for (int i = 0; i < 5; i++) {
+		CelestialBody* c_body = solar_data->bodies_list->GetAt(i); //Change this
+		MaterielRawData* color = material_file->FindByNameId(i);
+		renderer->model_mtl_shader_program->Render(sphere_mesh,
+													&c_body->World_Possition,
+													&c_body->size,
+													color);
+	}
+}
 void MapEditorScene::RenderMapGrid(BaseRenderer * renderer) {
 	GridRawDataV2 *grid_data = map_atlas_region_display[0]->file_data;
 	v3 grid_offset = grid_data->CalculateGridOffset();
@@ -95,18 +107,18 @@ void MapEditorScene::Render(BaseRenderer * renderer) {
 	renderer->cubeMesh->Render(v3(scene_light.position.x, scene_light.position.y, scene_light.position.z), v3(0.1f, 0.1f, 0.1f), scene_light.diffuse);
 	 
 	
-
-	RenderMapGrid(renderer);
+	RenderSolarSystem(renderer);
+//	RenderMapGrid(renderer);
 
 	for (int i = 0; i < material_file->Count(); i++) {
 		MaterielRawData* yrdy = material_file->FindByNameId(i);
-		renderer->model_mtl_shader_program->Render(sphere_mesh, &v3(5, i*3, 5), yrdy);
+		renderer->model_mtl_shader_program->Render(sphere_mesh, &v3(i * 2, i*2, i * 2), yrdy);
 
 	}
 
 }
 
-void MapEditorScene::Build() {
+void MapEditorScene::Build(AnimatorManager* anmation_manager) {
 	Scene::Build();
 
 	this->Set_Name("GridEditorScene");
@@ -120,6 +132,27 @@ void MapEditorScene::Build() {
 	//Todo(): Maybe we should test if we should calculate the aspect racio from the physical screen size or perharp with the window size???
 	this->Projection_Matrice = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 150.0f);
 
+	solar_data = new SolorSystemEntities();
+	
+	Star* s1 = new Star(2.0f);
+	solar_data->bodies_list->Add(s1);
+
+
+	Planet* p1 = new Planet(4.2f, 0.f, PG_Pi32/3.f, 0.6f, s1);
+		anmation_manager->AttachAnimation(new CelestialBodyAnimation(p1));
+	solar_data->bodies_list->Add(p1);
+
+	Planet* p2 = new Planet(7.2f, PG_Pi32, PG_Pi32 / 5.f, 0.9f, s1);
+		anmation_manager->AttachAnimation(new CelestialBodyAnimation(p2));
+	solar_data->bodies_list->Add(p2);;
+
+	Planet* p3 = new Planet(10.f, PG_Pi32*1.5f, PG_Pi32 / 8.f, 0.5f, s1);
+		anmation_manager->AttachAnimation(new CelestialBodyAnimation(p3));
+	solar_data->bodies_list->Add(p3);;
+
+	Planet* p4 = new Planet(13.f, PG_Pi32/3.f, PG_Pi32 / 6.f, 0.4f, s1);
+		anmation_manager->AttachAnimation(new CelestialBodyAnimation(p4));
+	solar_data->bodies_list->Add(p4);;
 
 
 	Model_Atlas_File = new ModelAtlasFile("Asset/Map_Data/Asset/atlas_model_map.txt");
@@ -142,7 +175,7 @@ void MapEditorScene::Build() {
 	bottom_tile_mesh->Build();
 
 	ModelRawDataV1* spher_data = new ModelRawDataV1();
-	spher_data->LoadFromFile("Asset/RawOBJ/spere2.obj");
+	spher_data->LoadFromFile("Asset/RawOBJ/spere3.obj");
 	sphere_mesh = new ModelMeshV1(spher_data);
 	sphere_mesh->Build();
 	delete(spher_data);

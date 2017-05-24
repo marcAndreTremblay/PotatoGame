@@ -8,12 +8,15 @@
 #include "CombatScene.h"
 #include "MapEditorScene.h"
 
+#include "AnimatorManager.h"
+
 using namespace PG::Engine;
 using namespace PG::GUI;
 
 class EditorInstance :
 	public EngineInstance {
 private:
+	AnimatorManager * anmation_manager;
 	GUICanvas* game_canvas;
 public:
 	EditorInstance();

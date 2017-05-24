@@ -3,7 +3,7 @@
 
 
 AnimatorManager::AnimatorManager() {
-	
+	//Note(Marc): The animation component is own by the object using the animation
 	animation_list = new List<IAnimation>(false);
 }
 

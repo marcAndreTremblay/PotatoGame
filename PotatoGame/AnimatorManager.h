@@ -3,6 +3,7 @@
 
 //Core
 #include "List.h"
+using namespace PG::Core;
 //Engine
 #include "IAnimation.h"
 

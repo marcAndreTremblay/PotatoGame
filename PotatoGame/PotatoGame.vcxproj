@@ -171,6 +171,7 @@
     <ClInclude Include="Panel.h" />
     <ClInclude Include="Quaternion.h" />
     <ClInclude Include="ShaderProgram.h" />
+    <ClInclude Include="SolarSystemEntities.h" />
     <ClInclude Include="TextBox.h" />
     <ClInclude Include="TextMesh.h" />
     <ClInclude Include="TileEditorUIWindow.h" />
@@ -232,6 +233,7 @@
     <ClCompile Include="ModelShaderProgram.cpp" />
     <ClCompile Include="MonkeyEngineInstance.cpp" />
     <ClCompile Include="ShaderProgram.cpp" />
+    <ClCompile Include="SolarSystemEntities.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

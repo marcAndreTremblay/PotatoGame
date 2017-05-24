@@ -273,6 +273,9 @@
     <ClInclude Include="Debugger.h">
       <Filter>Header Files\PG\Engine</Filter>
     </ClInclude>
+    <ClInclude Include="SolarSystemEntities.h">
+      <Filter>Header Files\GameEditor\Entities</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -343,6 +346,9 @@
     </ClCompile>
     <ClCompile Include="Debugger.cpp">
       <Filter>Header Files\PG\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="SolarSystemEntities.cpp">
+      <Filter>Header Files\GameEditor\Entities</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

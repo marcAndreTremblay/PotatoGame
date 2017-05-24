@@ -3,11 +3,13 @@
 
 
 EditorInstance::EditorInstance() {
+	anmation_manager = new AnimatorManager();
 }
 
 
 EditorInstance::~EditorInstance() {
 	delete(game_canvas);
+	delete(anmation_manager);
 }
 
 void EditorInstance::Build() {
@@ -43,7 +45,7 @@ void EditorInstance::Build() {
 	//Build the first scene
 	MapEditorScene* terrain_editor_scene = new MapEditorScene(this->Mouse_Picker);
 	terrain_editor_scene->Set_Id(1);
-	terrain_editor_scene->Build();
+	terrain_editor_scene->Build(anmation_manager);
 	this->LoadedScenes->Add(terrain_editor_scene);
 
 	this->CurrentViewedScene = terrain_editor_scene;
@@ -57,6 +59,7 @@ void EditorInstance::Build() {
 
 void EditorInstance::Update(double _TimeElapse) {
 	EngineInstance::Update(_TimeElapse);
+	anmation_manager->Update(_TimeElapse);
 	bool actif = this->game_canvas->Update(this->Controlers, _TimeElapse);
 	
 }

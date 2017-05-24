@@ -25,7 +25,7 @@ void PG::Engine::CameraAnimation::Update(double delta_time) {
 		//Do stuff here
 		
 
-		animated_camera->Possition += nor_direction*(speed*(r32)interval_timer);
-		//animated_camera->RotateZAxis(PG_Pi32 / 100.f, v3(0.f));
+		//animated_camera->Possition += nor_direction*(speed*(r32)interval_timer);
+		animated_camera->RotateZAxis(PG_Pi32/10.f * interval_timer, v3(0.f));
 	}
 }

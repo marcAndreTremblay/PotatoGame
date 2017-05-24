@@ -110,13 +110,13 @@ namespace PG {
 				ListNode<T>* next_node = head;
 				while (next_node != nullptr) {
 					ListNode<T>* current_node = next_node;
-					cpt_index++;
 					if (cpt_index == target_index) {
 						return current_node->GetData();
 					}
 					else {
 						next_node = current_node->GetNext();
 					}
+					cpt_index++;
 				}
 				return nullptr;
 			}

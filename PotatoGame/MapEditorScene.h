@@ -23,6 +23,8 @@
 #include "ModelMeshV1.h"
 
 #include "ModelAtlasFile.h"
+#include "AnimatorManager.h"
+#include "SolarSystemEntities.h"
 
 enum MapEditorMode {
 	Mode_Camera_Move = 0,
@@ -62,19 +64,21 @@ private:
 	MapEditorMode current_mode;
 
 	ModelAtlasFile* Model_Atlas_File;
-	
-	/*
+	SolorSystemEntities* solar_data;
+/*
 	I don't believe in the gods' existence.\n
 	Man is the master of his own fate, not the gods.\n
 	The gods are man's creation, to give answers that they are too afraid to give themselves."
 */
+	void RenderSolarSystem(BaseRenderer * renderer);
 	void RenderMapGrid(BaseRenderer * renderer);
 public:
 	MapEditorScene(MousePicker* mouse_picker);
 	virtual ~MapEditorScene();
 	void Update(Controler *controler, double timeElapse);
+	
 	void Render(BaseRenderer *renderer);
-	void Build();
+	void Build(AnimatorManager* anmation_manager);
 	void HandleTilePicking(Controler * controler);
 	void HandleCameraMovement(Controler * controler);
 	void HandleControler(Controler *controler);
