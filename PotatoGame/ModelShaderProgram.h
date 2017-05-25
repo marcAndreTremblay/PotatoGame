@@ -28,6 +28,7 @@ public:
 	 void Init();
 	 void Render(ModelMeshV1 * mesh, v3 *possition, MaterielRawData* mtl);
 	 void Render(ModelMeshV1 * mesh, v3 *possition, v3 *scale , MaterielRawData* mtl);
+	 void Render(ModelMeshV1 * mesh, m4 * possition_m, m4 * scale_m, MaterielRawData * mtl);
 };
 
 class ModelShaderProgram :
@@ -46,6 +47,7 @@ public:
 	void Init();
 	void Render(ModelMeshV1 * mesh, v3 *possition, MaterielRawData *color);
 	void Render(ModelMeshV1 * mesh, v3 *possition, v3 *scale, MaterielRawData* mtl);
+	void Render(ModelMeshV1 * mesh, m4 * possition_m, m4 * scale_m, MaterielRawData * mtl);
 };
 //Shader for model  todo(Marc): Make the lighting work for this shit
 //Vertex shader

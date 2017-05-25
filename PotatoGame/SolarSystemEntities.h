@@ -15,10 +15,21 @@ class CelestialBody : public Entity {
 public:
 	// If not null possition in relatiion
 	CelestialBody* parent; // Not owned
+	m4 *translation_matrix;
+	m4 *scale_matrix;
 	v3 size;
 	r32 orbit_radius;
 	r32 angular_speed;
-	m4 translation_matrix;
+	m4 GetPossition() {
+		if (parent == nullptr) {
+			
+			return *translation_matrix;
+		}
+		else {
+			return *parent->translation_matrix**translation_matrix; 
+		}
+	}
+	void SetPossition(v3 *new_possition);
 	void SetParent(CelestialBody* _parent);
 	CelestialBody(r32 orbit_r, r32 starting_angle, r32 _angular_speed, r32 size);
 	virtual ~CelestialBody();

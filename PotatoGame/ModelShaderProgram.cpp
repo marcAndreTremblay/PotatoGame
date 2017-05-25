@@ -19,40 +19,19 @@ void ModelMtlShaderProgram::Init() {
 	this->Unif_Mat_Shinniness = glGetUniformLocation(this->ShaderID, "OverridingMtl.shininess");
 	ShaderProgram::Init();
 }
-void ModelMtlShaderProgram::Render(ModelMeshV1 * mesh, v3 * possition, MaterielRawData* mtl = nullptr) {
-	if (this->IsInitialize == true) {
-		if (mesh->Mode == Vertices_Normal_Material) {
-			this->Use();
-			//Vertex shader uniform variable
-			glUniformMatrix4fv(this->Unif_Translate, 1, GL_FALSE, &glm::translate(m4(1.f), *possition)[0][0]);
-			glUniformMatrix4fv(this->Unif_Scale, 1, GL_FALSE, &glm::scale(m4(1.f), v3(1.f))[0][0]);
-			if (mtl != nullptr) {
-				glUniform1i(this->Unif_IsOverringMtl, 1);
-				//// Set material properties
-				glUniform3fv(Unif_Mat_Ambient, 1, &mtl->Ambient[0]);
-				glUniform3fv(Unif_Mat_Diffuse, 1, &mtl->Diffuse[0]);
-				glUniform3fv(Unif_Mat_Specular, 1, &mtl->Specular[0]);
-				glUniform1f(Unif_Mat_Shinniness, mtl->Shininess);
-			}
-			else {
-				glUniform1i(this->Unif_IsOverringMtl, 0);
-			}
-
-			mesh->BindVAO();
-			glDrawArrays(GL_TRIANGLES, 0, mesh->GetVeticesCount());
-		}
-	}
-	else {	
-
-	}
+void ModelMtlShaderProgram::Render(ModelMeshV1 * mesh, v3 * possition, MaterielRawData * mtl) {
+	ModelMtlShaderProgram::Render(mesh, possition, &v3(1.f), mtl);
 }
 void ModelMtlShaderProgram::Render(ModelMeshV1 * mesh, v3 * possition, v3 * scale, MaterielRawData * mtl) {
 	if (this->IsInitialize == true) {
 		if (mesh->Mode == Vertices_Normal_Material) {
 			this->Use();
 			//Vertex shader uniform variable
+			m4* t = new m4(1.f);
+			*t = glm::scale(m4(1.f),*scale);
+			
 			glUniformMatrix4fv(this->Unif_Translate, 1, GL_FALSE, &glm::translate(m4(1.f), *possition)[0][0]);
-			glUniformMatrix4fv(this->Unif_Scale, 1, GL_FALSE, &glm::scale(m4(1.f),*scale)[0][0]);
+			glUniformMatrix4fv(this->Unif_Scale, 1, GL_FALSE, glm::value_ptr(*t));
 			if (mtl != nullptr) {
 				glUniform1i(this->Unif_IsOverringMtl, 1);
 				//// Set material properties
@@ -73,6 +52,25 @@ void ModelMtlShaderProgram::Render(ModelMeshV1 * mesh, v3 * possition, v3 * scal
 
 	}
 
+}
+
+//Do not use this method
+void ModelMtlShaderProgram::Render(ModelMeshV1 * mesh, m4 * possition_m, m4 * scale_m, MaterielRawData * mtl) {
+	if (this->IsInitialize == true && mesh->Mode == Vertices_Normal) {
+		this->Use();
+		
+		//Vertex shader uniform variable
+		glUniformMatrix4fv(this->Unif_Translate, 1, GL_FALSE, glm::value_ptr(*possition_m));
+		glUniformMatrix4fv(this->Unif_Scale, 1, GL_FALSE, glm::value_ptr(*scale_m));
+		glUniform3fv(Unif_Mat_Ambient, 1, &mtl->Ambient[0]);
+		glUniform3fv(Unif_Mat_Diffuse, 1, &mtl->Diffuse[0]);
+		glUniform3fv(Unif_Mat_Specular, 1, &mtl->Specular[0]);
+		glUniform1f(Unif_Mat_Shinniness, mtl->Shininess);
+		mesh->BindVAO();
+		glDrawArrays(GL_TRIANGLES, 0, mesh->GetVeticesCount());
+	}
+	else {
+	}
 }
 //********************************************************************************************
 //********************************************************************************************
@@ -93,12 +91,16 @@ void ModelShaderProgram::Init() {
 	this->Unif_Mat_Shinniness = glGetUniformLocation(this->ShaderID, "OverridingMtl.shininess");
 	ShaderProgram::Init();
 }
+
 void ModelShaderProgram::Render(ModelMeshV1 * mesh, v3 * possition, MaterielRawData * mtl) {
+	ModelShaderProgram::Render(mesh, possition, &v3(1.f), mtl);
+}
+void ModelShaderProgram::Render(ModelMeshV1 * mesh, v3 * possition, v3 * scale, MaterielRawData * mtl) {
 	if (this->IsInitialize == true && mesh->Mode == Vertices_Normal) {
 		this->Use();
 		//Vertex shader uniform variable
 		glUniformMatrix4fv(this->Unif_Translate, 1, GL_FALSE, &glm::translate(m4(1.f), *possition)[0][0]);
-		glUniformMatrix4fv(this->Unif_Scale, 1, GL_FALSE, &glm::scale(m4(1.f), v3(1.f))[0][0]);
+		glUniformMatrix4fv(this->Unif_Scale, 1, GL_FALSE, &glm::scale(m4(1.f), *scale)[0][0]);
 		glUniform3fv(Unif_Mat_Ambient, 1, &mtl->Ambient[0]);
 		glUniform3fv(Unif_Mat_Diffuse, 1, &mtl->Diffuse[0]);
 		glUniform3fv(Unif_Mat_Specular, 1, &mtl->Specular[0]);
@@ -109,12 +111,13 @@ void ModelShaderProgram::Render(ModelMeshV1 * mesh, v3 * possition, MaterielRawD
 	else {
 	}
 }
-void ModelShaderProgram::Render(ModelMeshV1 * mesh, v3 * possition, v3 * scale, MaterielRawData * mtl) {
+void ModelShaderProgram::Render(ModelMeshV1 * mesh, m4 * possition_m, m4 * scale_m, MaterielRawData * mtl) {
 	if (this->IsInitialize == true && mesh->Mode == Vertices_Normal) {
 		this->Use();
+		
 		//Vertex shader uniform variable
-		glUniformMatrix4fv(this->Unif_Translate, 1, GL_FALSE, &glm::translate(m4(1.f), *possition)[0][0]);
-		glUniformMatrix4fv(this->Unif_Scale, 1, GL_FALSE, &glm::scale(m4(1.f), *scale)[0][0]);
+		glUniformMatrix4fv(this->Unif_Translate, 1, GL_FALSE, glm::value_ptr(*possition_m));
+		glUniformMatrix4fv(this->Unif_Scale, 1, GL_FALSE, glm::value_ptr(*scale_m));
 		glUniform3fv(Unif_Mat_Ambient, 1, &mtl->Ambient[0]);
 		glUniform3fv(Unif_Mat_Diffuse, 1, &mtl->Diffuse[0]);
 		glUniform3fv(Unif_Mat_Specular, 1, &mtl->Specular[0]);

@@ -20,7 +20,11 @@
 #include "Lib/glfw/glfw3.h"
 #include "Lib/glm/glm.hpp"
 #include "lib/glm/gtc/matrix_transform.hpp"
+#include "Lib/glm/gtc/type_ptr.hpp"
 
+//For quaternion use in the program
+#include "Lib/glm/gtc/quaternion.hpp" 
+#include "Lib/glm/gtx/quaternion.hpp"
 
 //Note(marc): Include for the Freetype lib
 #include <ft2build.h>
