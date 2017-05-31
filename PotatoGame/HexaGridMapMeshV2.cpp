@@ -114,7 +114,9 @@ void HexaGridMapMeshV2::Build() {
 		if (tile_bottom_mtl_array[grid_index] != 0) {
 			current_bottom_mtl = Grid_Data->mtl_file->FindByNameId(tile_bottom_mtl_array[grid_index]);
 		}
-
+		if (tile_top_style_array[grid_index] != 0) {
+			
+		}
 		translate_matrix = glm::translate(m4(1.f), v3(Grid_Data->grid_pos_data[grid_index].x, Grid_Data->grid_pos_data[grid_index].y, 0.f));
 		scale_matrix = glm::scale(m4(1.f), v3(1.f, 1.f, Grid_Data->grid_height_data[grid_index])); //Z = tile height
 		rotate_matrix = glm::rotate(m4(1.f), 0.f, v3(0.f, 0.f, 1.f));		

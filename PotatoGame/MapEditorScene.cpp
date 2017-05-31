@@ -47,12 +47,12 @@ void MapEditorScene::Update(Controler * controler, double timeElapse) {
 void MapEditorScene::RenderSolarSystem(BaseRenderer * renderer) {
 	solar_data->bodies_list->GetHead();
 
-	for (int i = 0; i < 5; i++) {
+	for (int i = 0; i < solar_data->bodies_list->element_count; i++) {
 		CelestialBody* c_body = solar_data->bodies_list->GetAt(i); //Change this
 		MaterielRawData* color = material_file->FindByNameId(i);
 		renderer->model_mtl_shader_program->Render(sphere_mesh,
-													&c_body->World_Possition,
-													&c_body->size,
+													&c_body->GetWorldPossition(),
+													&c_body->GetWorldSize(),
 													color);
 	}
 }
@@ -108,7 +108,7 @@ void MapEditorScene::Render(BaseRenderer * renderer) {
 	 
 	
 	RenderSolarSystem(renderer);
-//	RenderMapGrid(renderer);
+	RenderMapGrid(renderer);
 
 	for (int i = 0; i < material_file->Count(); i++) {
 		MaterielRawData* yrdy = material_file->FindByNameId(i);
@@ -134,26 +134,33 @@ void MapEditorScene::Build(AnimatorManager* anmation_manager) {
 
 	solar_data = new SolorSystemEntities();
 	
-	Star* s1 = new Star(2.0f);
+	Star* s1 = new Star(3.0f,12.f);
 	solar_data->bodies_list->Add(s1);
 
 
-	Planet* p1 = new Planet(4.2f, 0.f, PG_Pi32/3.f, 0.6f, s1);
+	Planet* p1 = new Planet(6.2f, 0.f, PG_Pi32/3.f, 0.2f, s1);
 		anmation_manager->AttachAnimation(new CelestialBodyAnimation(p1));
 	solar_data->bodies_list->Add(p1);
 
-	Planet* p2 = new Planet(7.2f, PG_Pi32, PG_Pi32 / 5.f, 0.9f, s1);
+	Planet* p2 = new Planet(10.2f, PG_Pi32, PG_Pi32 / 5.f, 0.2f, s1);
 		anmation_manager->AttachAnimation(new CelestialBodyAnimation(p2));
 	solar_data->bodies_list->Add(p2);;
 
-	Planet* p3 = new Planet(10.f, PG_Pi32*1.5f, PG_Pi32 / 8.f, 0.5f, s1);
+	Planet* p3 = new Planet(15.f, PG_Pi32*1.5f, PG_Pi32 / 8.f, 0.2f, s1);
 		anmation_manager->AttachAnimation(new CelestialBodyAnimation(p3));
 	solar_data->bodies_list->Add(p3);;
 
-	Planet* p4 = new Planet(13.f, PG_Pi32/3.f, PG_Pi32 / 6.f, 0.4f, s1);
+	Planet* p4 = new Planet(22.f, PG_Pi32/3.f, PG_Pi32 / 6.f, 0.2f, s1);
 		anmation_manager->AttachAnimation(new CelestialBodyAnimation(p4));
 	solar_data->bodies_list->Add(p4);;
 
+	Moon* p2_l1 = new Moon(2.f, PG_Pi32 / 2.f, PG_Pi32, 0.3f, p2);
+		anmation_manager->AttachAnimation(new CelestialBodyAnimation(p2_l1));
+	solar_data->bodies_list->Add(p2_l1);;
+
+	Moon* p2_l2 = new Moon(3.5f, PG_Pi32 / 4.f, PG_Pi32, 0.6f, p2);
+		anmation_manager->AttachAnimation(new CelestialBodyAnimation(p2_l2));
+	solar_data->bodies_list->Add(p2_l2);;
 
 	Model_Atlas_File = new ModelAtlasFile("Asset/Map_Data/Asset/atlas_model_map.txt");
 	Model_Atlas_File->LoadFromFile();

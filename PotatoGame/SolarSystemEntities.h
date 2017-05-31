@@ -20,25 +20,18 @@ public:
 	v3 size;
 	r32 orbit_radius;
 	r32 angular_speed;
-	m4 GetPossition() {
-		if (parent == nullptr) {
-			
-			return *translation_matrix;
-		}
-		else {
-			return *parent->translation_matrix**translation_matrix; 
-		}
-	}
+	v3 GetWorldPossition();
+	v3 GetWorldSize();
 	void SetPossition(v3 *new_possition);
 	void SetParent(CelestialBody* _parent);
-	CelestialBody(r32 orbit_r, r32 starting_angle, r32 _angular_speed, r32 size);
+	CelestialBody(r32 orbit_r, r32 starting_angle, r32 _angular_speed, r32 size, r32 height_plane);
 	virtual ~CelestialBody();
 	virtual void CelestialBody::Render();
 };
 
 class Star : public CelestialBody {
 public:
-	Star(r32 size);
+	Star(r32 size, r32 height_plane);
 	virtual ~Star();
 	void Star::Render(BaseRenderer *renderer);
 };
@@ -46,8 +39,9 @@ public:
 class Planet : public CelestialBody {
 public:
 	Planet();
-	Planet(r32 orbit_r, r32 starting_angle, r32 _angular_speed, r32 size);
+	Planet(r32 orbit_r, r32 starting_angle, r32 _angular_speed, r32 size, r32 height_plane);
 	Planet(r32 orbit_r, r32 starting_angle, r32 _angular_speed, r32 size, CelestialBody * parent);
+	
 	virtual ~Planet();
 	void Planet::Render(BaseRenderer *renderer);
 };
@@ -72,6 +66,7 @@ private:
 	double timer_cpt;
 	double timer_intervale;
 public:
+	
 	CelestialBodyAnimation(CelestialBody * target);
 	CelestialBodyAnimation(CelestialBody* target, double update_intervale);
 	~CelestialBodyAnimation();

@@ -177,7 +177,8 @@ PG_SHADER(const char* model_mtl_vertex_shader = GLSL330(
 			Matl.shininess = shininess.x;
 		}
 		Vertex_World_Possiton = (Translate*Scale)* vertex_position;		
-			gl_Position = WorldProjection  * WorldView * Vertex_World_Possiton;
+		
+		gl_Position = WorldProjection  * WorldView * Vertex_World_Possiton;
 		FragPos = vec3(WorldView*(Translate)* vertex_position);
 		Normal = mat3(transpose(inverse(WorldView /**  Translate*/))) * vertex_normal;
 	}
