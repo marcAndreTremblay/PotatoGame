@@ -56,7 +56,9 @@ private:
 	ModelMeshV1* bottom_tile_mesh;
 	ModelMeshV1* top_tile_mesh;
 	ModelMeshV1* sphere_mesh;
-	
+	ModelMeshV1* test_forest;
+	ModelMeshV1* test_floor_tile;
+
 	//Other Scene data
 	PGLight scene_light;
 	double time;

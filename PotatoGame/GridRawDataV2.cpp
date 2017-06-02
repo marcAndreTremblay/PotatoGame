@@ -120,9 +120,12 @@ void GridRawDataV2::LoadFromFile(char * file_path) {
 	if (grid_bottom_material_data != nullptr) delete(grid_bottom_material_data);
 	if (selected_indexes != nullptr) delete(selected_indexes);
 	
+	model_file = new ModelAtlasFile("Asset/Map_Data/Asset/atlas_model_map.txt");
+	model_file->LoadFromFile();
 
 	mtl_file = new  FileMtlRawDataV2();
 	mtl_file->LoadFromFile("Asset/Map_Data/Asset/atlas_material_map.mtl");
+
 	bottom = new ModelRawDataV1();
 	bottom->LoadFromFile("Asset/Map_Data/Asset/tile_bottom2.obj");
 	top = new ModelRawDataV1();
@@ -227,6 +230,7 @@ void GridRawDataV2::LoadFromFile(char * file_path) {
 
 GridRawDataV2::GridRawDataV2(v2 grid_size, r32 grid_tile_size) {
 	mtl_file = nullptr;
+	model_file = nullptr;
 	Grid_size = grid_size;
 	Tile_size = grid_tile_size;
 
@@ -308,6 +312,7 @@ GridRawDataV2::GridRawDataV2(v2 grid_size, r32 grid_tile_size) {
 
 GridRawDataV2::GridRawDataV2() {
 	mtl_file = nullptr;
+	model_file = nullptr;
 }
 
 
@@ -330,4 +335,5 @@ GridRawDataV2::~GridRawDataV2() {
 
 	delete(this->selected_indexes);
 	delete(this->mtl_file);
+	delete(this->model_file);
 }

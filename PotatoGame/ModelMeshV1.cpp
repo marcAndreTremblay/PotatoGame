@@ -1,4 +1,4 @@
-	#include "stdafx.h"
+#include "stdafx.h"
 #include "ModelMeshV1.h"
 
 

@@ -19,10 +19,10 @@ void ModelMtlShaderProgram::Init() {
 	this->Unif_Mat_Shinniness = glGetUniformLocation(this->ShaderID, "OverridingMtl.shininess");
 	ShaderProgram::Init();
 }
-void ModelMtlShaderProgram::Render(ModelMeshV1 * mesh, v3 * possition, MaterielRawData * mtl) {
+void ModelMtlShaderProgram::Render(ModelMeshV1 * mesh, v3 * possition, MaterielRawData * mtl = nullptr) {
 	ModelMtlShaderProgram::Render(mesh, possition, &v3(1.f), mtl);
 }
-void ModelMtlShaderProgram::Render(ModelMeshV1 * mesh, v3 * possition, v3 * scale, MaterielRawData * mtl) {
+void ModelMtlShaderProgram::Render(ModelMeshV1 * mesh, v3 * possition, v3 * scale, MaterielRawData * mtl = nullptr) {
 	if (this->IsInitialize == true) {
 		if (mesh->Mode == Vertices_Normal_Material) {
 			this->Use();

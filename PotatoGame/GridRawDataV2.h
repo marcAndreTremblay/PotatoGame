@@ -5,6 +5,7 @@
 #include "String.h"
 #include "PGShaderSources.h"
 #include "FileMtlRawDataV2.h"
+#include "ModelAtlasFile.h"
 #include "ModelRawDataV1.h"
 using namespace PG::Core;
 
@@ -46,7 +47,7 @@ public:
 	ModelRawDataV1* bottom;
 	ModelRawDataV1* top;
 	FileMtlRawDataV2* mtl_file;
-
+	ModelAtlasFile * model_file;
 	void LoadFromFile(char *file_path);
 	void SaveToFile(char *file_path);
 	v3 CalculateGridOffset();

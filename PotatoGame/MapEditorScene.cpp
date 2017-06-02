@@ -37,6 +37,8 @@ MapEditorScene::~MapEditorScene() {
 	delete(Model_Atlas_File);
 	delete(map_atlas);
 	delete(solar_data);
+	delete(test_forest);
+	delete(test_floor_tile);
 }
 
 void MapEditorScene::Update(Controler * controler, double timeElapse) {
@@ -87,6 +89,9 @@ void MapEditorScene::RenderMapGrid(BaseRenderer * renderer) {
 						}
 						tile_possition.z = 0.f;
 						renderer->model_base_shader_program->Render(bottom_tile_mesh, &tile_possition,&v3(1.f, 1.f, height_data[grid_index]), grid->mtl_file->FindByNameId(bottom_tile_data[grid_index]));
+						
+						tile_possition.z = height_data[grid_index];
+						renderer->model_mtl_shader_program->Render(test_forest, &tile_possition, &v3(1.f),nullptr);
 					}
 		}
 		else {
@@ -105,7 +110,12 @@ void MapEditorScene::Render(BaseRenderer * renderer) {
 
 	renderer->axisMesh->Render(v3(0.f, 0.f, 0.f), v4(0.f, 0.f, 1.f, 1.f));
 	renderer->cubeMesh->Render(v3(scene_light.position.x, scene_light.position.y, scene_light.position.z), v3(0.1f, 0.1f, 0.1f), scene_light.diffuse);
-	 
+	
+	for (float x = 0.f; x < 5.f; x = x + 1.f) {
+		for (float y = 0.f; y < 5.f; y = y + 1.f) {
+			renderer->model_mtl_shader_program->Render(test_floor_tile, &v3(x * 2, y * 2, 10.f),nullptr);
+		}
+	}
 	
 	RenderSolarSystem(renderer);
 	RenderMapGrid(renderer);
@@ -175,6 +185,13 @@ void MapEditorScene::Build(AnimatorManager* anmation_manager) {
 	bottom_tile_raw_data = new ModelRawDataV1();
 	bottom_tile_raw_data->LoadFromFile("Asset/Map_Data/Asset/tile_bottom2.obj");
 
+	ModelRawDataV1* forest_model_data = new ModelRawDataV1();
+	forest_model_data->LoadFromFile("Asset/Map_Data/Asset/forest.obj");
+	test_forest = new ModelMeshV1(forest_model_data);
+	test_forest->Build();
+
+	delete(forest_model_data);
+
 	top_tile_mesh = new ModelMeshV1(top_tile_raw_data);
 	top_tile_mesh->Build();
 
@@ -187,6 +204,13 @@ void MapEditorScene::Build(AnimatorManager* anmation_manager) {
 	sphere_mesh->Build();
 	delete(spher_data);
 
+
+
+	ModelRawDataV1* floor_data = new ModelRawDataV1();
+	floor_data->LoadFromFile("Asset/RawOBJ/tile_floor.obj");
+    test_floor_tile = new ModelMeshV1(floor_data);
+	test_floor_tile->Build();
+	delete(floor_data);
 	
 	int edit_target = 171;
 	//Load V2 of WorldAtlas

@@ -52,6 +52,9 @@ int HexaGridMapMeshV2::CalculateRegionVerticesCount() {
 	for (int grid_index = 0; grid_index < tile_count; grid_index++) {
 		total_vertices += Grid_Data->bottom->GetFaceCount()*3;
 		total_vertices += Grid_Data->top->GetFaceCount() * 3;
+		if (*top_style_cursor == 2) {
+
+		}
 		top_style_cursor++;
 	}
 	return total_vertices;
@@ -103,9 +106,11 @@ void HexaGridMapMeshV2::Build() {
 	int data_buffer_cursor = 0; //Note(Marc): Main buffer cursor
 	
 	int tile_count = Grid_Data->Grid_size.x*Grid_Data->Grid_size.y;
+	ModelRawDataV1 *bottom_model = Grid_Data->bottom;
+	ModelRawDataV1 *top_model = Grid_Data->top;
+	
 	for (int grid_index = 0; grid_index < tile_count; grid_index++) {
-		ModelRawDataV1 *bottom_model = Grid_Data->bottom;
-		ModelRawDataV1 *top_model = Grid_Data->top;
+		
 		MaterielRawData * current_top_mtl = nullptr;
 		MaterielRawData * current_bottom_mtl = nullptr;
 		if (tile_top_mtl_array[grid_index] != 0) {
@@ -115,7 +120,9 @@ void HexaGridMapMeshV2::Build() {
 			current_bottom_mtl = Grid_Data->mtl_file->FindByNameId(tile_bottom_mtl_array[grid_index]);
 		}
 		if (tile_top_style_array[grid_index] != 0) {
-			
+			AtlasModelData *selected_model_data = Grid_Data->model_file->FetchTileModelFilePath(Tile_Model, tile_top_style_array[grid_index]);
+			//ModelRawDataV1* test = new ModelRawDataV1();
+			//test->LoadFromFile(selected_model_data->path->CharAt());
 		}
 		translate_matrix = glm::translate(m4(1.f), v3(Grid_Data->grid_pos_data[grid_index].x, Grid_Data->grid_pos_data[grid_index].y, 0.f));
 		scale_matrix = glm::scale(m4(1.f), v3(1.f, 1.f, Grid_Data->grid_height_data[grid_index])); //Z = tile height

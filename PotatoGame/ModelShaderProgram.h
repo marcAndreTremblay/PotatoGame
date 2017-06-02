@@ -45,7 +45,7 @@ public:
 	ModelShaderProgram();
 	virtual ~ModelShaderProgram();
 	void Init();
-	void Render(ModelMeshV1 * mesh, v3 *possition, MaterielRawData *color);
+	void Render(ModelMeshV1 * mesh, v3 *possition, MaterielRawData *mtl);
 	void Render(ModelMeshV1 * mesh, v3 *possition, v3 *scale, MaterielRawData* mtl);
 	void Render(ModelMeshV1 * mesh, m4 * possition_m, m4 * scale_m, MaterielRawData * mtl);
 };
@@ -219,17 +219,7 @@ in vec4 Vertex_World_Possiton;
 out vec4 color;
 
 void main() {
-	float alpha = 1.f;
-	float radius_fog = 15;
-	float decay_lenght = 4;
-	float dist = distance(CenterOfFog, Vertex_World_Possiton);
-	if (dist > radius_fog) {
-		dist -= radius_fog;
-		alpha = 1 - dist / decay_lenght;
-		if (dist > decay_lenght) {
-			alpha = 0.0f;
-		}
-	}
+
 	// Ambient
 	vec3 ambient = vec3(Light.ambient) * Matl.ambient;
 
