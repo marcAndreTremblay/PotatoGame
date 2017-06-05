@@ -169,7 +169,6 @@
     <ClInclude Include="ModelShaderProgram.h" />
     <ClInclude Include="MonkeyEngineInstance.h" />
     <ClInclude Include="Panel.h" />
-    <ClInclude Include="Quaternion.h" />
     <ClInclude Include="ShaderProgram.h" />
     <ClInclude Include="SolarSystemEntities.h" />
     <ClInclude Include="TextBox.h" />
