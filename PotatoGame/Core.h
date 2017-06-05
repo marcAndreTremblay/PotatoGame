@@ -30,6 +30,7 @@ namespace PG {
 		typedef glm::mat4 m4;
 		typedef glm::mat3 m3;
 		typedef glm::mat2 m2;
+		typedef glm::quat Quaternion;
 
 
 		#define PG_60HZT 0.01666666666f

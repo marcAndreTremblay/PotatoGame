@@ -7,14 +7,14 @@
 
 namespace PG {
 	namespace Core {
-		class Quaternion {
+		class SuperQuaternion {
 		public:
 
-			Quaternion() {
+			SuperQuaternion() {
 				x = y = z = 0.0f;  
 				w = 1.0f;
 			}
-			~Quaternion();
+			~SuperQuaternion();
 
 			void CreateMatrix(float *pMatrix) {
 				if (pMatrix) {
@@ -58,8 +58,8 @@ namespace PG {
 				z = float(in_z * result);
 			}
 
-			Quaternion operator *(const Quaternion &q) {
-				Quaternion r;
+			SuperQuaternion operator *(const SuperQuaternion &q) {
+				SuperQuaternion r;
 
 				r.w = w*q.w - x*q.x - y*q.y - z*q.z;
 				r.x = w*q.x + x*q.w + y*q.z - z*q.y;

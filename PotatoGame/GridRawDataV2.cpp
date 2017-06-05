@@ -86,6 +86,10 @@ v3 GridRawDataV2::CalculateGridOffset()
 	return v3(Grid_size.x*x_offset, Grid_size.y*y_offset,0.f);
 }
 
+int * GridRawDataV2::GetModelTypeArrayPtr() {
+	return &grid_tile_top_model_type_data[0];
+}
+
 int * GridRawDataV2::GetTopStyleArrayPtr() {
 	return &grid_tile_top_style_data[0];
 }

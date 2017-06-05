@@ -31,6 +31,7 @@ private:
 	//other 
 	
 public:
+	int* GetModelTypeArrayPtr();
 	int* GetTopStyleArrayPtr();
 	v4* GetPossitionArrayPtr();
 	r32* GetHeightArrayPtr();

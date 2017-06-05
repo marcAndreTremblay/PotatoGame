@@ -19,7 +19,7 @@ namespace PG {
 	namespace Engine {
 		class Scene : public EngineObject, BuildableObject {
 		protected:
-			CameraAnimation* animation_test;
+			
 			Camera * scene_camera;
 			m4 Projection_Matrice;
 			virtual void Scene::HandleControler(Controler *controler) {
@@ -71,7 +71,7 @@ namespace PG {
 
 			}
 			virtual void Scene::Update(Controler *controler, double timeElapse) {
-				animation_test->Update(timeElapse);
+				
 				if (controler != nullptr) {
 					if (this->ShouldHandleControler == true) {
 						this->HandleControler(controler);

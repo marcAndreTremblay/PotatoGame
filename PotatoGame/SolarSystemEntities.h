@@ -7,6 +7,7 @@ using namespace PG::Core;
 #include "Entity.h"
 using namespace PG::Engine;
 
+
 #include "IAnimation.h" //Move this to anothe file
 
 
@@ -17,6 +18,11 @@ public:
 	CelestialBody* parent; // Not owned
 	m4 *translation_matrix;
 	m4 *scale_matrix;
+	
+	
+	m4 * rotation_matrix;
+	Quaternion* quat;
+
 	v3 size;
 	r32 orbit_radius;
 	r32 angular_speed;
@@ -65,8 +71,16 @@ private:
 	m4 rot_matrix_per_interval;
 	double timer_cpt;
 	double timer_intervale;
+	float rot_cpt;
 public:
-	
+	float WaveFct(float w, //Frequence angulaire
+				  double t, 
+				  float k, 
+				  float x, 
+			      float A, 
+				  float dephasage = 0.f) {
+		return A*glm::cos(w*t - k*x + dephasage);
+	}
 	CelestialBodyAnimation(CelestialBody * target);
 	CelestialBodyAnimation(CelestialBody* target, double update_intervale);
 	~CelestialBodyAnimation();

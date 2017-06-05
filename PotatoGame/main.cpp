@@ -7,14 +7,21 @@
 
 #include "Debugger.h"
 
+
+
 int main(int argc, char **argv)
 {
-	Quaternion *t = new Quaternion();
-
 	
-	Debug::Instance().Write("Game starting\n");
-	Debug::Instance().Write("Game starting\n");
-	Debug::Instance().Write("Game starting\n");
+	Quaternion* quaternion_test = new Quaternion(1.f, 1.f, 1.f, 1.f);
+	
+	m4 *test = new m4();
+	*test = glm::toMat4(*quaternion_test);
+	delete(quaternion_test);
+	delete(test);
+	
+	Debug::Instance().Write("Game starting");
+	Debug::Instance().Write("Game starting");
+	Debug::Instance().Write("Game starting");
 
 	EditorInstance* main_instance = new EditorInstance();
 			main_instance->Build();

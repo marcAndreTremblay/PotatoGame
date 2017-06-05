@@ -8,7 +8,7 @@ Debug & Debug::Instance() {
 }
 
 void Debug::Write(char *message) {
-	printf("%i", id);
+	printf("%i : %s\n", id,message);
 	id++;
 }
 

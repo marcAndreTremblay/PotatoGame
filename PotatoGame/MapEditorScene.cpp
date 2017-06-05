@@ -54,7 +54,8 @@ void MapEditorScene::RenderSolarSystem(BaseRenderer * renderer) {
 		MaterielRawData* color = material_file->FindByNameId(i);
 		renderer->model_mtl_shader_program->Render(sphere_mesh,
 													&c_body->GetWorldPossition(),
-													&c_body->GetWorldSize(),
+													&c_body->GetWorldSize(),	
+													c_body->quat,
 													color);
 	}
 }
@@ -73,6 +74,7 @@ void MapEditorScene::RenderMapGrid(BaseRenderer * renderer) {
 			
 					v3 tile_possition;
 					v3 scale = v3(1.f);
+					int* model_type_data = grid->GetModelTypeArrayPtr();
 					int* top_tile_data = grid->GetTopMaterialPtr();
 					r32* height_data = grid->GetHeightArrayPtr();
 					int* bottom_tile_data = grid->GetBottomMaterialPtr();
@@ -90,8 +92,11 @@ void MapEditorScene::RenderMapGrid(BaseRenderer * renderer) {
 						tile_possition.z = 0.f;
 						renderer->model_base_shader_program->Render(bottom_tile_mesh, &tile_possition,&v3(1.f, 1.f, height_data[grid_index]), grid->mtl_file->FindByNameId(bottom_tile_data[grid_index]));
 						
-						tile_possition.z = height_data[grid_index];
-						renderer->model_mtl_shader_program->Render(test_forest, &tile_possition, &v3(1.f),nullptr);
+						if (model_type_data[grid_index] == 1) {
+							tile_possition.z = height_data[grid_index];
+							renderer->model_mtl_shader_program->Render(test_forest, &tile_possition,nullptr);
+						}
+						
 					}
 		}
 		else {
@@ -111,11 +116,11 @@ void MapEditorScene::Render(BaseRenderer * renderer) {
 	renderer->axisMesh->Render(v3(0.f, 0.f, 0.f), v4(0.f, 0.f, 1.f, 1.f));
 	renderer->cubeMesh->Render(v3(scene_light.position.x, scene_light.position.y, scene_light.position.z), v3(0.1f, 0.1f, 0.1f), scene_light.diffuse);
 	
-	for (float x = 0.f; x < 5.f; x = x + 1.f) {
+	/*for (float x = 0.f; x < 5.f; x = x + 1.f) {
 		for (float y = 0.f; y < 5.f; y = y + 1.f) {
 			renderer->model_mtl_shader_program->Render(test_floor_tile, &v3(x * 2, y * 2, 10.f),nullptr);
 		}
-	}
+	}*/
 	
 	RenderSolarSystem(renderer);
 	RenderMapGrid(renderer);
@@ -133,17 +138,22 @@ void MapEditorScene::Build(AnimatorManager* anmation_manager) {
 
 	this->Set_Name("GridEditorScene");
 
+
+	
+
 	this->scene_camera = new Camera(
 		v3(-15, -15, 10), //Possition
 		v3(0, 0, 0), //look at
 		v3(0, 0, 1)	 //up
 	);
-	animation_test = new CameraAnimation(scene_camera);
+//	anmation_manager->AttachAnimation(new CameraAnimation(scene_camera));
 	//Todo(): Maybe we should test if we should calculate the aspect racio from the physical screen size or perharp with the window size???
 	this->Projection_Matrice = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 150.0f);
 
 	solar_data = new SolorSystemEntities();
 	
+
+
 	Star* s1 = new Star(3.0f,12.f);
 	solar_data->bodies_list->Add(s1);
 
@@ -152,7 +162,7 @@ void MapEditorScene::Build(AnimatorManager* anmation_manager) {
 		anmation_manager->AttachAnimation(new CelestialBodyAnimation(p1));
 	solar_data->bodies_list->Add(p1);
 
-	Planet* p2 = new Planet(10.2f, PG_Pi32, PG_Pi32 / 5.f, 0.2f, s1);
+	Planet* p2 = new Planet(10.2f, PG_Pi32, PG_Pi32 / 5.f, 0.3f, s1);
 		anmation_manager->AttachAnimation(new CelestialBodyAnimation(p2));
 	solar_data->bodies_list->Add(p2);;
 
@@ -164,11 +174,11 @@ void MapEditorScene::Build(AnimatorManager* anmation_manager) {
 		anmation_manager->AttachAnimation(new CelestialBodyAnimation(p4));
 	solar_data->bodies_list->Add(p4);;
 
-	Moon* p2_l1 = new Moon(2.f, PG_Pi32 / 2.f, PG_Pi32, 0.3f, p2);
+	Moon* p2_l1 = new Moon(2.f, PG_Pi32 / 2.f, PG_Pi32/4.f, 0.5f, p2);
 		anmation_manager->AttachAnimation(new CelestialBodyAnimation(p2_l1));
 	solar_data->bodies_list->Add(p2_l1);;
 
-	Moon* p2_l2 = new Moon(3.5f, PG_Pi32 / 4.f, PG_Pi32, 0.6f, p2);
+	Moon* p2_l2 = new Moon(3.5f, PG_Pi32 / 4.f, PG_Pi32 / 3.f, 0.5f, p2);
 		anmation_manager->AttachAnimation(new CelestialBodyAnimation(p2_l2));
 	solar_data->bodies_list->Add(p2_l2);;
 
@@ -364,6 +374,11 @@ void MapEditorScene::HandleControler(Controler * controler) {
 		}
 	}
 	switch (current_mode) {
+		case Mode_Edit_Tile_Model: {
+			HandleCameraMovement(controler);
+			HandleTilePicking(controler);
+			
+				break; }
 		case Mode_Camera_Move:
 			HandleCameraMovement(controler);
 			break;
@@ -462,9 +477,6 @@ void MapEditorScene::HandleControler(Controler * controler) {
 				}
 
 			}
-			break; }
-		case Mode_Edit_Tile_Model:{
-			
 			break; }
 		default: {current_mode = Mode_Camera_Move;
 			break; }

@@ -11,6 +11,7 @@ void ModelMtlShaderProgram::Init() {
 	glUniformBlockBinding(this->ShaderID, glGetUniformBlockIndex(this->ShaderID, "Renderer_UBO"), 1);
 	glUniformBlockBinding(this->ShaderID, glGetUniformBlockIndex(this->ShaderID, "SceneAdvanceLightData_UBO"), 3);
 	this->Unif_Scale = glGetUniformLocation(this->ShaderID, "Scale");
+	this->Unif_Rotate = glGetUniformLocation(this->ShaderID, "Rotation");
 	this->Unif_Translate = glGetUniformLocation(this->ShaderID, "Translate");
 	this->Unif_IsOverringMtl = glGetUniformLocation(this->ShaderID, "IsOverringMtl");
 	this->Unif_Mat_Ambient = glGetUniformLocation(this->ShaderID, "OverridingMtl.ambient");
@@ -20,9 +21,10 @@ void ModelMtlShaderProgram::Init() {
 	ShaderProgram::Init();
 }
 void ModelMtlShaderProgram::Render(ModelMeshV1 * mesh, v3 * possition, MaterielRawData * mtl = nullptr) {
-	ModelMtlShaderProgram::Render(mesh, possition, &v3(1.f), mtl);
+	ModelMtlShaderProgram::Render(mesh, possition, &v3(1.f), new Quaternion(v3(0.f, 0.f, 0.f)), mtl);
 }
-void ModelMtlShaderProgram::Render(ModelMeshV1 * mesh, v3 * possition, v3 * scale, MaterielRawData * mtl = nullptr) {
+
+void ModelMtlShaderProgram::Render(ModelMeshV1 * mesh, v3 * possition, v3 * scale , Quaternion* quat,MaterielRawData * mtl = nullptr) {
 	if (this->IsInitialize == true) {
 		if (mesh->Mode == Vertices_Normal_Material) {
 			this->Use();
@@ -30,6 +32,10 @@ void ModelMtlShaderProgram::Render(ModelMeshV1 * mesh, v3 * possition, v3 * scal
 			m4* t = new m4(1.f);
 			*t = glm::scale(m4(1.f),*scale);
 			
+			
+
+			
+			glUniformMatrix4fv(this->Unif_Rotate, 1, GL_FALSE, glm::value_ptr(glm::toMat4(*quat)));
 			glUniformMatrix4fv(this->Unif_Translate, 1, GL_FALSE, &glm::translate(m4(1.f), *possition)[0][0]);
 			glUniformMatrix4fv(this->Unif_Scale, 1, GL_FALSE, glm::value_ptr(*t));
 			if (mtl != nullptr) {
@@ -43,9 +49,11 @@ void ModelMtlShaderProgram::Render(ModelMeshV1 * mesh, v3 * possition, v3 * scal
 			else {
 				glUniform1i(this->Unif_IsOverringMtl, 0);
 			}
-
+			
+		
 			mesh->BindVAO();
 			glDrawArrays(GL_TRIANGLES, 0, mesh->GetVeticesCount());
+			delete(t);
 		}
 	}
 	else {
@@ -85,6 +93,8 @@ void ModelShaderProgram::Init() {
 
 	this->Unif_Translate = glGetUniformLocation(this->ShaderID, "Translate");
 	this->Unif_Scale = glGetUniformLocation(this->ShaderID, "Scale");
+	this->Unif_Rotate = glGetUniformLocation(this->ShaderID, "Rotation");
+
 	this->Unif_Mat_Ambient = glGetUniformLocation(this->ShaderID, "OverridingMtl.ambient");
 	this->Unif_Mat_Diffuse = glGetUniformLocation(this->ShaderID, "OverridingMtl.diffuse");
 	this->Unif_Mat_Specular = glGetUniformLocation(this->ShaderID, "OverridingMtl.specular");

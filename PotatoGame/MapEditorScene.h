@@ -1,6 +1,8 @@
 #ifndef Map_Editor_SCENE_H
 #define Map_Editor_SCENE_H
 
+
+
 #include "Core.h"
 #include "BaseRenderer.h"	
 #include "Scene.h"
@@ -38,6 +40,8 @@ class MapEditorScene :
 	public Scene {
 private:
 	MapAtlasRawDataV1* map_atlas;
+
+
 
 	//Display information
 	MapAtlasRegion* map_atlas_region_display[9];

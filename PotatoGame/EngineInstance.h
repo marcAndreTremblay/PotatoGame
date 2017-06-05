@@ -58,9 +58,10 @@ namespace PG {
 			}
 			virtual void EngineInstance::Render() {
 				if (this->CurrentViewedScene != nullptr) {
-					if (this->CurrentViewedScene->IsRenderable() == true)
+					if (this->CurrentViewedScene->IsRenderable() == true) {
 						this->CurrentViewedScene->Render(this->GameRenderer);
-				}
+					}
+									}
 			}
 			virtual void EngineInstance::Update(double _TimeElapse) {
 				this->HandleControler();
@@ -112,11 +113,12 @@ namespace PG {
 				double updateFctTimer = 0;
 				double UpdateFrequency = PG_60HZT;
 				double last_update_pass_stamp = 0;
-
+				double delta_time = 0;
+				double deltaTimeForUpdate = 0;
 				while (this->ShouldGameClose == false) {
 
 					current_pass_time_stamp = glfwGetTime();
-					double delta_time = (current_pass_time_stamp - last_pass_time_stamp);
+					delta_time = (current_pass_time_stamp - last_pass_time_stamp);
 					last_pass_time_stamp = current_pass_time_stamp;
 
 					glfwPollEvents();
@@ -124,7 +126,7 @@ namespace PG {
 
 					updateFctTimer += delta_time;
 					while (updateFctTimer >= UpdateFrequency) {
-						double deltaTimeForUpdate = (glfwGetTime() - last_update_pass_stamp);
+						deltaTimeForUpdate = (glfwGetTime() - last_update_pass_stamp);
 						last_update_pass_stamp = glfwGetTime();
 
 						this->Controlers->Update(this->Game_Window);

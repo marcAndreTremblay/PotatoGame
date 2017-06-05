@@ -37,6 +37,7 @@ namespace PG {
 			PGMouse_Right = GLFW_MOUSE_BUTTON_RIGHT
 		};
 		enum PGKey {
+			PGKey_Any = 0,
 			PGKey_1 = GLFW_KEY_1,
 			PGKey_2 = GLFW_KEY_2,
 			PGKey_3 = GLFW_KEY_3,

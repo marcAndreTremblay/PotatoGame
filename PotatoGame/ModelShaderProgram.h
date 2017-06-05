@@ -16,7 +16,8 @@ private:
 	GLuint Unif_Translate;
 	GLuint Unif_Scale;
 	GLuint Unif_IsOverringMtl;
-	
+	GLuint Unif_Rotate;
+
 	GLuint Unif_Mat_Ambient;
 	GLuint Unif_Mat_Diffuse;
 	GLuint Unif_Mat_Specular;
@@ -27,7 +28,8 @@ public:
 	virtual ~ModelMtlShaderProgram();
 	 void Init();
 	 void Render(ModelMeshV1 * mesh, v3 *possition, MaterielRawData* mtl);
-	 void Render(ModelMeshV1 * mesh, v3 *possition, v3 *scale , MaterielRawData* mtl);
+	 void Render(ModelMeshV1 * mesh, v3 *possition, v3 *scale, MaterielRawData* mtl);
+	 void Render(ModelMeshV1 * mesh, v3 *possition, v3 *scale ,Quaternion *quat, MaterielRawData* mtl);
 	 void Render(ModelMeshV1 * mesh, m4 * possition_m, m4 * scale_m, MaterielRawData * mtl);
 };
 
@@ -36,6 +38,7 @@ class ModelShaderProgram :
 private:
 	GLuint Unif_Translate;
 	GLuint Unif_Scale;
+	GLuint Unif_Rotate;
 
 	GLuint Unif_Mat_Ambient;
 	GLuint Unif_Mat_Diffuse;
@@ -63,7 +66,7 @@ PG_SHADER(const char* base_model_vertex_shader = GLSL330(
 		float shininess;
 	};
 
-
+	uniform mat4 Rotation;
 	uniform mat4 Scale;
 	uniform mat4 Translate; //Note(Marc): will translate all the world space coord of the map
 	uniform PGMaterial OverridingMtl;
@@ -144,6 +147,7 @@ PG_SHADER(const char* model_mtl_vertex_shader = GLSL330(
 		vec3 specular;
 		float shininess;
 	};
+	uniform mat4 Rotation;
 	uniform mat4 Scale;
 	uniform mat4 Translate; //Note(Marc): will translate all the world space coord of the map
 	uniform int IsOverringMtl;
@@ -176,11 +180,12 @@ PG_SHADER(const char* model_mtl_vertex_shader = GLSL330(
 			Matl.specular = specular;
 			Matl.shininess = shininess.x;
 		}
-		Vertex_World_Possiton = (Translate*Scale)* vertex_position;		
+		//Todo(marc): Build a model matrice and reuse it
+		Vertex_World_Possiton = (Translate*Rotation*Scale)* vertex_position;
 		
 		gl_Position = WorldProjection  * WorldView * Vertex_World_Possiton;
-		FragPos = vec3(WorldView*(Translate)* vertex_position);
-		Normal = mat3(transpose(inverse(WorldView /**  Translate*/))) * vertex_normal;
+		FragPos = vec3(WorldView*(Translate*Rotation*Scale)* vertex_position);
+		Normal = mat3(transpose(inverse(WorldView*(Translate*Rotation*Scale) /**  *(Translate*Rotation*Scale)*/))) * vertex_normal;
 	}
 ));
 #endif
