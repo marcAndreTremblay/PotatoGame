@@ -11,5 +11,8 @@ Count: 2
 1 not_found.obj
 
 [TILE_MODEL]
-Count: 1
-1 forest.obj
+Count: 4
+1 single_tree_1.obj
+2 rock_1.obj
+3 rock_2.obj
+4 rock_3.obj

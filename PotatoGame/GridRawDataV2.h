@@ -12,12 +12,11 @@ using namespace PG::Core;
 
 /*
 	File Format :
-
 */
 class GridRawDataV2 {
 private:
 	Str* mtl_file_path;
-	
+
 	//File data
 	int* grid_tile_top_model_type_data = nullptr;  // 0 = no data
 		bool* grid_tile_top_model_dynamic_status = nullptr; // 1= dynamic 0 = static

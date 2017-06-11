@@ -6,6 +6,12 @@
 
 #include "Debugger.h"
 
+class command {
+	command();
+	~command();
+	void Apply();
+	void Undo();
+};
 
 
 int main(int argc, char **argv)

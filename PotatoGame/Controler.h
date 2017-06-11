@@ -38,6 +38,7 @@ namespace PG {
 		};
 		enum PGKey {
 			PGKey_Any = 0,
+			PGKey_0 = GLFW_KEY_0,
 			PGKey_1 = GLFW_KEY_1,
 			PGKey_2 = GLFW_KEY_2,
 			PGKey_3 = GLFW_KEY_3,
@@ -117,6 +118,7 @@ namespace PG {
 				}
 				this->AddKeyboardKey(PGBackSpace);
 				this->AddKeyboardKey(PGSpace);
+				this->AddKeyboardKey(PGKey_0, "0_Key");
 				this->AddKeyboardKey(PGKey_1, "1_Key");
 				this->AddKeyboardKey(PGKey_2, "2_Key");
 				this->AddKeyboardKey(PGKey_3, "3_Key");

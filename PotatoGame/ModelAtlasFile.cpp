@@ -4,6 +4,7 @@
 
 ModelAtlasFile::ModelAtlasFile(char *file_path) {
 	Atlas_File_Path = new Str(file_path);
+	Model_Folder_Path = Str::ExtractFolderPath(Atlas_File_Path);
 	tile_model_file_path = new List<AtlasModelData>(true);
 	bottom_tile_file_path = new List<AtlasModelData>(true);
 	top_tile_file_path = new List<AtlasModelData>(true);
@@ -39,7 +40,9 @@ void ModelAtlasFile::LoadFromFile() {
 							int match_cpt1 = fscanf(file, "%i", &tempo_read_id);
 							int match_cpt2 = fscanf(file, "%s", &lineHeader);
 							if (match_cpt1 == 1 && match_cpt2 == 1) {
-								bottom_tile_file_path->Add(new AtlasModelData(tempo_read_id, lineHeader));
+
+
+								bottom_tile_file_path->Add(new AtlasModelData(tempo_read_id, lineHeader, Model_Folder_Path->CharAt(0)));
 							}
 							else {
 								//Todo(marc): addd debug model line info format dosn't match id:file_name.obj
@@ -60,7 +63,7 @@ void ModelAtlasFile::LoadFromFile() {
 							int match_cpt1 = fscanf(file, "%i", &tempo_read_id);
 							int match_cpt2 = fscanf(file, "%s", &lineHeader);
 							if (match_cpt1 == 1 && match_cpt2 == 1) {
-								top_tile_file_path->Add(new AtlasModelData(tempo_read_id, lineHeader));
+								top_tile_file_path->Add(new AtlasModelData(tempo_read_id, lineHeader, Model_Folder_Path->CharAt(0)));
 							}
 							else {
 								//Todo(marc): addd debug model line info format dosn't match id:file_name.obj
@@ -76,7 +79,7 @@ void ModelAtlasFile::LoadFromFile() {
 					int match_cpt1 = fscanf(file, "%i", &tempo_read_id);
 					int match_cpt2 = fscanf(file, "%s", &lineHeader);
 					if (match_cpt1 == 1 && match_cpt2 == 1) {
-						not_found_path = new AtlasModelData(tempo_read_id, lineHeader);
+						not_found_path = new AtlasModelData(tempo_read_id, lineHeader, Model_Folder_Path->CharAt(0));
 					}
 				}
 			else
@@ -90,7 +93,8 @@ void ModelAtlasFile::LoadFromFile() {
 							int match_cpt1 = fscanf(file, "%i", &tempo_read_id);
  							int match_cpt2 = fscanf(file, "%s", &lineHeader);
 							if (match_cpt1 == 1 && match_cpt2 == 1) {
-								tile_model_file_path->Add(new AtlasModelData(tempo_read_id, lineHeader));
+								
+								tile_model_file_path->Add(new AtlasModelData(tempo_read_id, lineHeader, Model_Folder_Path->CharAt(0)));
 							}
 							else {
 								//Todo(marc): addd debug model line info format dosn't match id:file_name.obj

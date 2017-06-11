@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "MapEditorScene.h"/
+#include "MapEditorScene.h"
 
 
 MapEditorScene::MapEditorScene(MousePicker* mouse_picker) : Scene(mouse_picker){
@@ -81,22 +81,26 @@ void MapEditorScene::RenderMapGrid(BaseRenderer * renderer) {
 					for (int grid_index = 0; grid_index < grid->Grid_size.x*grid->Grid_size.y;grid_index++) {	
 
 						tile_possition = possition_cursor + v3(grid->grid_pos_data[grid_index]);
+						
+						tile_possition.z = 0.f;
+						renderer->model_base_shader_program->Render(bottom_tile_mesh, &tile_possition, &v3(1.f, 1.f, height_data[grid_index]), grid->mtl_file->FindByNameId(bottom_tile_data[grid_index]));
+
+
 						tile_possition.z = height_data[grid_index];
 						if (grid->selected_indexes[grid_index] == true) {
 							renderer->model_base_shader_program->Render(top_tile_mesh, &tile_possition, grid->mtl_file->FindByNameId(0));
 						}	
 						else {
 							renderer->model_base_shader_program->Render(top_tile_mesh, &tile_possition, grid->mtl_file->FindByNameId(top_tile_data[grid_index]));
-
 						}
-						tile_possition.z = 0.f;
-						renderer->model_base_shader_program->Render(bottom_tile_mesh, &tile_possition,&v3(1.f, 1.f, height_data[grid_index]), grid->mtl_file->FindByNameId(bottom_tile_data[grid_index]));
 						
-						if (model_type_data[grid_index] == 1) {
+						
+						if (model_type_data[grid_index] != 0) {
 							tile_possition.z = height_data[grid_index];
-							renderer->model_mtl_shader_program->Render(test_forest, &tile_possition,nullptr);
+							AtlasModelData *selected_model_data = grid->model_file->FetchTileModelFilePath(Tile_Model, model_type_data[grid_index]);
+
+							renderer->model_mtl_shader_program->Render(test_floor_tile, &tile_possition, nullptr);
 						}
-						
 					}
 		}
 		else {
@@ -124,10 +128,12 @@ void MapEditorScene::Render(BaseRenderer * renderer) {
 	
 	RenderSolarSystem(renderer);
 	RenderMapGrid(renderer);
+	
+	renderer->model_mtl_shader_program->Render(test_floor_tile, &v3(0.f, 5.f, 5.f), nullptr);
 
 	for (int i = 0; i < material_file->Count(); i++) {
 		MaterielRawData* yrdy = material_file->FindByNameId(i);
-		renderer->model_mtl_shader_program->Render(sphere_mesh, &v3(i * 2, i*2, i * 2), yrdy);
+		renderer->model_mtl_shader_program->Render(test_floor_tile, &v3(4.f+i*4.f, 5.f, 5.f), yrdy);
 
 	}
 
@@ -196,7 +202,7 @@ void MapEditorScene::Build(AnimatorManager* anmation_manager) {
 	bottom_tile_raw_data->LoadFromFile("Asset/Map_Data/Asset/tile_bottom2.obj");
 
 	ModelRawDataV1* forest_model_data = new ModelRawDataV1();
-	forest_model_data->LoadFromFile("Asset/Map_Data/Asset/forest.obj");
+	forest_model_data->LoadFromFile("Asset/Map_Data/Asset/single_tree_1.obj");
 	test_forest = new ModelMeshV1(forest_model_data);
 	test_forest->Build();
 
@@ -217,7 +223,7 @@ void MapEditorScene::Build(AnimatorManager* anmation_manager) {
 
 
 	ModelRawDataV1* floor_data = new ModelRawDataV1();
-	floor_data->LoadFromFile("Asset/RawOBJ/tile_floor.obj");
+	floor_data->LoadFromFile("Asset/Map_Data/Asset/single_tree_1.obj");
     test_floor_tile = new ModelMeshV1(floor_data);
 	test_floor_tile->Build();
 	delete(floor_data);
@@ -394,10 +400,59 @@ void MapEditorScene::HandleControler(Controler * controler) {
 				for (int i = 0; i < 9; i++) {
 					if (map_atlas_region_edited[i] == true) {
 						GridRawDataV2 *grid = map_atlas_region_display[i]->file_data;
+						
 						for (int grid_index = 0;
 							grid_index < grid->Grid_size.x*grid->Grid_size.y;
 							grid_index++) {
 							grid->selected_indexes[grid_index] = false;
+						}
+					}
+				}
+			}
+			if (controler->IsRelease(PGKey_0) == true) {
+				for (int i = 0; i < 9; i++) {
+					if (map_atlas_region_edited[i] == true) {
+						GridRawDataV2 *grid = map_atlas_region_display[i]->file_data;
+						int* model_type = grid->GetModelTypeArrayPtr();
+						for (int grid_index = 0;
+							grid_index < grid->Grid_size.x*grid->Grid_size.y;
+							grid_index++) {
+							if (grid->selected_indexes[grid_index] == true) {
+								model_type[grid_index] = 0;
+							}
+
+						}
+					}
+				}
+			}
+			if (controler->IsRelease(PGKey_1) == true) {
+				for (int i = 0; i < 9; i++) {
+					if (map_atlas_region_edited[i] == true) {
+						GridRawDataV2 *grid = map_atlas_region_display[i]->file_data;
+						int* model_type = grid->GetModelTypeArrayPtr();
+						for (int grid_index = 0;
+							grid_index < grid->Grid_size.x*grid->Grid_size.y;
+							grid_index++) {
+							if (grid->selected_indexes[grid_index] == true) {
+								model_type[grid_index] = 1;
+							}
+							
+						}
+					}
+				}
+			}
+			if (controler->IsRelease(PGKey_2) == true) {
+				for (int i = 0; i < 9; i++) {
+					if (map_atlas_region_edited[i] == true) {
+						GridRawDataV2 *grid = map_atlas_region_display[i]->file_data;
+						int* model_type = grid->GetModelTypeArrayPtr();
+						for (int grid_index = 0;
+							grid_index < grid->Grid_size.x*grid->Grid_size.y;
+							grid_index++) {
+							if (grid->selected_indexes[grid_index] == true) {
+								model_type[grid_index] = 2;
+							}
+
 						}
 					}
 				}
@@ -456,6 +511,9 @@ void MapEditorScene::HandleControler(Controler * controler) {
 						for (int grid_index = 0;grid_index < grid->Grid_size.x*grid->Grid_size.y;grid_index++) {
 							if (grid->selected_indexes[grid_index] == true) {
 								grid->grid_height_data[grid_index] -= 0.1f;
+								if (grid->grid_height_data[grid_index] > 0.1f) {
+									grid->grid_height_data[grid_index] = 0.1f;
+								}
 							}
 						}
 					}

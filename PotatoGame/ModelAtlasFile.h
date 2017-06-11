@@ -4,6 +4,8 @@
 #include "Core.h"
 #include "String.h"
 #include "List.h"
+#include "ModelRawDataV1.h"
+#include "ModelMeshV1.h"
 using namespace PG::Core;
 
 
@@ -38,26 +40,39 @@ using namespace PG::Core;
 */
 struct AtlasModelData {
 	int id;
-	Str* path;
+	ModelRawDataV1* data;
+	ModelMeshV1*mesh;
+	Str* file_name;
+	Str* folder_path;
 	AtlasModelData() {
-		path = nullptr;
+		data = nullptr;
+		mesh = nullptr;
+		file_name = nullptr;
+		folder_path = nullptr;
 		id = -1;
 	}
-	AtlasModelData(int id,char *file) {
-		path = new Str(file);
-		id = id;
+	AtlasModelData(int _id,char *_file,char* _folder) {
+		data = nullptr;
+		mesh = nullptr;
+		this->file_name = new Str(_file);
+		this->folder_path = new Str(_folder);
+		this->id = _id;
 	}
 	~AtlasModelData() {
-		delete(path);
+		delete(this->file_name);
+		delete(this->folder_path);
+		delete(this->data);
+		delete(this->mesh);
 	}
 };
 enum AtlasCategorie{
 	Tile_Model=0,
 	Tile_Top = 1,
-	Tile_Bottom = 2
+	Tile_Bottom = 2 
 };
 class ModelAtlasFile {
 private:
+	Str* Model_Folder_Path;
 	Str* Atlas_File_Path;
 	List<AtlasModelData>* tile_model_file_path;
 	List<AtlasModelData>* bottom_tile_file_path;

@@ -296,7 +296,7 @@ GridRawDataV2::GridRawDataV2(v2 grid_size, r32 grid_tile_size) {
 				grid_tile_top_model_rotation_data[index_cpt] = 0.f;
 				grid_tile_top_model_offset_data[index_cpt] = 0.f;
 
-				grid_tile_top_style_data[index_cpt] = 1.f;
+				grid_tile_top_style_data[index_cpt] = 1; // Set to 0
 				grid_top_material_data[index_cpt] = 1;
 				grid_bottom_material_data[index_cpt] = 2;
 				selected_indexes[index_cpt] = false;
