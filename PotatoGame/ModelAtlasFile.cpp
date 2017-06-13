@@ -114,6 +114,48 @@ void ModelAtlasFile::LoadFromFile() {
 	printf("Loading | Model Atlas file | End\n");
 }
 
+void ModelAtlasFile::LoadRawData() {
+	//Model raw data loading
+	ListNode<AtlasModelData> *c_node;
+	c_node = this->tile_model_file_path->GetHead();
+	for (c_node; c_node != nullptr; c_node = c_node->GetNext()) {
+		AtlasModelData* current_element = c_node->GetData();
+		Str* full_path = new Str("");
+		full_path->Append(current_element->folder_path->CharAt(0));
+		full_path->Append(current_element->file_name->CharAt(0));
+		current_element->data = new ModelRawDataV1();
+		current_element->data->LoadFromFile(full_path->CharAt());
+	}
+	//Tile top raw data loading
+	ListNode<AtlasModelData> *c_node2;
+	c_node2 = this->top_tile_file_path->GetHead();
+	for (c_node2; c_node2 != nullptr; c_node2 = c_node2->GetNext()) {
+		AtlasModelData* current_element = c_node2->GetData();
+		Str* full_path = new Str("");
+			full_path->Append(current_element->folder_path->CharAt(0));
+			full_path->Append(current_element->file_name->CharAt(0));
+		current_element->data = new ModelRawDataV1();
+		current_element->data->LoadFromFile(full_path->CharAt());
+	}
+}
+
+void ModelAtlasFile::LoadMesh() {
+	ListNode<AtlasModelData> *c_node;
+	c_node = this->tile_model_file_path->GetHead();
+	for (c_node; c_node != nullptr; c_node = c_node->GetNext()) {
+		AtlasModelData* current_element = c_node->GetData();
+		current_element->mesh = new ModelMeshV1(current_element->data);
+		current_element->mesh->Build();
+	}
+	ListNode<AtlasModelData> *c_node2;
+	c_node2 = this->top_tile_file_path->GetHead();
+	for (c_node2; c_node2 != nullptr; c_node2 = c_node2->GetNext()) {
+		AtlasModelData* current_element = c_node2->GetData();
+		current_element->mesh = new ModelMeshV1(current_element->data);
+		current_element->mesh->Build();
+	}
+}
+
 AtlasModelData * ModelAtlasFile::FetchTileModelFilePath(AtlasCategorie categorie, int id) {
 	ListNode<AtlasModelData> *c_node;
 	switch (categorie) {

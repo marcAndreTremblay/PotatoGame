@@ -8,7 +8,7 @@ MapEditorScene::MapEditorScene(MousePicker* mouse_picker) : Scene(mouse_picker){
 	this->tempo_var = 0.1f;
 	this->scene_light = PGLight();
 	this->scene_light.position = v4(0.f, 0.f, 0.f, 1.f);
-
+ 
 	this->scene_light.diffuse = v4(1.f, 1.f, 1.f, 1.f);
 	this->scene_light.ambient = v4(0.6f, 0.6f, 0.6f, 1.f);
 	this->scene_light.specular = v4(0.6f, 0.6f, 0.6f, 1.f);
@@ -74,6 +74,7 @@ void MapEditorScene::RenderMapGrid(BaseRenderer * renderer) {
 			
 					v3 tile_possition;
 					v3 scale = v3(1.f);
+					int* tile_top_style_data = grid->GetTopStyleArrayPtr();
 					int* model_type_data = grid->GetModelTypeArrayPtr();
 					int* top_tile_data = grid->GetTopMaterialPtr();
 					r32* height_data = grid->GetHeightArrayPtr();
@@ -86,20 +87,23 @@ void MapEditorScene::RenderMapGrid(BaseRenderer * renderer) {
 						renderer->model_base_shader_program->Render(bottom_tile_mesh, &tile_possition, &v3(1.f, 1.f, height_data[grid_index]), grid->mtl_file->FindByNameId(bottom_tile_data[grid_index]));
 
 
-						tile_possition.z = height_data[grid_index];
-						if (grid->selected_indexes[grid_index] == true) {
-							renderer->model_base_shader_program->Render(top_tile_mesh, &tile_possition, grid->mtl_file->FindByNameId(0));
-						}	
-						else {
-							renderer->model_base_shader_program->Render(top_tile_mesh, &tile_possition, grid->mtl_file->FindByNameId(top_tile_data[grid_index]));
+						if (tile_top_style_data[grid_index] != 0) {
+							tile_possition.z = height_data[grid_index];
+							AtlasModelData *selected_model_data = grid->model_file->FetchTileModelFilePath(Tile_Top, tile_top_style_data[grid_index]);
+							ModelMeshV1* t_m = selected_model_data->mesh;
+							if (grid->selected_indexes[grid_index] == true) {
+
+								renderer->model_base_shader_program->Render(t_m, &tile_possition, grid->mtl_file->FindByNameId(0));
+							}
+							else {
+								renderer->model_base_shader_program->Render(t_m, &tile_possition, grid->mtl_file->FindByNameId(top_tile_data[grid_index]));
+							}
 						}
-						
-						
 						if (model_type_data[grid_index] != 0) {
 							tile_possition.z = height_data[grid_index];
 							AtlasModelData *selected_model_data = grid->model_file->FetchTileModelFilePath(Tile_Model, model_type_data[grid_index]);
-
-							renderer->model_mtl_shader_program->Render(test_floor_tile, &tile_possition, nullptr);
+							ModelMeshV1* t_m = selected_model_data->mesh;
+							renderer->model_mtl_shader_program->Render(t_m, &tile_possition, nullptr);
 						}
 					}
 		}
@@ -350,17 +354,18 @@ void MapEditorScene::HandleControler(Controler * controler) {
 		printf("Mode_Camera_Move Mode\n");
 	}
 	if (controler->IsRelease(PGKey_F2) == true) {
-		current_mode = Mode_Entities_Selection;
-		printf("Mode_Entities_Selection Mode\n");
+		current_mode = Mode_Edit_Tile_Top_Style;
+		printf("Mode Tile top style\n");
 	}
 	if (controler->IsRelease(PGKey_F3) == true) {
 		current_mode = Mode_Tiles_Selection;
 		printf("Mode_Tiles_Selection Mode\n");
 	}
 	if (controler->IsRelease(PGKey_F4) == true) {
-		current_mode = Mode_Edit_Tile_Material;
-		printf("Mode_Edit_Tile_Material Mode\n");
+		current_mode = Mode_Edit_Tile_Top_Material;
+		printf("Mode_Edit_Tile_ tops Material Mode\n");
 	}
+
 	if (controler->IsRelease(PGKey_F5) == true) {
 		current_mode = Mode_Edit_Tile_Height;
 		printf("Mode_Edit_Tile_Height Mode\n");
@@ -368,6 +373,10 @@ void MapEditorScene::HandleControler(Controler * controler) {
 	if (controler->IsRelease(PGKey_F6) == true) {
 		current_mode = Mode_Edit_Tile_Model;
 		printf("Mode_Edit_Tile_Model Mode\n");
+	}
+	if (controler->IsRelease(PGKey_F7) == true) {
+		current_mode = Mode_Edit_Tile_Bottom_Material;
+		printf("Mode_Edit_Tile_ bottom Material Mode\n");
 	}
 	if (controler->GetKey(PGKey_Left_Ctrl)->IsPress == true) {
 		if (controler->IsRelease(PGKey_S) == true) {
@@ -380,16 +389,96 @@ void MapEditorScene::HandleControler(Controler * controler) {
 		}
 	}
 	switch (current_mode) {
-		case Mode_Edit_Tile_Model: {
-			HandleCameraMovement(controler);
-			HandleTilePicking(controler);
-			
-				break; }
-		case Mode_Camera_Move:
-			HandleCameraMovement(controler);
-			break;
-		case Mode_Entities_Selection:
-			break;
+	case Mode_Edit_Tile_Model: {
+		HandleTilePicking(controler);
+		if (controler->IsRelease(PGKey_0) == true) {
+			for (int i = 0; i < 9; i++) {
+				if (map_atlas_region_edited[i] == true) {
+					GridRawDataV2 *grid = map_atlas_region_display[i]->file_data;
+					int* model_type = grid->GetModelTypeArrayPtr();
+					for (int grid_index = 0;
+						grid_index < grid->Grid_size.x*grid->Grid_size.y;
+						grid_index++) {
+						if (grid->selected_indexes[grid_index] == true) {
+							model_type[grid_index] = 0;
+						}
+
+					}
+				}
+			}
+		}
+		if (controler->IsRelease(PGKey_1) == true) {
+			for (int i = 0; i < 9; i++) {
+				if (map_atlas_region_edited[i] == true) {
+					GridRawDataV2 *grid = map_atlas_region_display[i]->file_data;
+					int* model_type = grid->GetModelTypeArrayPtr();
+					for (int grid_index = 0;
+						grid_index < grid->Grid_size.x*grid->Grid_size.y;
+						grid_index++) {
+						if (grid->selected_indexes[grid_index] == true) {
+							model_type[grid_index] = 1;
+						}
+
+					}
+				}
+			}
+		}
+		if (controler->IsRelease(PGKey_2) == true) {
+			for (int i = 0; i < 9; i++) {
+				if (map_atlas_region_edited[i] == true) {
+					GridRawDataV2 *grid = map_atlas_region_display[i]->file_data;
+					int* model_type = grid->GetModelTypeArrayPtr();
+					for (int grid_index = 0;
+						grid_index < grid->Grid_size.x*grid->Grid_size.y;
+						grid_index++) {
+						if (grid->selected_indexes[grid_index] == true) {
+							model_type[grid_index] = 2;
+						}
+
+					}
+				}
+			}
+		}
+		break; }
+	case Mode_Camera_Move:
+		HandleCameraMovement(controler);
+		break;
+	case Mode_Edit_Tile_Top_Style: {
+		if (controler->IsRelease(PGKey_1) == true) {
+			for (int i = 0; i < 9; i++) {
+				if (map_atlas_region_edited[i] == true) {
+					GridRawDataV2 *grid = map_atlas_region_display[i]->file_data;
+					int* model_type = grid->GetTopStyleArrayPtr();
+					for (int grid_index = 0;
+						grid_index < grid->Grid_size.x*grid->Grid_size.y;
+						grid_index++) {
+						if (grid->selected_indexes[grid_index] == true) {
+							grid->grid_tile_top_style_data[grid_index] = 1;
+							
+						}
+
+					}
+				}
+			}
+		}
+		if (controler->IsRelease(PGKey_2) == true) {
+			for (int i = 0; i < 9; i++) {
+				if (map_atlas_region_edited[i] == true) {
+					GridRawDataV2 *grid = map_atlas_region_display[i]->file_data;
+					int* model_type = grid->GetTopStyleArrayPtr();
+					for (int grid_index = 0;
+						grid_index < grid->Grid_size.x*grid->Grid_size.y;
+						grid_index++) {
+						if (grid->selected_indexes[grid_index] == true) {
+							grid->grid_tile_top_style_data[grid_index] = 2;
+						}
+
+					}
+				}
+			}
+		}
+								   break;
+	}
 		case Mode_Tiles_Selection:
 		{
 
@@ -409,75 +498,56 @@ void MapEditorScene::HandleControler(Controler * controler) {
 					}
 				}
 			}
-			if (controler->IsRelease(PGKey_0) == true) {
-				for (int i = 0; i < 9; i++) {
-					if (map_atlas_region_edited[i] == true) {
-						GridRawDataV2 *grid = map_atlas_region_display[i]->file_data;
-						int* model_type = grid->GetModelTypeArrayPtr();
-						for (int grid_index = 0;
-							grid_index < grid->Grid_size.x*grid->Grid_size.y;
-							grid_index++) {
-							if (grid->selected_indexes[grid_index] == true) {
-								model_type[grid_index] = 0;
-							}
 
-						}
-					}
-				}
-			}
+			//*************************************************************************************
+
+			break; }
+		case Mode_Edit_Tile_Bottom_Material: {
+			HandleCameraMovement(controler);
+			HandleTilePicking(controler);
 			if (controler->IsRelease(PGKey_1) == true) {
 				for (int i = 0; i < 9; i++) {
 					if (map_atlas_region_edited[i] == true) {
 						GridRawDataV2 *grid = map_atlas_region_display[i]->file_data;
-						int* model_type = grid->GetModelTypeArrayPtr();
+						int total_material = grid->mtl_file->Count();
 						for (int grid_index = 0;
 							grid_index < grid->Grid_size.x*grid->Grid_size.y;
 							grid_index++) {
 							if (grid->selected_indexes[grid_index] == true) {
-								model_type[grid_index] = 1;
+								grid->grid_bottom_material_data[grid_index] += 1;
+								if (grid->grid_bottom_material_data[grid_index] >= total_material) {
+									grid->grid_bottom_material_data[grid_index] = 1;
+								}
 							}
-							
+
 						}
 					}
 				}
 			}
-			if (controler->IsRelease(PGKey_2) == true) {
+			break;}
+		case Mode_Edit_Tile_Top_Material: {
+			HandleCameraMovement(controler);
+			HandleTilePicking(controler);
+			if (controler->IsRelease(PGKey_1) == true) {
 				for (int i = 0; i < 9; i++) {
 					if (map_atlas_region_edited[i] == true) {
 						GridRawDataV2 *grid = map_atlas_region_display[i]->file_data;
-						int* model_type = grid->GetModelTypeArrayPtr();
+						int total_material = grid->mtl_file->Count();
 						for (int grid_index = 0;
 							grid_index < grid->Grid_size.x*grid->Grid_size.y;
 							grid_index++) {
 							if (grid->selected_indexes[grid_index] == true) {
-								model_type[grid_index] = 2;
+								grid->grid_top_material_data[grid_index] += 1;
+								if (grid->grid_top_material_data[grid_index] >= total_material) {
+									grid->grid_top_material_data[grid_index] = 1;
+								}
 							}
 
 						}
 					}
 				}
 			}
-			//*************************************************************************************
-
 			break; }
-		case Mode_Edit_Tile_Material: {
-			HandleCameraMovement(controler);
-			HandleTilePicking(controler);
-			//if (controler->IsRelease(PGKey_1) == true) {
-			//	for (int i = 0; i < 9; i++) {
-			//		if (map_atlas_region_edited[i] == true) {
-			//			GridRawDataV2 *grid = map_atlas_region_display[i]->file_data;
-			//			for (int grid_index = 0;
-			//				grid_index < grid->Grid_size.x*grid->Grid_size.y;
-			//				grid_index++) {
-			//				if (grid->selected_indexes[grid_index] == true) {
-			//					//Do shit here
-			//				}
-			//			}
-			//		}
-			//	}
-			//}
-			break;}
 		case Mode_Edit_Tile_Height:{
 			HandleCameraMovement(controler);
 			HandleTilePicking(controler);

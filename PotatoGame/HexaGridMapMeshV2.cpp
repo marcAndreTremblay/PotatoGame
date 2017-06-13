@@ -68,13 +68,18 @@ int HexaGridMapMeshV2::CalculateRegionVerticesCount() {
 	int tile_count = Grid_Data->Grid_size.x*Grid_Data->Grid_size.y;
 
 	int * model_style_cursor = Grid_Data->GetModelTypeArrayPtr();
+	int * tile_top_style_cursor = Grid_Data->GetTopStyleArrayPtr();
 
 	for (int grid_index = 0; grid_index < tile_count; grid_index++) {
 		total_vertices += Grid_Data->bottom->GetFaceCount() *3 ;
-		total_vertices += Grid_Data->top->GetFaceCount() * 3;
 		
+		if (*tile_top_style_cursor != 0) {
+			AtlasModelData *selected_model_data = Grid_Data->model_file->FetchTileModelFilePath(Tile_Top, *tile_top_style_cursor);
+			total_vertices += selected_model_data->data->GetFaceCount() * 3;
+		}
+
 		if (*model_style_cursor != 0) {
-			AtlasModelData *selected_model_data = Grid_Data->model_file->FetchTileModelFilePath(Tile_Model, 1);
+			AtlasModelData *selected_model_data = Grid_Data->model_file->FetchTileModelFilePath(Tile_Model, *model_style_cursor);
 			total_vertices += selected_model_data->data->GetFaceCount() * 3;
 		}			
 
@@ -88,12 +93,9 @@ void HexaGridMapMeshV2::Build() {
 	glBindVertexArray(VAO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
-	AtlasModelData *selected_model_data = Grid_Data->model_file->FetchTileModelFilePath(Tile_Model, 1);
-		Str* full_path = new Str("");
-		full_path->Append(selected_model_data->folder_path->CharAt(0));
-		full_path->Append(selected_model_data->file_name->CharAt(0));
-		selected_model_data->data = new ModelRawDataV1();
-		selected_model_data->data->LoadFromFile(full_path->CharAt());
+	Grid_Data->model_file->LoadRawData();
+	
+
 	
 	this->Vertices_Count = CalculateRegionVerticesCount();
 	this->Data_Size_Per_vertex = sizeof(v4) + // LOC (0)
@@ -155,7 +157,7 @@ void HexaGridMapMeshV2::Build() {
 			current_bottom_mtl = Grid_Data->mtl_file->FindByNameId(tile_bottom_mtl_array[grid_index]);
 		}
 		if (tile_model_style_cursor[grid_index] != 0) {
-			
+			AtlasModelData *selected_model_data = Grid_Data->model_file->FetchTileModelFilePath(Tile_Model, tile_model_style_cursor[grid_index]);
 			//todo(marc): load the model raw data if not already loader or/and  store it
 			translate_matrix = glm::translate(m4(1.f), v3(Grid_Data->grid_pos_data[grid_index].x, Grid_Data->grid_pos_data[grid_index].y, Grid_Data->grid_height_data[grid_index]));
 			scale_matrix = glm::scale(m4(1.f), v3(1.f));
@@ -167,15 +169,20 @@ void HexaGridMapMeshV2::Build() {
 		scale_matrix = glm::scale(m4(1.f), v3(1.f, 1.f, Grid_Data->grid_height_data[grid_index])); //Z = tile height
 		rotate_matrix = glm::rotate(m4(1.f), 0.f, v3(0.f, 0.f, 1.f));		
 		PushModelToBuffer(&data_buffer_cursor, bottom_model, current_bottom_mtl,&translate_matrix, &scale_matrix,&rotate_matrix);
+		
+		if (tile_top_style_array[grid_index] != 0) {
+			AtlasModelData *selected_model_data = Grid_Data->model_file->FetchTileModelFilePath(Tile_Top, tile_top_style_array[grid_index]);
 
-	
-		translate_matrix = glm::translate(m4(1.f), v3(Grid_Data->grid_pos_data[grid_index].x, Grid_Data->grid_pos_data[grid_index].y, Grid_Data->grid_height_data[grid_index]));
-		scale_matrix = glm::scale(m4(1.f), v3(1.f, 1.f, 1.f)); //Z = tile height
-		rotate_matrix = glm::rotate(m4(1.f), 0.f, v3(0.f, 0.f, 1.f));
-		PushModelToBuffer(&data_buffer_cursor, top_model, current_top_mtl, &translate_matrix, &scale_matrix, &rotate_matrix);
+			translate_matrix = glm::translate(m4(1.f), v3(Grid_Data->grid_pos_data[grid_index].x, Grid_Data->grid_pos_data[grid_index].y, Grid_Data->grid_height_data[grid_index]));
+			scale_matrix = glm::scale(m4(1.f), v3(1.f, 1.f, 1.f)); //Z = tile height
+			rotate_matrix = glm::rotate(m4(1.f), 0.f, v3(0.f, 0.f, 1.f));
+			PushModelToBuffer(&data_buffer_cursor, selected_model_data->data, current_top_mtl, &translate_matrix, &scale_matrix, &rotate_matrix);
 
+		}
 	}
-
+	
+	Grid_Data->model_file->LoadMesh();
+	
 	BuildableObject::EndBuilding();
 }
 

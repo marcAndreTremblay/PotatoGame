@@ -30,11 +30,12 @@
 
 enum MapEditorMode {
 	Mode_Camera_Move = 0,
-	Mode_Entities_Selection = 1,
+	Mode_Edit_Tile_Top_Style = 1,
 	Mode_Tiles_Selection = 2,
-	Mode_Edit_Tile_Material =3,
+	Mode_Edit_Tile_Top_Material =3,
 	Mode_Edit_Tile_Height = 4,
-	Mode_Edit_Tile_Model = 5
+	Mode_Edit_Tile_Model = 5,
+	Mode_Edit_Tile_Bottom_Material = 6,
 };
 class MapEditorScene :
 	public Scene {

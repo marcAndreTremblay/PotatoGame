@@ -38,10 +38,11 @@ using namespace PG::Core;
 		...
 		n file_name.obj
 */
-struct AtlasModelData {
+class AtlasModelData {
+public:
 	int id;
 	ModelRawDataV1* data;
-	ModelMeshV1*mesh;
+	ModelMeshV1 * mesh;
 	Str* file_name;
 	Str* folder_path;
 	AtlasModelData() {
@@ -82,7 +83,8 @@ public:
 	ModelAtlasFile(char *file_path);
 	virtual ~ModelAtlasFile();
 	void LoadFromFile();
-
+	void LoadRawData();
+	void LoadMesh();
 	AtlasModelData* FetchTileModelFilePath(AtlasCategorie categorie,int id);
 };
 #endif
