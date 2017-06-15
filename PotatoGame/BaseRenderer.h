@@ -54,6 +54,8 @@ namespace PG {
 					glEnable(GL_BLEND);
 					glEnable(GL_DEPTH_TEST);
 					glEnable(GL_MULTISAMPLE);
+
+					//glEnable(GL_FRAMEBUFFER_SRGB);
 					//glEnable(GL_PROGRAM_POINT_SIZE);
 					int max_attribs;
 					glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &max_attribs);

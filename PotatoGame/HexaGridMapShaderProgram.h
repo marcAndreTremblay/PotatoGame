@@ -150,10 +150,12 @@ void main() {
 	vec3 viewDir = normalize(-FragPos); //Note() The viewer is at(0, 0, 0) so viewDir is(0, 0, 0) - Position = > -Position
 	vec3 norm = normalize(Normal);
 
-	vec3 result = CalcDirLight(D_Light, norm, viewDir);
-		result += CalcPointLight(Light, norm, viewDir); 
+	vec3 result = CalcPointLight(Light, norm, viewDir);
+	result += 0.2f*CalcDirLight(D_Light, norm, viewDir);
 
-	color = vec4(result, 1.0f);
+		float gamma = 2.2f;
+		result = pow(result, vec3(1.0f / gamma));
+	    color = vec4(result, 1.0f);
 
 }
 ));
