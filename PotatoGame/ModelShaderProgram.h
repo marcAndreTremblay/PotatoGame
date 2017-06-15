@@ -101,8 +101,19 @@ PG_SHADER(const char* base_model_vertex_shader = GLSL330(
 //Fragment shader
 #if 1 
 PG_SHADER(const char* base_model_FragShader = GLSL330(
-	struct PGLight {
+	struct PGLightSettings {
+		bool UseDirectional;
+		bool UsePoint;
+	};
+	struct PGPointLight {
 		vec4 position;
+		vec4 ambient;
+		vec4 diffuse;
+		vec4 specular;
+		vec4 attenuation_factors;//Kc = constant , Kl = linear , Kq = quadratic , use attenuation 1=true 2=false
+	};
+	struct PGDirectionalLight {
+		vec4 direction;
 		vec4 ambient;
 		vec4 diffuse;
 		vec4 specular;
@@ -116,7 +127,9 @@ PG_SHADER(const char* base_model_FragShader = GLSL330(
 		vec4 CenterOfFog; // ->W = radius
 	};
 	layout(std140) uniform SceneAdvanceLightData_UBO {
-		PGLight Light;
+		PGPointLight Light;
+		PGDirectionalLight D_Light;
+		PGLightSettings Light_Setting;
 	};
 
 	in vec3 Normal;
@@ -192,19 +205,30 @@ PG_SHADER(const char* model_mtl_vertex_shader = GLSL330(
 //Fragment shader
 #if 1 
 PG_SHADER(const char* model_mtl_FragShader = GLSL330(
-	struct PGMaterial {
+struct PGMaterial {
 	vec3 ambient;
 	vec3 diffuse;
 	vec3 specular;
 	float shininess;
 };
-struct PGLight {
+struct PGLightSettings {
+	bool UseDirectional;
+	bool UsePoint;
+};
+
+struct PGPointLight {
 	vec4 position;
 	vec4 ambient;
 	vec4 diffuse;
 	vec4 specular;
+	vec4 attenuation_factors;//Kc = constant , Kl = linear , Kq = quadratic , use attenuation 1=true 2=false
 };
-
+struct PGDirectionalLight {
+	vec4 direction;
+	vec4 ambient;
+	vec4 diffuse;
+	vec4 specular;
+};
 
 layout(std140) uniform Renderer_UBO {
 	mat4 WorldProjection;
@@ -213,7 +237,9 @@ layout(std140) uniform Renderer_UBO {
 	vec4 CenterOfFog; // ->W = radius
 };
 layout(std140) uniform SceneAdvanceLightData_UBO {
-	PGLight Light;
+	PGPointLight Light;
+	PGDirectionalLight D_Light;
+	PGLightSettings Light_Setting;
 };
 
 in vec3 Normal;

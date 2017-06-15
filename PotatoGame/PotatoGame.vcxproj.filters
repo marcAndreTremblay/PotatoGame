@@ -273,6 +273,9 @@
     <ClInclude Include="SolarSystemEntities.h">
       <Filter>Header Files\GameEditor\Entities</Filter>
     </ClInclude>
+    <ClInclude Include="DayTimeAnimation.h">
+      <Filter>Header Files\GameEditor\Animation</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -346,6 +349,9 @@
     </ClCompile>
     <ClCompile Include="SolarSystemEntities.cpp">
       <Filter>Header Files\GameEditor\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="DayTimeAnimation.cpp">
+      <Filter>Header Files\GameEditor\Animation</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -71,19 +71,19 @@ int HexaGridMapMeshV2::CalculateRegionVerticesCount() {
 	int * tile_top_style_cursor = Grid_Data->GetTopStyleArrayPtr();
 
 	for (int grid_index = 0; grid_index < tile_count; grid_index++) {
+		
+		
 		total_vertices += Grid_Data->bottom->GetFaceCount() *3 ;
 		
-		if (*tile_top_style_cursor != 0) {
-			AtlasModelData *selected_model_data = Grid_Data->model_file->FetchTileModelFilePath(Tile_Top, *tile_top_style_cursor);
+		if (tile_top_style_cursor[grid_index] != 0) {
+			AtlasModelData *selected_model_data = Grid_Data->model_file->FetchTileModelFilePath(Tile_Top, tile_top_style_cursor[grid_index]);
 			total_vertices += selected_model_data->data->GetFaceCount() * 3;
 		}
 
-		if (*model_style_cursor != 0) {
-			AtlasModelData *selected_model_data = Grid_Data->model_file->FetchTileModelFilePath(Tile_Model, *model_style_cursor);
+		if (model_style_cursor[grid_index] != 0) {
+			AtlasModelData *selected_model_data = Grid_Data->model_file->FetchTileModelFilePath(Tile_Model, model_style_cursor[grid_index]);
 			total_vertices += selected_model_data->data->GetFaceCount() * 3;
 		}			
-
-		model_style_cursor++;
 	}
 	return total_vertices;
 }

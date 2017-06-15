@@ -6,9 +6,22 @@ MapEditorScene::MapEditorScene(MousePicker* mouse_picker) : Scene(mouse_picker){
 	current_mode = Mode_Camera_Move;
 	this->time = 0.1f;
 	this->tempo_var = 0.1f;
-	this->scene_light = PGLight();
-	this->scene_light.position = v4(0.f, 0.f, 0.f, 1.f);
- 
+
+	this->scene_light_setting = PGLightSettings();
+		scene_light_setting.UseDirectional = true;
+		scene_light_setting.UsePoint = true;
+	this->scene_d_light = PGDirectionalLight();
+
+	this->scene_d_light.direction = v4(1.f, 0.f, 0.f, 0.f);
+
+	this->scene_d_light.diffuse = v4(1.f, 1.f, 1.f, 1.f);
+	this->scene_d_light.ambient = v4(0.6f, 0.6f, 0.6f, 1.f);
+	this->scene_d_light.specular = v4(0.6f, 0.6f, 0.6f, 1.f);
+
+
+	this->scene_light = PGPointLight();
+	this->scene_light.position = v4(0.f, 0.f, 4.f, 1.f);
+	this->scene_light.attenuation_factors = v4(1.0f, 0.22f, 0.20f, 1.f);
 	this->scene_light.diffuse = v4(1.f, 1.f, 1.f, 1.f);
 	this->scene_light.ambient = v4(0.6f, 0.6f, 0.6f, 1.f);
 	this->scene_light.specular = v4(0.6f, 0.6f, 0.6f, 1.f);
@@ -102,13 +115,13 @@ void MapEditorScene::RenderMapGrid(BaseRenderer * renderer) {
 						if (model_type_data[grid_index] != 0) {
 							tile_possition.z = height_data[grid_index];
 							AtlasModelData *selected_model_data = grid->model_file->FetchTileModelFilePath(Tile_Model, model_type_data[grid_index]);
-							ModelMeshV1* t_m = selected_model_data->mesh;
-							renderer->model_mtl_shader_program->Render(t_m, &tile_possition, nullptr);
+							renderer->model_mtl_shader_program->Render(selected_model_data->mesh, &tile_possition, nullptr);
 						}
 					}
 		}
 		else {
 			if (map_atlas_region_display[grid_index] != nullptr) {
+				//This render call maight cause wiert artefact model loading
 				renderer->map_shader_program->Render(map_atlas_region_display[grid_index]->region_mesh, &possition_cursor);
 			}
 		}
@@ -118,17 +131,21 @@ void MapEditorScene::RenderMapGrid(BaseRenderer * renderer) {
 void MapEditorScene::Render(BaseRenderer * renderer) {
 	Scene::Render(renderer);
 
-	renderer->PushLightPossition(&scene_light.position);;
+	renderer->PushLightPossition(&scene_light.position);
 	renderer->PushLightData(&scene_light);
+	renderer->PushDirLightData(&scene_d_light);
+	renderer->PushLightSetting(&scene_light_setting);
+
+	
 
 	renderer->axisMesh->Render(v3(0.f, 0.f, 0.f), v4(0.f, 0.f, 1.f, 1.f));
 	renderer->cubeMesh->Render(v3(scene_light.position.x, scene_light.position.y, scene_light.position.z), v3(0.1f, 0.1f, 0.1f), scene_light.diffuse);
 	
-	/*for (float x = 0.f; x < 5.f; x = x + 1.f) {
-		for (float y = 0.f; y < 5.f; y = y + 1.f) {
-			renderer->model_mtl_shader_program->Render(test_floor_tile, &v3(x * 2, y * 2, 10.f),nullptr);
-		}
-	}*/
+	//for (float x = 0.f; x < 5.f; x = x + 1.f) {
+	//	for (float y = 0.f; y < 5.f; y = y + 1.f) {
+	//		renderer->model_mtl_shader_program->Render(test_floor_tile, &v3(x * 2, y * 2, 10.f),nullptr);
+	//	}
+	//}
 	
 	RenderSolarSystem(renderer);
 	RenderMapGrid(renderer);
@@ -162,7 +179,7 @@ void MapEditorScene::Build(AnimatorManager* anmation_manager) {
 
 	solar_data = new SolorSystemEntities();
 	
-
+//	anmation_manager->AttachAnimation(new DayTimeAnimation(&this->scene_d_light));
 
 	Star* s1 = new Star(3.0f,12.f);
 	solar_data->bodies_list->Add(s1);

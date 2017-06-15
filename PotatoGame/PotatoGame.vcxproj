@@ -152,6 +152,7 @@
     <ClInclude Include="Buffer.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="CombatScene.h" />
+    <ClInclude Include="DayTimeAnimation.h" />
     <ClInclude Include="Debugger.h" />
     <ClInclude Include="EditorInstance.h" />
     <ClInclude Include="GridRawDataV2.h" />
@@ -215,6 +216,7 @@
     <ClCompile Include="BaseMesh.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CombatScene.cpp" />
+    <ClCompile Include="DayTimeAnimation.cpp" />
     <ClCompile Include="Debugger.cpp" />
     <ClCompile Include="EditorInstance.cpp" />
     <ClCompile Include="GridRawDataV2.cpp" />

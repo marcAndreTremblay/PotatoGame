@@ -28,6 +28,8 @@
 #include "AnimatorManager.h"
 #include "SolarSystemEntities.h"
 
+#include "DayTimeAnimation.h"
+
 enum MapEditorMode {
 	Mode_Camera_Move = 0,
 	Mode_Edit_Tile_Top_Style = 1,
@@ -65,7 +67,9 @@ private:
 	ModelMeshV1* test_floor_tile;
 
 	//Other Scene data
-	PGLight scene_light;
+	PGLightSettings scene_light_setting;
+	PGPointLight scene_light;
+	PGDirectionalLight scene_d_light;
 	double time;
 	double tempo_var;
 	MapEditorMode current_mode;

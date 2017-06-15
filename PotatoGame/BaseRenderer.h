@@ -109,13 +109,25 @@ namespace PG {
 				glBufferSubData(GL_UNIFORM_BUFFER, sizeof(v4), sizeof(v3), _color_vector);
 				glBindBuffer(GL_UNIFORM_BUFFER, 0);
 			}
-
-			void BaseRenderer::PushLightData(PGLight* _light) {
+			
+				void BaseRenderer::PushLightSetting(PGLightSettings* _setting) {
 				glBindBuffer(GL_UNIFORM_BUFFER, this->SceneAdvanceLight_UBO_Ref_Id);
-				glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(PGLight), _light);
+					glBufferSubData(GL_UNIFORM_BUFFER,  (sizeof(PGPointLight) + sizeof(PGDirectionalLight)),
+														sizeof(PGLightSettings), _setting);
 				glBindBuffer(GL_UNIFORM_BUFFER, 0);
 			}
-
+			void BaseRenderer::PushLightData(PGPointLight* _light) {
+				glBindBuffer(GL_UNIFORM_BUFFER, this->SceneAdvanceLight_UBO_Ref_Id);
+				glBufferSubData(GL_UNIFORM_BUFFER,  0, 
+													sizeof(PGPointLight), _light);
+				glBindBuffer(GL_UNIFORM_BUFFER, 0);
+			}
+			void BaseRenderer::PushDirLightData(PGDirectionalLight* _light) {
+				glBindBuffer(GL_UNIFORM_BUFFER, this->SceneAdvanceLight_UBO_Ref_Id);
+				glBufferSubData(GL_UNIFORM_BUFFER,  sizeof(PGPointLight), 
+													sizeof(PGDirectionalLight), _light);
+				glBindBuffer(GL_UNIFORM_BUFFER, 0);
+			}
 			virtual void BaseRenderer::Build() {
 				//Gen the UBO Buffer and get ID
 				glGenBuffers(1, &this->Renderer_UBO_Ref_Id);
@@ -138,7 +150,9 @@ namespace PG {
 
 
 				glBindBuffer(GL_UNIFORM_BUFFER, this->SceneAdvanceLight_UBO_Ref_Id);
-				glBufferData(GL_UNIFORM_BUFFER, 4 * sizeof(v4), NULL, GL_DYNAMIC_DRAW); // allocate bytes of memory
+				glBufferData(GL_UNIFORM_BUFFER, sizeof(PGDirectionalLight) +
+												sizeof(PGPointLight) + 
+												sizeof(PGLightSettings), NULL, GL_DYNAMIC_DRAW); // allocate bytes of memory
 				glBindBufferBase(GL_UNIFORM_BUFFER, 3, this->SceneAdvanceLight_UBO_Ref_Id);
 				
 				

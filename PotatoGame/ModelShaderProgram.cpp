@@ -21,7 +21,10 @@ void ModelMtlShaderProgram::Init() {
 	ShaderProgram::Init();
 }
 void ModelMtlShaderProgram::Render(ModelMeshV1 * mesh, v3 * possition, MaterielRawData * mtl = nullptr) {
-	ModelMtlShaderProgram::Render(mesh, possition, &v3(1.f), new Quaternion(v3(0.f, 0.f, 0.f)), mtl);
+	//Todo(Marc): Maybe we should not create resource
+	Quaternion* tempo = new Quaternion(v3(0.f, 0.f, 0.f));
+	ModelMtlShaderProgram::Render(mesh, possition, &v3(1.f), tempo, mtl);
+	delete(tempo);
 }
 
 void ModelMtlShaderProgram::Render(ModelMeshV1 * mesh, v3 * possition, v3 * scale , Quaternion* quat,MaterielRawData * mtl = nullptr) {

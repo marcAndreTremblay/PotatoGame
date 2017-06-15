@@ -60,8 +60,21 @@ PG_SHADER(const char* map_hexa_FragShader = GLSL330(
 	vec3 specular;
 	float shininess;
 };
-struct PGLight {
+struct PGLightSettings{
+	bool UseDirectional;
+	bool UsePoint;
+};
+struct PGPointLight {
 	vec4 position;
+	
+	vec4 ambient;
+	vec4 diffuse;
+	vec4 specular;
+
+	vec4 attenuation_factors; //Kc = constant , Kl = linear , Kq = quadratic , use attenuation 1=true 2=false 
+};
+struct PGDirectionalLight {
+	vec4 direction;
 	vec4 ambient;
 	vec4 diffuse;
 	vec4 specular;
@@ -75,7 +88,10 @@ layout(std140) uniform Renderer_UBO {
 	vec4 CenterOfFog; // ->W = radius
 };
 layout(std140) uniform SceneAdvanceLightData_UBO {
-	PGLight Light;
+	
+	PGPointLight Light;
+	PGDirectionalLight D_Light;
+	PGLightSettings Light_Setting;
 };
 
 in vec3 Normal;
@@ -84,36 +100,60 @@ in PGMaterial Matl;
 in vec4 Vertex_World_Possiton;
 
 out vec4 color;
-
-void main() {
-	float alpha = 1.f;
-	float radius_fog = 15;
-	float decay_lenght = 4;
-	float dist = distance(CenterOfFog, Vertex_World_Possiton);
-	if (dist > radius_fog) {
-		dist -= radius_fog;
-		alpha = 1 - dist / decay_lenght;
-		if (dist > decay_lenght) {
-			alpha = 0.0f;
-		}
-	}
+vec3 CalcPointLight(PGPointLight p_light, vec3 normal, vec3 viewDir) {
 	// Ambient
-	vec3 ambient = vec3(Light.ambient) * Matl.ambient;
+	vec3 ambient = vec3(p_light.ambient) * Matl.ambient;
 
 	// Diffuse 
-	vec3 LightPos = vec3(WorldView * Light.position);
-	vec3 norm = normalize(Normal);
+	vec3 LightPos = vec3(WorldView * p_light.position);
 	vec3 lightDir = normalize(LightPos - FragPos);
-	float diff = max(dot(norm, lightDir), 0.0f);
-	vec3 diffuse = vec3(Light.diffuse) * (diff * Matl.diffuse);
-
-	vec3 viewDir = normalize(-FragPos); // The viewer is at(0, 0, 0) so viewDir is(0, 0, 0) - Position = > -Position
-	vec3 reflectDir = reflect(-lightDir, norm);
+	
+	float diff = max(dot(normal, lightDir), 0.0f);
+	vec3 diffuse = vec3(p_light.diffuse) * (diff * Matl.diffuse);
+	
+	vec3 reflectDir = reflect(-lightDir, normal);
 	float spec = pow(max(dot(viewDir, reflectDir), 0.0), Matl.shininess);
-	vec3 specular = vec3(Light.specular) * (spec * Matl.specular);
+	vec3 specular = vec3(p_light.specular) * (spec * Matl.specular);
 
-	//Combine each	colors
-	color = vec4((ambient + diffuse + specular), 1.0f);
+	//Attenuation
+	if (p_light.attenuation_factors.w == 1.f) { // 1=true 0=false
+		float distance = length(vec3(p_light.position) - vec3(Vertex_World_Possiton)); //Note() we do the calculation in the world space
+		float attenuation = 1.f / (p_light.attenuation_factors.x +
+			p_light.attenuation_factors.y * distance +
+			p_light.attenuation_factors.z * (distance*distance));
+		ambient *= attenuation;
+		diffuse *= attenuation;
+		specular *= attenuation;
+	}
+
+	return (ambient + diffuse + specular);
+}
+vec3 CalcDirLight(PGDirectionalLight d_light, vec3 normal, vec3 viewDir) {
+	// Ambient 
+	vec3 ambient = vec3(d_light.ambient) * Matl.ambient;
+	// Diffuse 
+	
+	vec3 lightDir = normalize(vec3(WorldView *-D_Light.direction));
+	float diff = max(dot(normal, lightDir), 0.0f);
+	vec3 diffuse = vec3(d_light.diffuse) * (diff * Matl.diffuse);
+
+	vec3 reflectDir = reflect(-lightDir, normal);
+	float spec = pow(max(dot(viewDir, reflectDir), 0.0), Matl.shininess);
+	vec3 specular = vec3(d_light.specular) * (spec * Matl.specular);
+	
+
+
+	return (ambient + diffuse + specular);
+}
+
+void main() {
+	vec3 viewDir = normalize(-FragPos); //Note() The viewer is at(0, 0, 0) so viewDir is(0, 0, 0) - Position = > -Position
+	vec3 norm = normalize(Normal);
+
+	vec3 result = CalcDirLight(D_Light, norm, viewDir);
+		result += CalcPointLight(Light, norm, viewDir); 
+
+	color = vec4(result, 1.0f);
 
 }
 ));
