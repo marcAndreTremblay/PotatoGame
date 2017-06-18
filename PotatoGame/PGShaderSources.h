@@ -26,6 +26,7 @@ const PGMaterial Material_Gray = { v3(0.01f, 0.0f, 0.01f), v3(0.26f, 0.26f, 0.26
 //const PGMaterial Material_Obsidian = ­{  };
 //Note(Marc): Be aware, variables order match the same struct in the fragment shader, do not modify 1 without the other
 struct PGPointLight {
+	v4 setting; // x = is in use 1 = true = false , y = flat effect range i>0
 	v4 position;
 	v4 ambient;
 	v4 diffuse;
@@ -39,8 +40,10 @@ struct PGDirectionalLight {
 	v4 specular;
 };
 struct PGLightSettings {
-	bool UseDirectional;
-	bool UsePoint;
+	int UseDirectional; // 1 = true , 0 = false
+	int UsePoint;// 1 = true , 0 = false
+	int UseGamma;// 1 = true , 0 = false
+	int Point_Light_Max_Cap; // Number of entity of point light reserve in memory
 };
 
 static const GLfloat ui_panel_vertex_data[] = {//Center = top left align	
@@ -555,11 +558,14 @@ PG_SHADER(const char* Model_FragShader = GLSL330(
 		float shininess;
 	};
 struct PGLightSettings {
-	bool UseDirectional;
-	bool UsePoint;
+	int UseDirectional; // 1 = true , 0 = false
+	int UsePoint;// 1 = true , 0 = false
+	int UseGamma;// 1 = true , 0 = false
+	int Point_Light_Max_Cap; // Number of entity of point light reserve in memory
 };
 
 	struct PGPointLight {
+		vec4 setting; // x = is in use 1 = true = false
 		vec4 position;
 		vec4 ambient;
 		vec4 diffuse;
@@ -580,11 +586,10 @@ struct PGLightSettings {
 		mat4 GUIProjection;
 		vec4 CenterOfFog;
 	};
-	layout(std140) uniform SceneAdvanceLightData_UBO
-	{
-		PGPointLight Light;
-		PGDirectionalLight D_Light;
+	layout(std140) uniform SceneAdvanceLightData_UBO {
 		PGLightSettings Light_Setting;
+		PGDirectionalLight D_Light;
+		PGPointLight P_Light[10];
 	};
 		
 	in vec3 Normal;
@@ -595,19 +600,19 @@ struct PGLightSettings {
 
 	void main() {
 		// Ambient
-		vec3 ambient = vec3(Light.ambient) * Matl.ambient;
+		vec3 ambient = vec3(P_Light[0].ambient) * Matl.ambient;
 
 		// Diffuse 
-		vec3 LightPos = vec3(WorldView * Light.position);
+		vec3 LightPos = vec3(WorldView * P_Light[0].position);
 		vec3 norm = normalize(Normal);
 		vec3 lightDir = normalize(LightPos - FragPos);
 		float diff = max(dot(norm, lightDir), 0.0f);
-		vec3 diffuse = vec3(Light.diffuse) * (diff * Matl.diffuse);
+		vec3 diffuse = vec3(P_Light[0].diffuse) * (diff * Matl.diffuse);
 
 		vec3 viewDir = normalize(-FragPos); // The viewer is at(0, 0, 0) so viewDir is(0, 0, 0) - Position = > -Position
 		vec3 reflectDir = reflect(-lightDir, norm);
 		float spec = pow(max(dot(viewDir, reflectDir), 0.0), Matl.shininess);
-		vec3 specular = vec3(Light.specular) * (spec * Matl.specular);
+		vec3 specular = vec3(P_Light[0].specular) * (spec * Matl.specular);
 
 		//Combine each	colors
 		color = vec4((ambient + diffuse + specular), 1.0f);
@@ -621,12 +626,15 @@ PG_SHADER(const char* FragShaderMaterializeLight = GLSL330(
 		vec3 specular;
 		float shininess;
 	};
-	struct PGLightSettings {
-		bool UseDirectional;
-		bool UsePoint;
-	};
+struct PGLightSettings {
+	int UseDirectional; // 1 = true , 0 = false
+	int UsePoint;// 1 = true , 0 = false
+	int UseGamma;// 1 = true , 0 = false
+	int Point_Light_Max_Cap; // Number of entity of point light reserve in memory
+};
 
-	struct PGPointLight {
+	struct PGPointLight {	
+		vec4 setting; // x = is in use 1 = true = false
 		vec4 position;
 		vec4 ambient;
 		vec4 diffuse;
@@ -649,11 +657,10 @@ PG_SHADER(const char* FragShaderMaterializeLight = GLSL330(
 		mat4 GUIProjection;
 		vec4 CenterOfFog;
 	};
-	layout(std140) uniform SceneAdvanceLightData_UBO
-	{
-		PGPointLight Light;
-		PGDirectionalLight D_Light;
+	layout(std140) uniform SceneAdvanceLightData_UBO {
 		PGLightSettings Light_Setting;
+		PGDirectionalLight D_Light;
+		PGPointLight P_Light[10];
 	};
 
 	in vec3 FragPos;
@@ -663,19 +670,19 @@ PG_SHADER(const char* FragShaderMaterializeLight = GLSL330(
 
 	void main() {
 		// Ambient
-		vec3 ambient = vec3(Light.ambient) * Material.ambient;
+		vec3 ambient = vec3(P_Light[0].ambient) * Material.ambient;
 
 		// Diffuse 
-		vec3 LightPos = vec3(WorldView * Light.position);
+		vec3 LightPos = vec3(WorldView * P_Light[0].position);
 		vec3 norm = normalize(Normal);
 		vec3 lightDir = normalize(LightPos - FragPos);
 		float diff = max(dot(norm, lightDir), 0.0f);
-		vec3 diffuse = vec3(Light.diffuse) * (diff * Material.diffuse);
+		vec3 diffuse = vec3(P_Light[0].diffuse) * (diff * Material.diffuse);
 
 		vec3 viewDir = normalize(-FragPos); // The viewer is at(0, 0, 0) so viewDir is(0, 0, 0) - Position = > -Position
 		vec3 reflectDir = reflect(-lightDir, norm);
 		float spec = pow(max(dot(viewDir, reflectDir), 0.0), Material.shininess);
-		vec3 specular = vec3(Light.specular) * (spec * Material.specular);
+		vec3 specular = vec3(P_Light[0].specular) * (spec * Material.specular);
 
 		//Combine each	colors
 		color = vec4((ambient + diffuse + specular), 1.0f);

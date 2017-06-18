@@ -34,10 +34,6 @@ void ModelMtlShaderProgram::Render(ModelMeshV1 * mesh, v3 * possition, v3 * scal
 			//Vertex shader uniform variable
 			m4* t = new m4(1.f);
 			*t = glm::scale(m4(1.f),*scale);
-			
-			
-
-			
 			glUniformMatrix4fv(this->Unif_Rotate, 1, GL_FALSE, glm::value_ptr(glm::toMat4(*quat)));
 			glUniformMatrix4fv(this->Unif_Translate, 1, GL_FALSE, &glm::translate(m4(1.f), *possition)[0][0]);
 			glUniformMatrix4fv(this->Unif_Scale, 1, GL_FALSE, glm::value_ptr(*t));

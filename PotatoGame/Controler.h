@@ -46,6 +46,7 @@ namespace PG {
 			PGKey_5 = GLFW_KEY_5,
 			PGKey_6 = GLFW_KEY_6,
 			PGKey_7 = GLFW_KEY_7,
+			PGKey_8 = GLFW_KEY_8,
 			PGKey_Space = GLFW_KEY_SPACE,
 			PGKey_Up = GLFW_KEY_UP,
 			PGKey_Down = GLFW_KEY_DOWN,
@@ -68,6 +69,7 @@ namespace PG {
 			PGKey_F5 = GLFW_KEY_F5,
 			PGKey_F6 = GLFW_KEY_F6,
 			PGKey_F7 = GLFW_KEY_F7,
+			PGKey_F8 = GLFW_KEY_F8,
 			PGKey_Z = GLFW_KEY_Z,
 			PGKey_C = GLFW_KEY_C,
 			PGSpace = GLFW_KEY_SPACE,
@@ -127,14 +129,17 @@ namespace PG {
 				this->AddKeyboardKey(PGKey_5, "5_Key");
 				this->AddKeyboardKey(PGKey_6, "6_Key");
 				this->AddKeyboardKey(PGKey_7, "7_Key");
-
+				this->AddKeyboardKey(PGKey_8, "8_Key");
+				
 				this->AddKeyboardKey(PGKey_F1, "F1_Key");
 				this->AddKeyboardKey(PGKey_F2, "F2_Key");
 				this->AddKeyboardKey(PGKey_F3, "F3_Key");
 				this->AddKeyboardKey(PGKey_F4, "F4_Key");
 				this->AddKeyboardKey(PGKey_F5, "F5_Key");
 				this->AddKeyboardKey(PGKey_F6, "F6_Key");
-				this->AddKeyboardKey(PGKey_F7, "F6_Key");
+				this->AddKeyboardKey(PGKey_F7, "F7_Key");
+				this->AddKeyboardKey(PGKey_F8, "8_Key");
+
 				this->AddKeyboardKey(PGKey_Page_Down, "Down_Key");
 				this->AddKeyboardKey(PGKey_Page_Up, "Up_Key");
 				this->AddKeyboardKey(PGKey_Left_Ctrl, "Ctrl_Left");

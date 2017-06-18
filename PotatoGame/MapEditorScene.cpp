@@ -8,29 +8,60 @@ MapEditorScene::MapEditorScene(MousePicker* mouse_picker) : Scene(mouse_picker){
 	this->tempo_var = 0.1f;
 
 	this->scene_light_setting = PGLightSettings();
-		scene_light_setting.UseDirectional = true;
-		scene_light_setting.UsePoint = true;
+		scene_light_setting.UseDirectional = 0;
+		scene_light_setting.UsePoint = 1;
+		scene_light_setting.UseGamma = 0;
 	this->scene_d_light = PGDirectionalLight();
 
-	this->scene_d_light.direction = v4(1.f, 0.f, 0.f, 0.f);
-
+	this->scene_d_light.direction = v4(1.f, 0.f, -0.2f, 0.f);
+	
 	this->scene_d_light.diffuse = v4(1.f, 1.f, 1.f, 1.f);
 	this->scene_d_light.ambient = v4(0.6f, 0.6f, 0.6f, 1.f);
 	this->scene_d_light.specular = v4(0.6f, 0.6f, 0.6f, 1.f);
 
-
-	this->scene_light = PGPointLight();
-	this->scene_light.position = v4(0.f, 0.f, 4.f, 1.f);
-	this->scene_light.attenuation_factors = v4(1.0f, 0.22f, 0.20f, 1.f);
-	this->scene_light.diffuse = v4(1.f, 1.f, 1.f, 1.f);
-	this->scene_light.ambient = v4(0.6f, 0.6f, 0.6f, 1.f);
-	this->scene_light.specular = v4(0.6f, 0.6f, 0.6f, 1.f);
+	//Build default light
+	for (int i = 0; i < 10; i++) {
+		this->scene_light[i] = PGPointLight();
+		scene_light[i].setting.x = 0.f;	
+		scene_light[i].setting.y = 0.f; 	
+		scene_light[i].attenuation_factors = v4(1.0f, 0.7f, 1.8f, 1.f);
+		//scene_light[i].attenuation_factors = v4(1.0f, 0.22f, 0.20f, 1.f);
+		scene_light[i].diffuse = v4(1.f, 1.f, 1.f, 1.f);
+		scene_light[i].ambient = v4(1.f, 1.f, 1.f, 1.f);
+		scene_light[i].specular = v4(1.f, 1.f, 1.f, 1.f);
+		scene_light[i].position = v4(0.f, 0.f, 5.f, 1.f);
+	}
 	
+	this->scene_light[0].position = v4(10.f, 0.f, 5.f, 1.f);
+	this->scene_light[0].setting.x = 1.f;
+	this->scene_light[0].diffuse = v4(1.0f, 1.0f, 1.0f, 1.f);
+	this->scene_light[0].ambient = v4(1.0f, 1.0f, 1.0f, 1.f);
+	this->scene_light[0].specular = v4(1.0f, 1.0f, 1.0f, 1.f);
+	this->scene_light[0].setting.y = 15.f;
+
+	this->scene_light[1].position = v4(10.f, 10.f, 3.f, 1.f);
+	this->scene_light[1].setting.x = 1.f;
+	this->scene_light[1].diffuse = v4(1.0f, 1.0f, 1.0f, 1.f);
+	this->scene_light[1].ambient = v4(1.0f, 1.0f, 1.0f, 1.f);
+	this->scene_light[1].specular = v4(1.0f, 1.0f, 1.0f, 1.f);
+	this->scene_light[1].setting.y = 15.f;
+
+	this->scene_light[2].position = v4(10.f, 20.f, 4.f, 1.f);
+	this->scene_light[2].setting.x = 1.f;
+	this->scene_light[2].diffuse = v4(1.0f, 1.0f, 1.0f, 1.f);
+	this->scene_light[2].ambient = v4(1.0f, 1.0f, 1.0f, 1.f);
+	this->scene_light[2].specular = v4(1.0f, 1.0f, 1.0f, 1.f);
+	this->scene_light[2].setting.y = 15.f;
+
+	
+
 	map_atlas = nullptr;
 	for (int i = 0; i <= 9; i++) {
 		map_atlas_region_display[i] = nullptr;
 		map_atlas_region_edited[i] = false;
 	}
+
+	
 
 	top_tile_raw_data = nullptr;
 	bottom_tile_raw_data = nullptr;
@@ -131,15 +162,24 @@ void MapEditorScene::RenderMapGrid(BaseRenderer * renderer) {
 void MapEditorScene::Render(BaseRenderer * renderer) {
 	Scene::Render(renderer);
 
-	renderer->PushLightPossition(&scene_light.position);
-	renderer->PushLightData(&scene_light);
+//	renderer->PushLightPossition(&scene_light.position);
+	for (int i = 0; i < 10; i++) {
+		if (scene_light[i].setting.x == 1.f) {
+			renderer->PushLightData(&scene_light[i], i);
+		}
+	}
+	
 	renderer->PushDirLightData(&scene_d_light);
 	renderer->PushLightSetting(&scene_light_setting);
 
 	
 
 	renderer->axisMesh->Render(v3(0.f, 0.f, 0.f), v4(0.f, 0.f, 1.f, 1.f));
-	renderer->cubeMesh->Render(v3(scene_light.position.x, scene_light.position.y, scene_light.position.z), v3(0.1f, 0.1f, 0.1f), scene_light.diffuse);
+	for (int i = 0; i < 10; i++) {
+		if (scene_light[i].setting.x == 1.f) {
+			renderer->cubeMesh->Render(v3(scene_light[i].position.x, scene_light[i].position.y, scene_light[i].position.z), v3(0.1f, 0.1f, 0.1f), scene_light[i].diffuse);
+		}
+	}
 	
 	//for (float x = 0.f; x < 5.f; x = x + 1.f) {
 	//	for (float y = 0.f; y < 5.f; y = y + 1.f) {
@@ -313,16 +353,16 @@ void MapEditorScene::HandleTilePicking(Controler * controler) {
 void MapEditorScene::HandleCameraMovement(Controler * controler) {
 	float speed = 0.15f;
 	if (controler->GetKey(PGKey_Left)->IsPress == true) {
-		this->scene_light.position += v4(0.1f, 0.0f, 0.0f, 0.f);
+		this->scene_light[1].position += v4(0.1f, 0.0f, 0.0f, 0.f);
 	}
 	if (controler->GetKey(PGKey_Right)->IsPress == true) {
-		this->scene_light.position -= v4(0.1f, 0.0f, 0.0, 0.f);
+		this->scene_light[1].position -= v4(0.1f, 0.0f, 0.0, 0.f);
 	}
-	if (controler->GetKey(PGKey_Page_Up)->IsPress == true) {
-		this->scene_light.position -= v4(0.0f, 0.0f, 0.1f, 0.f);
+	if (controler->GetKey(PGKey_Up)->IsPress == true) {
+		this->scene_light[0].position += v4(0.0f, 0.1f, 0.0f, 0.f);
 	}
-	if (controler->GetKey(PGKey_Page_Down)->IsPress == true) {
-		this->scene_light.position += v4(0.0f, 0.0f, 0.1f, 0.f);
+	if (controler->GetKey(PGKey_Down)->IsPress == true) {
+		this->scene_light[0].position -= v4(0.0f, 0.1f, 0.0f, 0.f);
 	}
 	if (controler->GetKey(PGKey_Q)->IsPress == true) {
 		this->scene_camera->RotateZAxis(speed, this->scene_camera->LookAt);
@@ -354,12 +394,7 @@ void MapEditorScene::HandleCameraMovement(Controler * controler) {
 		this->scene_camera->Possition += v3(0.0f, 0.f, -speed);
 		this->scene_camera->LookAt += v3(0.0f, 0.f, -speed);
 	}
-	if (controler->GetKey(PGKey_Up)->IsPress == true) {
-		this->scene_light.position += v4(0.0f, 0.1f, 0.0f, 0.f);
-	}
-	if (controler->GetKey(PGKey_Down)->IsPress == true) {
-		this->scene_light.position -= v4(0.0f, 0.1f, 0.0f, 0.f);
-	}
+
 }
 void MapEditorScene::HandleControler(Controler * controler) {
 	Scene::HandleControler(controler);
@@ -395,6 +430,10 @@ void MapEditorScene::HandleControler(Controler * controler) {
 		current_mode = Mode_Edit_Tile_Bottom_Material;
 		printf("Mode_Edit_Tile_ bottom Material Mode\n");
 	}
+	if (controler->IsRelease(PGKey_F8) == true) {
+		current_mode = Mode_Edit_Light_setting;
+		printf("Mode Light setting\n");
+	}
 	if (controler->GetKey(PGKey_Left_Ctrl)->IsPress == true) {
 		if (controler->IsRelease(PGKey_S) == true) {
 			for (int i = 0; i < 9; i++) {
@@ -406,6 +445,29 @@ void MapEditorScene::HandleControler(Controler * controler) {
 		}
 	}
 	switch (current_mode) {
+		case Mode_Edit_Light_setting: {
+			HandleCameraMovement(controler);
+			if (controler->IsRelease(PGKey_1) == true) {
+				scene_light_setting.UseDirectional = 0;
+			}
+			if (controler->IsRelease(PGKey_2) == true) {
+				scene_light_setting.UseDirectional = 1;
+			}
+			if (controler->IsRelease(PGKey_3) == true) {
+				scene_light_setting.UseGamma = 0;
+			}
+			if (controler->IsRelease(PGKey_4) == true) {
+				scene_light_setting.UseGamma = 1;
+			}
+			if (controler->IsRelease(PGKey_5) == true) {
+				scene_light_setting.UsePoint = 0;
+			}
+			if (controler->IsRelease(PGKey_6) == true) {
+				scene_light_setting.UsePoint = 1;
+			}
+			break;
+		}
+
 	case Mode_Edit_Tile_Model: {
 		HandleTilePicking(controler);
 		if (controler->IsRelease(PGKey_0) == true) {

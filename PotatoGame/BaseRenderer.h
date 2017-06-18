@@ -112,24 +112,25 @@ namespace PG {
 				glBindBuffer(GL_UNIFORM_BUFFER, 0);
 			}
 			
-				void BaseRenderer::PushLightSetting(PGLightSettings* _setting) {
+			void BaseRenderer::PushLightSetting(PGLightSettings* _setting) {
 				glBindBuffer(GL_UNIFORM_BUFFER, this->SceneAdvanceLight_UBO_Ref_Id);
-					glBufferSubData(GL_UNIFORM_BUFFER,  (sizeof(PGPointLight) + sizeof(PGDirectionalLight)),
+					glBufferSubData(GL_UNIFORM_BUFFER,  0,
 														sizeof(PGLightSettings), _setting);
 				glBindBuffer(GL_UNIFORM_BUFFER, 0);
 			}
-			void BaseRenderer::PushLightData(PGPointLight* _light) {
+			void BaseRenderer::PushLightData(PGPointLight* _light , int index) {
 				glBindBuffer(GL_UNIFORM_BUFFER, this->SceneAdvanceLight_UBO_Ref_Id);
-				glBufferSubData(GL_UNIFORM_BUFFER,  0, 
+				glBufferSubData(GL_UNIFORM_BUFFER, (sizeof(PGLightSettings) + sizeof(PGDirectionalLight)  + index * sizeof(PGPointLight)),
 													sizeof(PGPointLight), _light);
 				glBindBuffer(GL_UNIFORM_BUFFER, 0);
 			}
 			void BaseRenderer::PushDirLightData(PGDirectionalLight* _light) {
 				glBindBuffer(GL_UNIFORM_BUFFER, this->SceneAdvanceLight_UBO_Ref_Id);
-				glBufferSubData(GL_UNIFORM_BUFFER,  sizeof(PGPointLight), 
+				glBufferSubData(GL_UNIFORM_BUFFER,  sizeof(PGLightSettings),
 													sizeof(PGDirectionalLight), _light);
 				glBindBuffer(GL_UNIFORM_BUFFER, 0);
 			}
+			
 			virtual void BaseRenderer::Build() {
 				//Gen the UBO Buffer and get ID
 				glGenBuffers(1, &this->Renderer_UBO_Ref_Id);
@@ -152,9 +153,10 @@ namespace PG {
 
 
 				glBindBuffer(GL_UNIFORM_BUFFER, this->SceneAdvanceLight_UBO_Ref_Id);
-				glBufferData(GL_UNIFORM_BUFFER, sizeof(PGDirectionalLight) +
-												sizeof(PGPointLight) + 
-												sizeof(PGLightSettings), NULL, GL_DYNAMIC_DRAW); // allocate bytes of memory
+				glBufferData(GL_UNIFORM_BUFFER, sizeof(PGLightSettings) +
+												 sizeof(PGDirectionalLight) + 
+												(sizeof(PGPointLight)*10)
+												, NULL, GL_DYNAMIC_DRAW); // allocate bytes of memory
 				glBindBufferBase(GL_UNIFORM_BUFFER, 3, this->SceneAdvanceLight_UBO_Ref_Id);
 				
 				

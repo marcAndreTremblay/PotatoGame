@@ -60,18 +60,20 @@ PG_SHADER(const char* map_hexa_FragShader = GLSL330(
 	vec3 specular;
 	float shininess;
 };
-struct PGLightSettings{
-	bool UseDirectional;
-	bool UsePoint;
+struct PGLightSettings {
+	int UseDirectional; // 1 = true , 0 = false
+	int UsePoint;// 1 = true , 0 = false
+	int UseGamma;// gamme value , 0 = false
+	int Point_Light_Max_Cap; // Number of entity of point light reserve in memory
 };
 struct PGPointLight {
-	vec4 position;
-	
+	vec4 setting; // x = is in use 1 = true = false
+	vec4 position;	
 	vec4 ambient;
 	vec4 diffuse;
 	vec4 specular;
-
 	vec4 attenuation_factors; //Kc = constant , Kl = linear , Kq = quadratic , use attenuation 1=true 2=false 
+	
 };
 struct PGDirectionalLight {
 	vec4 direction;
@@ -88,10 +90,9 @@ layout(std140) uniform Renderer_UBO {
 	vec4 CenterOfFog; // ->W = radius
 };
 layout(std140) uniform SceneAdvanceLightData_UBO {
-	
-	PGPointLight Light;
-	PGDirectionalLight D_Light;
 	PGLightSettings Light_Setting;
+	PGDirectionalLight D_Light;
+	PGPointLight P_Light[10];
 };
 
 in vec3 Normal;
@@ -100,9 +101,9 @@ in PGMaterial Matl;
 in vec4 Vertex_World_Possiton;
 
 out vec4 color;
-vec3 CalcPointLight(PGPointLight p_light, vec3 normal, vec3 viewDir) {
+vec3 CalcPointLight(PGPointLight p_light, vec3 normal, vec3 viewDir, float distance) {
 	// Ambient
-	vec3 ambient = vec3(p_light.ambient) * Matl.ambient;
+	vec3 ambient = vec3(0.3f*p_light.diffuse) * Matl.ambient;
 
 	// Diffuse 
 	vec3 LightPos = vec3(WorldView * p_light.position);
@@ -117,7 +118,6 @@ vec3 CalcPointLight(PGPointLight p_light, vec3 normal, vec3 viewDir) {
 
 	//Attenuation
 	if (p_light.attenuation_factors.w == 1.f) { // 1=true 0=false
-		float distance = length(vec3(p_light.position) - vec3(Vertex_World_Possiton)); //Note() we do the calculation in the world space
 		float attenuation = 1.f / (p_light.attenuation_factors.x +
 			p_light.attenuation_factors.y * distance +
 			p_light.attenuation_factors.z * (distance*distance));
@@ -126,14 +126,14 @@ vec3 CalcPointLight(PGPointLight p_light, vec3 normal, vec3 viewDir) {
 		specular *= attenuation;
 	}
 
-	return (ambient + diffuse + specular);
+	return (/*ambient*/ + diffuse + specular);
 }
 vec3 CalcDirLight(PGDirectionalLight d_light, vec3 normal, vec3 viewDir) {
 	// Ambient 
 	vec3 ambient = vec3(d_light.ambient) * Matl.ambient;
 	// Diffuse 
 	
-	vec3 lightDir = normalize(vec3(WorldView *-D_Light.direction));
+	vec3 lightDir = normalize(vec3(WorldView *-d_light.direction));
 	float diff = max(dot(normal, lightDir), 0.0f);
 	vec3 diffuse = vec3(d_light.diffuse) * (diff * Matl.diffuse);
 
@@ -149,12 +149,29 @@ vec3 CalcDirLight(PGDirectionalLight d_light, vec3 normal, vec3 viewDir) {
 void main() {
 	vec3 viewDir = normalize(-FragPos); //Note() The viewer is at(0, 0, 0) so viewDir is(0, 0, 0) - Position = > -Position
 	vec3 norm = normalize(Normal);
-
-	vec3 result = CalcPointLight(Light, norm, viewDir);
-	result += 0.2f*CalcDirLight(D_Light, norm, viewDir);
-
-		float gamma = 2.2f;
-		result = pow(result, vec3(1.0f / gamma));
+	vec3 result = vec3(0.0f, 0.0f, 0.0f);
+	
+	//Point light calculation
+	if (Light_Setting.UsePoint == 1) {
+		for (int i = 0; i < 10; i++) {
+			if (P_Light[i].setting.x == 1.f) {
+				float distance = length(vec3(P_Light[i].position) - vec3(Vertex_World_Possiton)); //Note() we do the calculation in the world space
+				if (P_Light[i].setting.y == 0 ||
+					distance < P_Light[i].setting.y) {
+					result += CalcPointLight(P_Light[i], norm, viewDir, distance);
+				}
+			}
+		}
+		
+	}
+	//Dirrectional light calculation
+	if (Light_Setting.UseDirectional == 1) {
+		result += CalcDirLight(D_Light, norm, viewDir);
+	}
+	//Gamma calculation
+	if (Light_Setting.UseGamma == 1) {
+		result = pow(result, vec3(1.0f / 2.2f));
+	}
 	    color = vec4(result, 1.0f);
 
 }

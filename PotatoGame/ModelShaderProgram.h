@@ -92,7 +92,7 @@ PG_SHADER(const char* base_model_vertex_shader = GLSL330(
 		Matl.shininess = OverridingMtl.shininess;
 
 		Vertex_World_Possiton = (Translate*Scale)* vertex_position;
-			gl_Position = WorldProjection  * WorldView * Vertex_World_Possiton;
+		gl_Position = WorldProjection  * WorldView * Vertex_World_Possiton;
 		FragPos = vec3(WorldView*(Translate)* vertex_position);
 		Normal = mat3(transpose(inverse(WorldView))) * vertex_normal;
 	}
@@ -102,10 +102,12 @@ PG_SHADER(const char* base_model_vertex_shader = GLSL330(
 #if 1 
 PG_SHADER(const char* base_model_FragShader = GLSL330(
 	struct PGLightSettings {
-		bool UseDirectional;
-		bool UsePoint;
+		int UseDirectional; // 1 = true , 0 = false
+		int UsePoint;// 1 = true , 0 = false
+		int UseGamma;// gamme value , 0 = false
 	};
-	struct PGPointLight {
+	struct PGPointLight {	
+		vec4 setting; // x = is in use 1 = true = false
 		vec4 position;
 		vec4 ambient;
 		vec4 diffuse;
@@ -127,9 +129,9 @@ PG_SHADER(const char* base_model_FragShader = GLSL330(
 		vec4 CenterOfFog; // ->W = radius
 	};
 	layout(std140) uniform SceneAdvanceLightData_UBO {
-		PGPointLight Light;
-		PGDirectionalLight D_Light;
 		PGLightSettings Light_Setting;
+		PGDirectionalLight D_Light;
+		PGPointLight P_Light[10];
 	};
 
 	in vec3 Normal;
@@ -212,12 +214,15 @@ struct PGMaterial {
 	float shininess;
 };
 struct PGLightSettings {
-	bool UseDirectional;
-	bool UsePoint;
+	int UseDirectional; // 1 = true , 0 = false
+	int UsePoint;// 1 = true , 0 = false
+	int UseGamma;// gamme value , 0 = false
+	int Point_Light_Max_Cap; // Number of entity of point light reserve in memory
 };
 
-struct PGPointLight {
-	vec4 position;
+struct PGPointLight { 
+	vec4 setting; // x = is in use 1 = true = false
+	vec4 position;// possition xyz , w = intensity
 	vec4 ambient;
 	vec4 diffuse;
 	vec4 specular;
@@ -237,9 +242,9 @@ layout(std140) uniform Renderer_UBO {
 	vec4 CenterOfFog; // ->W = radius
 };
 layout(std140) uniform SceneAdvanceLightData_UBO {
-	PGPointLight Light;
-	PGDirectionalLight D_Light;
 	PGLightSettings Light_Setting;
+	PGDirectionalLight D_Light;	
+	PGPointLight P_Light[10];
 };
 
 in vec3 Normal;
@@ -252,19 +257,19 @@ out vec4 color;
 void main() {
 
 	// Ambient
-	vec3 ambient = vec3(Light.ambient) * Matl.ambient;
+	vec3 ambient = vec3(P_Light[0].ambient) * Matl.ambient;
 
 	// Diffuse 
-	vec3 LightPos = vec3(WorldView * Light.position);
+	vec3 LightPos = vec3(WorldView * P_Light[0].position);
 	vec3 norm = normalize(Normal);
 	vec3 lightDir = normalize(LightPos - FragPos);
 	float diff = max(dot(norm, lightDir), 0.0f);
-	vec3 diffuse = vec3(Light.diffuse) * (diff * Matl.diffuse);
+	vec3 diffuse = vec3(P_Light[0].diffuse) * (diff * Matl.diffuse);
 
 	vec3 viewDir = normalize(-FragPos); // The viewer is at(0, 0, 0) so viewDir is(0, 0, 0) - Position = > -Position
 	vec3 reflectDir = reflect(-lightDir, norm);
 	float spec = pow(max(dot(viewDir, reflectDir), 0.0), Matl.shininess);
-	vec3 specular = vec3(Light.specular) * (spec * Matl.specular);
+	vec3 specular = vec3(P_Light[0].specular) * (spec * Matl.specular);
 
 	//Combine each	colors
 	color = vec4((ambient + diffuse + specular), 1.0f);

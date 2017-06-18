@@ -38,6 +38,7 @@ enum MapEditorMode {
 	Mode_Edit_Tile_Height = 4,
 	Mode_Edit_Tile_Model = 5,
 	Mode_Edit_Tile_Bottom_Material = 6,
+	Mode_Edit_Light_setting = 7,
 };
 class MapEditorScene :
 	public Scene {
@@ -68,7 +69,7 @@ private:
 
 	//Other Scene data
 	PGLightSettings scene_light_setting;
-	PGPointLight scene_light;
+	PGPointLight scene_light[10];
 	PGDirectionalLight scene_d_light;
 	double time;
 	double tempo_var;
