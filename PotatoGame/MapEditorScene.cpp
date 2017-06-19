@@ -8,9 +8,10 @@ MapEditorScene::MapEditorScene(MousePicker* mouse_picker) : Scene(mouse_picker){
 	this->tempo_var = 0.1f;
 
 	this->scene_light_setting = PGLightSettings();
-		scene_light_setting.UseDirectional = 0;
+		scene_light_setting.UseDirectional = 1;
 		scene_light_setting.UsePoint = 1;
-		scene_light_setting.UseGamma = 0;
+		scene_light_setting.UseGamma = 1;
+		scene_light_setting.Point_Light_Max_Cap = 0;
 	this->scene_d_light = PGDirectionalLight();
 
 	this->scene_d_light.direction = v4(1.f, 0.f, -0.2f, 0.f);
@@ -21,7 +22,7 @@ MapEditorScene::MapEditorScene(MousePicker* mouse_picker) : Scene(mouse_picker){
 
 	//Build default light
 	for (int i = 0; i < 10; i++) {
-		this->scene_light[i] = PGPointLight();
+		scene_light[i] = PGPointLight();
 		scene_light[i].setting.x = 0.f;	
 		scene_light[i].setting.y = 0.f; 	
 		scene_light[i].attenuation_factors = v4(1.0f, 0.7f, 1.8f, 1.f);
@@ -34,23 +35,23 @@ MapEditorScene::MapEditorScene(MousePicker* mouse_picker) : Scene(mouse_picker){
 	
 	this->scene_light[0].position = v4(10.f, 0.f, 5.f, 1.f);
 	this->scene_light[0].setting.x = 1.f;
-	this->scene_light[0].diffuse = v4(1.0f, 1.0f, 1.0f, 1.f);
-	this->scene_light[0].ambient = v4(1.0f, 1.0f, 1.0f, 1.f);
-	this->scene_light[0].specular = v4(1.0f, 1.0f, 1.0f, 1.f);
+	this->scene_light[0].diffuse = v4(1.0f, 0.1f, 1.0f, 1.f);
+	this->scene_light[0].ambient = v4(1.0f, 0.1f, 1.0f, 1.f);
+	this->scene_light[0].specular = v4(1.0f, 0.1f, 1.0f, 1.f);
 	this->scene_light[0].setting.y = 15.f;
 
 	this->scene_light[1].position = v4(10.f, 10.f, 3.f, 1.f);
 	this->scene_light[1].setting.x = 1.f;
-	this->scene_light[1].diffuse = v4(1.0f, 1.0f, 1.0f, 1.f);
-	this->scene_light[1].ambient = v4(1.0f, 1.0f, 1.0f, 1.f);
-	this->scene_light[1].specular = v4(1.0f, 1.0f, 1.0f, 1.f);
+	this->scene_light[1].diffuse = v4(1.0f, 1.0f, 0.1f, 1.f);
+	this->scene_light[1].ambient = v4(1.0f, 1.0f, 0.1f, 1.f);
+	this->scene_light[1].specular = v4(1.0f, 1.0f, 0.1f, 1.f);
 	this->scene_light[1].setting.y = 15.f;
 
 	this->scene_light[2].position = v4(10.f, 20.f, 4.f, 1.f);
 	this->scene_light[2].setting.x = 1.f;
-	this->scene_light[2].diffuse = v4(1.0f, 1.0f, 1.0f, 1.f);
-	this->scene_light[2].ambient = v4(1.0f, 1.0f, 1.0f, 1.f);
-	this->scene_light[2].specular = v4(1.0f, 1.0f, 1.0f, 1.f);
+	this->scene_light[2].diffuse = v4(0.1f, 1.0f, 1.0f, 1.f);
+	this->scene_light[2].ambient = v4(0.1f, 1.0f, 1.0f, 1.f);
+	this->scene_light[2].specular = v4(0.1f, 1.0f, 1.0f, 1.f);
 	this->scene_light[2].setting.y = 15.f;
 
 	
@@ -363,6 +364,12 @@ void MapEditorScene::HandleCameraMovement(Controler * controler) {
 	}
 	if (controler->GetKey(PGKey_Down)->IsPress == true) {
 		this->scene_light[0].position -= v4(0.0f, 0.1f, 0.0f, 0.f);
+	}
+	if (controler->GetKey(PGKey_Page_Down)->IsPress == true) {
+		this->scene_light[2].position -= v4(0.0f, 0.f, 0.1f, 0.f);
+	}
+	if (controler->GetKey(PGKey_Page_Up)->IsPress == true) {
+		this->scene_light[2].position += v4(0.0f, 0.f, 0.1f, 0.f);
 	}
 	if (controler->GetKey(PGKey_Q)->IsPress == true) {
 		this->scene_camera->RotateZAxis(speed, this->scene_camera->LookAt);

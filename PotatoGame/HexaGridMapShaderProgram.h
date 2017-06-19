@@ -39,15 +39,15 @@ PG_SHADER(const char* map_hexa_vertex_shader = GLSL330(
 	};
 
 
-	void main() {
-		Vertex_World_Possiton = (Translate)* vertex_position;
+	void main() {	
 		Matl.ambient = ambient;
 		Matl.diffuse = diffuse;
 		Matl.specular = specular;
 		Matl.shininess = shininess.x;
-		gl_Position = WorldProjection  * WorldView * Vertex_World_Possiton;
-		FragPos = vec3(WorldView*(Translate)* vertex_position);
-		Normal = mat3(transpose(inverse(WorldView ))) * vertex_normal;
+		Vertex_World_Possiton = (Translate)* vertex_position;
+		FragPos = vec3(WorldView* Vertex_World_Possiton);
+		gl_Position = WorldProjection  * WorldView * Vertex_World_Possiton;		
+		Normal = mat3(transpose(inverse(WorldView))) * vertex_normal;
 	}
 ));
 #endif
@@ -68,12 +68,11 @@ struct PGLightSettings {
 };
 struct PGPointLight {
 	vec4 setting; // x = is in use 1 = true = false
-	vec4 position;	
+	vec4 position;
 	vec4 ambient;
 	vec4 diffuse;
 	vec4 specular;
 	vec4 attenuation_factors; //Kc = constant , Kl = linear , Kq = quadratic , use attenuation 1=true 2=false 
-	
 };
 struct PGDirectionalLight {
 	vec4 direction;
@@ -126,11 +125,11 @@ vec3 CalcPointLight(PGPointLight p_light, vec3 normal, vec3 viewDir, float dista
 		specular *= attenuation;
 	}
 
-	return (/*ambient*/ + diffuse + specular);
+	return (ambient+ diffuse + specular);
 }
 vec3 CalcDirLight(PGDirectionalLight d_light, vec3 normal, vec3 viewDir) {
 	// Ambient 
-	vec3 ambient = vec3(d_light.ambient) * Matl.ambient;
+	vec3 ambient = vec3(0.3f*d_light.diffuse) * Matl.ambient;
 	// Diffuse 
 	
 	vec3 lightDir = normalize(vec3(WorldView *-d_light.direction));
@@ -154,9 +153,9 @@ void main() {
 	//Point light calculation
 	if (Light_Setting.UsePoint == 1) {
 		for (int i = 0; i < 10; i++) {
-			if (P_Light[i].setting.x == 1.f) {
-				float distance = length(vec3(P_Light[i].position) - vec3(Vertex_World_Possiton)); //Note() we do the calculation in the world space
-				if (P_Light[i].setting.y == 0 ||
+			if (P_Light[i].setting.x == 1.f) { //Check if light is in the scene
+				float distance = length(vec3(P_Light[i].position) - vec3(Vertex_World_Possiton)); //Calculate distance, 
+				if (P_Light[i].setting.y == 0 ||//Check if the light is too far
 					distance < P_Light[i].setting.y) {
 					result += CalcPointLight(P_Light[i], norm, viewDir, distance);
 				}
@@ -166,13 +165,13 @@ void main() {
 	}
 	//Dirrectional light calculation
 	if (Light_Setting.UseDirectional == 1) {
-		result += CalcDirLight(D_Light, norm, viewDir);
+		result += 0.1f*CalcDirLight(D_Light, norm, viewDir);
 	}
 	//Gamma calculation
 	if (Light_Setting.UseGamma == 1) {
 		result = pow(result, vec3(1.0f / 2.2f));
 	}
-	    color = vec4(result, 1.0f);
+	color = vec4(result, 1.0f);
 
 }
 ));

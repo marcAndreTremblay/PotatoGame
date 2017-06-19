@@ -5,8 +5,11 @@
 #include "stdafx.h"
 #include "Core.h"
 
-#define PG_SHADER(shader_text) static shader_text
-#define GLSL330(src) "#version 330 core\n" #src 
+#define PG_SHADER(shader_text) static shader_text;
+
+#define GLSL330(src) "#version 330 core\n"  #src ;
+#define GlobalStruct(src) "#version 330 core\n"  #src ;
+
 class ShaderProgram {
 protected:
 	void ShaderProgram::Use();

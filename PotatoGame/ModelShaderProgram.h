@@ -253,27 +253,78 @@ in PGMaterial Matl;
 in vec4 Vertex_World_Possiton;
 
 out vec4 color;
-
-void main() {
-
+vec3 CalcPointLight(PGPointLight p_light, vec3 normal, vec3 viewDir, float distance) {
 	// Ambient
-	vec3 ambient = vec3(P_Light[0].ambient) * Matl.ambient;
+	vec3 ambient = vec3(0.3f*p_light.diffuse) * Matl.ambient;
 
 	// Diffuse 
-	vec3 LightPos = vec3(WorldView * P_Light[0].position);
-	vec3 norm = normalize(Normal);
+	vec3 LightPos = vec3(WorldView * p_light.position);
 	vec3 lightDir = normalize(LightPos - FragPos);
-	float diff = max(dot(norm, lightDir), 0.0f);
-	vec3 diffuse = vec3(P_Light[0].diffuse) * (diff * Matl.diffuse);
 
-	vec3 viewDir = normalize(-FragPos); // The viewer is at(0, 0, 0) so viewDir is(0, 0, 0) - Position = > -Position
-	vec3 reflectDir = reflect(-lightDir, norm);
+	float diff = max(dot(normal, lightDir), 0.0f);
+	vec3 diffuse = vec3(p_light.diffuse) * (diff * Matl.diffuse);
+
+	vec3 reflectDir = reflect(-lightDir, normal);
 	float spec = pow(max(dot(viewDir, reflectDir), 0.0), Matl.shininess);
-	vec3 specular = vec3(P_Light[0].specular) * (spec * Matl.specular);
+	vec3 specular = vec3(p_light.specular) * (spec * Matl.specular);
 
-	//Combine each	colors
-	color = vec4((ambient + diffuse + specular), 1.0f);
+	//Attenuation
+	if (p_light.attenuation_factors.w == 1.f) { // 1=true 0=false
+		float attenuation = 1.f / (p_light.attenuation_factors.x +
+			p_light.attenuation_factors.y * distance +
+			p_light.attenuation_factors.z * (distance*distance));
+		ambient *= attenuation;
+		diffuse *= attenuation;
+		specular *= attenuation;
+	}
 
+	return (ambient + diffuse + specular);
+}
+vec3 CalcDirLight(PGDirectionalLight d_light, vec3 normal, vec3 viewDir) {
+	// Ambient 
+	vec3 ambient = vec3(0.3f*d_light.diffuse) * Matl.ambient;
+	// Diffuse 
+
+	vec3 lightDir = normalize(vec3(WorldView *-d_light.direction));
+	float diff = max(dot(normal, lightDir), 0.0f);
+	vec3 diffuse = vec3(d_light.diffuse) * (diff * Matl.diffuse);
+
+	vec3 reflectDir = reflect(-lightDir, normal);
+	float spec = pow(max(dot(viewDir, reflectDir), 0.0), Matl.shininess);
+	vec3 specular = vec3(d_light.specular) * (spec * Matl.specular);
+
+
+
+	return (ambient + diffuse + specular);
+}
+
+void main() {
+	vec3 viewDir = normalize(-FragPos); //Note() The viewer is at(0, 0, 0) so viewDir is(0, 0, 0) - Position = > -Position
+	vec3 norm = normalize(Normal);
+	vec3 result = vec3(0.0f, 0.0f, 0.0f);
+
+	//Point light calculation
+	if (Light_Setting.UsePoint == 1) {
+		for (int i = 0; i < 10; i++) {
+			if (P_Light[i].setting.x == 1.f) { //Check if light is in the scene
+				float distance = length(vec3(P_Light[i].position) - vec3(Vertex_World_Possiton)); //Calculate distance, 
+				if (P_Light[i].setting.y == 0 ||//Check if the light is too far
+					distance < P_Light[i].setting.y) {
+					result += CalcPointLight(P_Light[i], norm, viewDir, distance);
+				}
+			}
+		}
+
+	}
+	//Dirrectional light calculation
+	if (Light_Setting.UseDirectional == 1) {
+		result += 0.1f*CalcDirLight(D_Light, norm, viewDir);
+	}
+	//Gamma calculation
+	if (Light_Setting.UseGamma == 1) {
+		result = pow(result, vec3(1.0f / 2.2f));
+	}
+	color = vec4(result, 1.0f);
 }
 ));
 #endif
