@@ -42,6 +42,7 @@ namespace PG {
 			GameWindow* Game_Window;
 			EngineObjectList<UIElement>* Element_list;
 		public:
+			void GUICanvas::AddElement(UIElement* element);
 			GUICanvas() {
 				this->NextElementId = 1;
 				this->Element_list = new EngineObjectList<UIElement>(true);
@@ -55,9 +56,7 @@ namespace PG {
 				this->Mouse_Picker = _mouse_picker;
 				this->Game_Window = game_window;
 
-				TileEditorUIWindow *tile_editor_menu_window = new TileEditorUIWindow(asset_manager);
-				this->Element_list->Add(tile_editor_menu_window);
-
+				
 				WindowMenu *menu_window = new WindowMenu();
 				menu_window->SetSize(v2(300.f, 900.f));
 				menu_window->SetPossition(v2(200.f, 10.f));

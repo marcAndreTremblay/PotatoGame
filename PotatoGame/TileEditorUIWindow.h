@@ -11,8 +11,10 @@ using namespace PG::GUI;
 
 class TileEditorUIWindow : public WindowMenu {
 public:
+	DropDownMenu* drop_down_menu_tile_top_material;
 	TileEditorUIWindow(AssetManager* asset_manager);
 	virtual ~TileEditorUIWindow();
+	virtual void OnEvent(GUIEvent *event);
 };
 #endif
 

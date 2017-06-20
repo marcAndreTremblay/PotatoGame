@@ -29,6 +29,7 @@
 #include "SolarSystemEntities.h"
 
 #include "DayTimeAnimation.h"
+#include "GUICanvas.h"
 
 enum MapEditorMode {
 	Mode_Camera_Move = 0,
@@ -41,11 +42,11 @@ enum MapEditorMode {
 	Mode_Edit_Light_setting = 7,
 };
 class MapEditorScene :
-	public Scene {
+	public Scene , public EventListener {
 private:
 	MapAtlasRawDataV1* map_atlas;
 
-
+	TileEditorUIWindow *tile_editor_menu_window;
 
 	//Display information
 	MapAtlasRegion* map_atlas_region_display[9];
@@ -69,6 +70,7 @@ private:
 
 	//Other Scene data
 	PGLightSettings scene_light_setting;
+	PGPointLight* selected_light;
 	PGPointLight scene_light[10];
 	PGDirectionalLight scene_d_light;
 	double time;
@@ -90,10 +92,14 @@ public:
 	void Update(Controler *controler, double timeElapse);
 	
 	void Render(BaseRenderer *renderer);
-	void Build(AnimatorManager* anmation_manager);
+	void Build(AnimatorManager* anmation_manager, GUICanvas* canvas, AssetManager* asset_manager);
+	void HandleLightPicking(Controler * controler);
 	void HandleTilePicking(Controler * controler);
 	void HandleCameraMovement(Controler * controler);
 	void HandleControler(Controler *controler);
+
+	void OnEvent(GUIEvent *event);
+
 };
 #endif
 

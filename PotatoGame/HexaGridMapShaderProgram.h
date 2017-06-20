@@ -54,7 +54,7 @@ PG_SHADER(const char* map_hexa_vertex_shader = GLSL330(
 //Fragment shader
 #if 1 
 PG_SHADER(const char* map_hexa_FragShader = GLSL330(
-	struct PGMaterial {
+struct PGMaterial {
 	vec3 ambient;
 	vec3 diffuse;
 	vec3 specular;

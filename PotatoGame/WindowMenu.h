@@ -110,6 +110,7 @@ using namespace PG::GUI;
 				if (event->sender == this->Hide_Button) {
 					if (event->code == GUIEvent_Button_Release) {
 						this->IsVisible = false;
+						this->EmiteEvent(event);//Re-emit event for those 
 					}
 				}
 

@@ -179,6 +179,7 @@ namespace PG {
 												   }
 												   else {
 													   this->State = UIState_Idle;
+													 
 												   }
 
 											   }
@@ -205,10 +206,12 @@ namespace PG {
 			virtual void DropDownMenu::OnEvent(GUIEvent *event) override {
 				if (event->code == GUIEvent_Element_Select) {
 					selected = (GUISelectNode*)event->sender;
-					EmiteEvent(event);
+					delete(event);
+					EmiteEvent(new GUIEvent(this, GUIEvent_Element_Select));
 				}
 
 			}
+			
 		};
 	}
 }

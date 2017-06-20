@@ -353,5 +353,8 @@
     <ClCompile Include="DayTimeAnimation.cpp">
       <Filter>Header Files\GameEditor\Animation</Filter>
     </ClCompile>
+    <ClCompile Include="GUICanvas.cpp">
+      <Filter>Header Files\PG\Gui</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

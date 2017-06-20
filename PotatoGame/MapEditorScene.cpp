@@ -6,7 +6,7 @@ MapEditorScene::MapEditorScene(MousePicker* mouse_picker) : Scene(mouse_picker){
 	current_mode = Mode_Camera_Move;
 	this->time = 0.1f;
 	this->tempo_var = 0.1f;
-
+	selected_light = nullptr;
 	this->scene_light_setting = PGLightSettings();
 		scene_light_setting.UseDirectional = 1;
 		scene_light_setting.UsePoint = 1;
@@ -162,13 +162,11 @@ void MapEditorScene::RenderMapGrid(BaseRenderer * renderer) {
 }
 void MapEditorScene::Render(BaseRenderer * renderer) {
 	Scene::Render(renderer);
-
-//	renderer->PushLightPossition(&scene_light.position);
 	for (int i = 0; i < 10; i++) {
-		if (scene_light[i].setting.x == 1.f) {
-			renderer->PushLightData(&scene_light[i], i);
-		}
+		renderer->PushLightData(&scene_light[i], i);
 	}
+//	renderer->PushLightPossition(&scene_light.position);
+
 	
 	renderer->PushDirLightData(&scene_d_light);
 	renderer->PushLightSetting(&scene_light_setting);
@@ -178,7 +176,12 @@ void MapEditorScene::Render(BaseRenderer * renderer) {
 	renderer->axisMesh->Render(v3(0.f, 0.f, 0.f), v4(0.f, 0.f, 1.f, 1.f));
 	for (int i = 0; i < 10; i++) {
 		if (scene_light[i].setting.x == 1.f) {
-			renderer->cubeMesh->Render(v3(scene_light[i].position.x, scene_light[i].position.y, scene_light[i].position.z), v3(0.1f, 0.1f, 0.1f), scene_light[i].diffuse);
+			if (&scene_light[i] == selected_light) {
+				renderer->cubeMesh->Render(v3(scene_light[i].position.x, scene_light[i].position.y, scene_light[i].position.z), v3(0.2f, 0.2f, 0.2f), scene_light[i].diffuse);
+			}
+			else {
+				renderer->cubeMesh->Render(v3(scene_light[i].position.x, scene_light[i].position.y, scene_light[i].position.z), v3(0.1f, 0.1f, 0.1f), scene_light[i].diffuse);
+			}
 		}
 	}
 	
@@ -201,12 +204,14 @@ void MapEditorScene::Render(BaseRenderer * renderer) {
 
 }
 
-void MapEditorScene::Build(AnimatorManager* anmation_manager) {
+void MapEditorScene::Build(AnimatorManager* anmation_manager, GUICanvas* canvas, AssetManager* asset_manager) {
 	Scene::Build();
 
 	this->Set_Name("GridEditorScene");
 
-
+	tile_editor_menu_window = new TileEditorUIWindow(asset_manager);	
+	canvas->AddElement(tile_editor_menu_window);
+	tile_editor_menu_window->AddListener(this);
 	
 
 	this->scene_camera = new Camera(
@@ -307,6 +312,34 @@ void MapEditorScene::Build(AnimatorManager* anmation_manager) {
 
 }
 
+void MapEditorScene::HandleLightPicking(Controler * controler) {
+	if (controler->GetKey(PGKey_Left_Ctrl)->IsPress == true
+		&& controler->IsRelease(PGMouse_Right) == true) {
+		
+		v3 world_ray;
+		v3 plane_normal = v3(0.f, 0.f, 1.f);
+		r32 z_offset = 0.f;
+		v3 result_point = v3(0.f);
+		world_ray = Mouse_Picker->CastRay(controler, &this->Projection_Matrice, this->scene_camera->GetViewMatrice());
+		
+		for (int i = 0; i < 10; i++) {
+			if (scene_light[i].setting.x == 1) {
+				v3 possition = v3(scene_light[i].position);
+				z_offset = scene_light[i].position.z;
+				float dis_t = -((glm::dot(this->scene_camera->Possition, plane_normal) - z_offset) / glm::dot(world_ray, plane_normal));
+				result_point = this->scene_camera->Possition + world_ray*dis_t;
+				
+				float dist = glm::distance(result_point, possition);
+				if (dist < 0.5f) {
+					selected_light = &scene_light[i];
+					return;
+				}
+			}
+		}
+		selected_light = nullptr;
+
+	}
+}
 void MapEditorScene::HandleTilePicking(Controler * controler) {
 	int picked_index = -1;
 	//Picking into world space
@@ -318,6 +351,8 @@ void MapEditorScene::HandleTilePicking(Controler * controler) {
 		r32 z_offset = 0.f;
 		v3 result_point = v3(0.f);
 		world_ray = Mouse_Picker->CastRay(controler, &this->Projection_Matrice, this->scene_camera->GetViewMatrice());
+		
+		
 		GridRawDataV2 *grid_data = map_atlas_region_display[4]->file_data;
 		v3 possition_offset = grid_data->CalculateGridOffset();
 		v3 possition_cursor = v3(0.f) - possition_offset;
@@ -353,24 +388,7 @@ void MapEditorScene::HandleTilePicking(Controler * controler) {
 }
 void MapEditorScene::HandleCameraMovement(Controler * controler) {
 	float speed = 0.15f;
-	if (controler->GetKey(PGKey_Left)->IsPress == true) {
-		this->scene_light[1].position += v4(0.1f, 0.0f, 0.0f, 0.f);
-	}
-	if (controler->GetKey(PGKey_Right)->IsPress == true) {
-		this->scene_light[1].position -= v4(0.1f, 0.0f, 0.0, 0.f);
-	}
-	if (controler->GetKey(PGKey_Up)->IsPress == true) {
-		this->scene_light[0].position += v4(0.0f, 0.1f, 0.0f, 0.f);
-	}
-	if (controler->GetKey(PGKey_Down)->IsPress == true) {
-		this->scene_light[0].position -= v4(0.0f, 0.1f, 0.0f, 0.f);
-	}
-	if (controler->GetKey(PGKey_Page_Down)->IsPress == true) {
-		this->scene_light[2].position -= v4(0.0f, 0.f, 0.1f, 0.f);
-	}
-	if (controler->GetKey(PGKey_Page_Up)->IsPress == true) {
-		this->scene_light[2].position += v4(0.0f, 0.f, 0.1f, 0.f);
-	}
+
 	if (controler->GetKey(PGKey_Q)->IsPress == true) {
 		this->scene_camera->RotateZAxis(speed, this->scene_camera->LookAt);
 	}
@@ -454,6 +472,7 @@ void MapEditorScene::HandleControler(Controler * controler) {
 	switch (current_mode) {
 		case Mode_Edit_Light_setting: {
 			HandleCameraMovement(controler);
+			HandleLightPicking(controler);
 			if (controler->IsRelease(PGKey_1) == true) {
 				scene_light_setting.UseDirectional = 0;
 			}
@@ -472,6 +491,37 @@ void MapEditorScene::HandleControler(Controler * controler) {
 			if (controler->IsRelease(PGKey_6) == true) {
 				scene_light_setting.UsePoint = 1;
 			}
+			if (this->selected_light != nullptr) {
+				if (controler->IsRelease(PGKey_Z)) {
+					if (this->selected_light->setting.x == 1) {
+						this->selected_light->setting.x = 0;
+					}
+					else {
+						this->selected_light->setting.x = 1;
+					}
+				}
+				if (controler->GetKey(PGKey_Left)->IsPress == true) {
+					this->selected_light->position += v4(0.1f, 0.0f, 0.0f, 0.f);
+				}
+				if (controler->GetKey(PGKey_Right)->IsPress == true) {
+					this->selected_light->position -= v4(0.1f, 0.0f, 0.0, 0.f);
+				}
+				if (controler->GetKey(PGKey_Up)->IsPress == true) {
+					this->selected_light->position += v4(0.0f, 0.1f, 0.0f, 0.f);
+				}
+				if (controler->GetKey(PGKey_Down)->IsPress == true) {
+					this->selected_light->position -= v4(0.0f, 0.1f, 0.0f, 0.f);
+
+				}
+				if (controler->GetKey(PGKey_Page_Down)->IsPress == true) {
+					this->selected_light->position -= v4(0.0f, 0.f, 0.1f, 0.f);
+				}
+				if (controler->GetKey(PGKey_Page_Up)->IsPress == true) {
+					this->selected_light->position += v4(0.0f, 0.f, 0.1f, 0.f);
+				}
+			}
+
+
 			break;
 		}
 
@@ -702,4 +752,11 @@ void MapEditorScene::HandleControler(Controler * controler) {
 
 
 
+}
+void MapEditorScene::OnEvent(GUIEvent *event) {
+	if (event->sender == tile_editor_menu_window->drop_down_menu_tile_top_material){
+		if (event->code == GUIEvent_Element_Select) {
+			printf("Material top select\n");
+		}
+	}
 }
