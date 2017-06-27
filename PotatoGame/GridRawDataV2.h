@@ -17,8 +17,7 @@ class GridRawDataV2 {
 private:
 	Str* mtl_file_path;
 
-	//File data
-	
+	//File data	
 		bool* grid_tile_top_model_dynamic_status = nullptr; // 1= dynamic 0 = static
 		v3* grid_tile_top_model_scale_data = nullptr;
 		r32 * grid_tile_top_model_rotation_data = nullptr;

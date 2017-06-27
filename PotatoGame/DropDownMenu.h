@@ -60,7 +60,7 @@ namespace PG {
 					if (left_mouse_key->WasPress == true && left_mouse_key->IsPress == false) {
 						GUIEvent *evet = new GUIEvent(this, GUIEvent_Element_Select);
 						this->EmiteEvent(evet);
-						delete(evet);
+						
 					}
 					if (IsIntersection(mouse_ui_possition, *size, *render_possition) == false) {
 						this->State = UIState_Idle;

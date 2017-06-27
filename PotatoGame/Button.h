@@ -20,6 +20,7 @@ namespace PG {
 		private:
 			Str* Text;
 			Font* _Font; //Un-managed resource
+			Texture* Image; //Not owned
 		public:
 			v3 Text_color;
 			r32 Text_size;
@@ -32,9 +33,11 @@ namespace PG {
 			void Button::SetFont(PG::Engine::Font* font) {
 				this->_Font = font;
 			}
-
+			void Button::SetImage(Texture* tex_ref) {
+				this->Image = tex_ref;
+			}
 			Button() {
-
+				this->Image = nullptr;
 				this->Text_color = v3(0.f);
 				this->Text_size = 1.f;
 				this->Text = nullptr;
@@ -63,6 +66,9 @@ namespace PG {
 					}
 					if (Text != nullptr && _Font != nullptr) {
 						renderer->RenderUIText(this->Text->CharAt(), v3(this->GetRelativePossition(), this->GetRelativeZ()) + v3(0.f, 0.f, 0.1f), v4(Text_color, this->GetRelativeOpacity()), this->Text_size, this->_Font);
+					}
+					if (this->Image != nullptr) {
+						renderer->ui_image_mesh->Render(v3(this->GetRelativePossition(), this->GetRelativeZ()), this->Size, this->Image, v4(v3(1.f), this->GetRelativeOpacity()));
 					}
 				}
 				UIElement::Render(renderer);

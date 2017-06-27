@@ -42,9 +42,9 @@ MapEditorScene::MapEditorScene(MousePicker* mouse_picker) : Scene(mouse_picker){
 
 	this->scene_light[1].position = v4(10.f, 10.f, 3.f, 1.f);
 	this->scene_light[1].setting.x = 1.f;
-	this->scene_light[1].diffuse = v4(1.0f, 1.0f, 0.1f, 1.f);
-	this->scene_light[1].ambient = v4(1.0f, 1.0f, 0.1f, 1.f);
-	this->scene_light[1].specular = v4(1.0f, 1.0f, 0.1f, 1.f);
+	this->scene_light[1].diffuse = v4(1.0f, 0.1f, 0.1f, 1.f);
+	this->scene_light[1].ambient = v4(1.0f, 0.1f, 0.1f, 1.f);
+	this->scene_light[1].specular = v4(1.0f, 0.1f, 0.1f, 1.f);
 	this->scene_light[1].setting.y = 15.f;
 
 	this->scene_light[2].position = v4(10.f, 20.f, 4.f, 1.f);
@@ -53,6 +53,7 @@ MapEditorScene::MapEditorScene(MousePicker* mouse_picker) : Scene(mouse_picker){
 	this->scene_light[2].ambient = v4(0.1f, 1.0f, 1.0f, 1.f);
 	this->scene_light[2].specular = v4(0.1f, 1.0f, 1.0f, 1.f);
 	this->scene_light[2].setting.y = 15.f;
+//	this->scene_light[2].attenuation_factors = v4(1.0f, 0.22f, 0.20f, 1.f);
 
 	
 
@@ -81,7 +82,7 @@ MapEditorScene::~MapEditorScene() {
 	delete(top_tile_mesh);
 	delete(Model_Atlas_File);
 	delete(map_atlas);
-	delete(solar_data);
+//	delete(solar_data);
 	delete(test_forest);
 	delete(test_floor_tile);
 }
@@ -165,14 +166,8 @@ void MapEditorScene::Render(BaseRenderer * renderer) {
 	for (int i = 0; i < 10; i++) {
 		renderer->PushLightData(&scene_light[i], i);
 	}
-//	renderer->PushLightPossition(&scene_light.position);
-
-	
 	renderer->PushDirLightData(&scene_d_light);
 	renderer->PushLightSetting(&scene_light_setting);
-
-	
-
 	renderer->axisMesh->Render(v3(0.f, 0.f, 0.f), v4(0.f, 0.f, 1.f, 1.f));
 	for (int i = 0; i < 10; i++) {
 		if (scene_light[i].setting.x == 1.f) {
@@ -184,14 +179,6 @@ void MapEditorScene::Render(BaseRenderer * renderer) {
 			}
 		}
 	}
-	
-	//for (float x = 0.f; x < 5.f; x = x + 1.f) {
-	//	for (float y = 0.f; y < 5.f; y = y + 1.f) {
-	//		renderer->model_mtl_shader_program->Render(test_floor_tile, &v3(x * 2, y * 2, 10.f),nullptr);
-	//	}
-	//}
-	
-	RenderSolarSystem(renderer);
 	RenderMapGrid(renderer);
 	
 	renderer->model_mtl_shader_program->Render(test_floor_tile, &v3(0.f, 5.f, 5.f), nullptr);
@@ -223,15 +210,15 @@ void MapEditorScene::Build(AnimatorManager* anmation_manager, GUICanvas* canvas,
 	//Todo(): Maybe we should test if we should calculate the aspect racio from the physical screen size or perharp with the window size???
 	this->Projection_Matrice = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 150.0f);
 
-	solar_data = new SolorSystemEntities();
+//	solar_data = new SolorSystemEntities();
 	
 //	anmation_manager->AttachAnimation(new DayTimeAnimation(&this->scene_d_light));
 
-	Star* s1 = new Star(3.0f,12.f);
-	solar_data->bodies_list->Add(s1);
+	//Star* s1 = new Star(3.0f,12.f);
+	//solar_data->bodies_list->Add(s1);
 
 
-	Planet* p1 = new Planet(6.2f, 0.f, PG_Pi32/3.f, 0.2f, s1);
+	/*Planet* p1 = new Planet(6.2f, 0.f, PG_Pi32/3.f, 0.2f, s1);
 		anmation_manager->AttachAnimation(new CelestialBodyAnimation(p1));
 	solar_data->bodies_list->Add(p1);
 
@@ -254,7 +241,7 @@ void MapEditorScene::Build(AnimatorManager* anmation_manager, GUICanvas* canvas,
 	Moon* p2_l2 = new Moon(3.5f, PG_Pi32 / 4.f, PG_Pi32 / 3.f, 0.5f, p2);
 		anmation_manager->AttachAnimation(new CelestialBodyAnimation(p2_l2));
 	solar_data->bodies_list->Add(p2_l2);;
-
+*/
 	Model_Atlas_File = new ModelAtlasFile("Asset/Map_Data/Asset/atlas_model_map.txt");
 	Model_Atlas_File->LoadFromFile();
 
@@ -300,9 +287,13 @@ void MapEditorScene::Build(AnimatorManager* anmation_manager, GUICanvas* canvas,
 	map_atlas = new MapAtlasRawDataV1("Asset/Map_Data/AtlasMapV2.txt");
 	map_atlas->LoadFromFile();
 	map_atlas->LoadRegionsAndFillDisplayTemplate(edit_target,&map_atlas_region_display[0]);
-	map_atlas_region_edited[0] = true;
-
+	map_atlas_region_edited[0] = false;
+	map_atlas_region_edited[1] = false;
+	map_atlas_region_edited[2] = false;
 	
+	map_atlas_region_edited[3] = false;
+	map_atlas_region_edited[4] = false;
+	map_atlas_region_edited[5] = false;
 
 	test_mat = material_file->FindByNameId(1);
 	selected_mat = material_file->FindByNameId(2);
