@@ -17,7 +17,7 @@ MapEditorScene::MapEditorScene(MousePicker* mouse_picker) : Scene(mouse_picker){
 	this->scene_d_light.direction = v4(1.f, 0.f, -0.2f, 0.f);
 	
 	this->scene_d_light.diffuse = v4(1.f, 1.f, 1.f, 1.f);
-	this->scene_d_light.ambient = v4(0.6f, 0.6f, 0.6f, 1.f);
+	this->scene_d_light.ambient = v4(0.6f, 0.6f, 0.6f, 1.f); 
 	this->scene_d_light.specular = v4(0.6f, 0.6f, 0.6f, 1.f);
 
 	//Build default light
@@ -138,12 +138,9 @@ void MapEditorScene::RenderMapGrid(BaseRenderer * renderer) {
 							AtlasModelData *selected_model_data = grid->model_file->FetchTileModelFilePath(Tile_Top, tile_top_style_data[grid_index]);
 							ModelMeshV1* t_m = selected_model_data->mesh;
 							if (grid->selected_indexes[grid_index] == true) {
-
-								renderer->model_base_shader_program->Render(t_m, &tile_possition, grid->mtl_file->FindByNameId(0));
+								renderer->axisMesh->Render(tile_possition, v4(0.f, 0.f, 1.f, 1.f));
 							}
-							else {
-								renderer->model_base_shader_program->Render(t_m, &tile_possition, grid->mtl_file->FindByNameId(top_tile_data[grid_index]));
-							}
+							renderer->model_base_shader_program->Render(t_m, &tile_possition, grid->mtl_file->FindByNameId(top_tile_data[grid_index]));						
 						}
 						if (model_type_data[grid_index] != 0) {
 							tile_possition.z = height_data[grid_index];
@@ -196,9 +193,8 @@ void MapEditorScene::Build(AnimatorManager* anmation_manager, GUICanvas* canvas,
 
 	this->Set_Name("GridEditorScene");
 
-	tile_editor_menu_window = new TileEditorUIWindow(asset_manager);	
-	canvas->AddElement(tile_editor_menu_window);
-	tile_editor_menu_window->AddListener(this);
+
+
 	
 
 	this->scene_camera = new Camera(
@@ -291,7 +287,7 @@ void MapEditorScene::Build(AnimatorManager* anmation_manager, GUICanvas* canvas,
 	map_atlas_region_edited[1] = false;
 	map_atlas_region_edited[2] = false;
 	
-	map_atlas_region_edited[3] = false;
+	map_atlas_region_edited[3] = true;
 	map_atlas_region_edited[4] = false;
 	map_atlas_region_edited[5] = false;
 
@@ -745,9 +741,5 @@ void MapEditorScene::HandleControler(Controler * controler) {
 
 }
 void MapEditorScene::OnEvent(GUIEvent *event) {
-	if (event->sender == tile_editor_menu_window->drop_down_menu_tile_top_material){
-		if (event->code == GUIEvent_Element_Select) {
-			printf("Material top select\n");
-		}
-	}
+	
 }

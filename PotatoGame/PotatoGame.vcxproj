@@ -161,20 +161,20 @@
     <ClInclude Include="HexaGridMapShaderProgram.h" />
     <ClInclude Include="IAnimation.h" />
     <ClInclude Include="ImageBox.h" />
+    <ClInclude Include="Light.h" />
     <ClInclude Include="MapAtlasRawDataV1.h" />
     <ClInclude Include="MapEditorScene.h" />
     <ClInclude Include="FileMtlRawDataV2.h" />
+    <ClInclude Include="Material.h" />
     <ClInclude Include="ModelAtlasFile.h" />
     <ClInclude Include="ModelMeshV1.h" />
     <ClInclude Include="ModelRawDataV1.h" />
     <ClInclude Include="ModelShaderProgram.h" />
-    <ClInclude Include="MonkeyEngineInstance.h" />
     <ClInclude Include="Panel.h" />
     <ClInclude Include="ShaderProgram.h" />
     <ClInclude Include="SolarSystemEntities.h" />
     <ClInclude Include="TextBox.h" />
     <ClInclude Include="TextMesh.h" />
-    <ClInclude Include="TileEditorUIWindow.h" />
     <ClInclude Include="WindowMenu.h" />
     <ClInclude Include="Label.h" />
     <ClInclude Include="Shader.h" />
@@ -225,15 +225,16 @@
     <ClCompile Include="HexaGridMapMeshV2.cpp" />
     <ClCompile Include="HexaGridMapShaderProgram.cpp" />
     <ClCompile Include="IAnimation.cpp" />
+    <ClCompile Include="Light.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MapAtlasRawDataV1.cpp" />
     <ClCompile Include="MapEditorScene.cpp" />
     <ClCompile Include="FileMtlRawDataV2.cpp" />
+    <ClCompile Include="Material.cpp" />
     <ClCompile Include="ModelAtlasFile.cpp" />
     <ClCompile Include="ModelMeshV1.cpp" />
     <ClCompile Include="ModelRawDataV1.cpp" />
     <ClCompile Include="ModelShaderProgram.cpp" />
-    <ClCompile Include="MonkeyEngineInstance.cpp" />
     <ClCompile Include="ShaderProgram.cpp" />
     <ClCompile Include="SolarSystemEntities.cpp" />
     <ClCompile Include="stdafx.cpp">
@@ -242,7 +243,6 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="TileEditorUIWindow.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

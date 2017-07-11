@@ -46,7 +46,7 @@ class MapEditorScene :
 private:
 	MapAtlasRawDataV1* map_atlas;
 
-	TileEditorUIWindow *tile_editor_menu_window;
+
 
 	//Display information
 	MapAtlasRegion* map_atlas_region_display[9];

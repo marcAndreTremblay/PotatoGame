@@ -26,7 +26,7 @@ using namespace PG::Engine;
 #include "WindowMenu.h"
 #include "TextBox.h"
 
-#include "TileEditorUIWindow.h"
+
 
 namespace PG {
 	namespace GUI {

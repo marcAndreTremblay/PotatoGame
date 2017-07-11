@@ -11,7 +11,7 @@
 #define PG_SHADER(shader_text) static shader_text;
 
 #define GLSL330(src) "#version 330 core\n" #src ;
-#define GlobalStruct(src) "#version 330 core\n"  #src ;
+
 
 
 

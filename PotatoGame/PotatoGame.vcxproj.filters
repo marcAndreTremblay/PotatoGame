@@ -55,12 +55,6 @@
     <Filter Include="Header Files\GameEditor\Scene">
       <UniqueIdentifier>{b1d5f6c7-4812-4961-aca3-1c3762933421}</UniqueIdentifier>
     </Filter>
-    <Filter Include="MonkeyEngine">
-      <UniqueIdentifier>{e07143af-ca3d-4dd7-86af-74dae91f7a06}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="MonkeyEngine\Engine">
-      <UniqueIdentifier>{ad12121d-4eb4-4f2b-abba-62d90b067da9}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\PG\Engine\Renderer\ShaderProgram">
       <UniqueIdentifier>{cbd7069d-bb24-4c6c-9ef5-d59d7c15828d}</UniqueIdentifier>
     </Filter>
@@ -207,9 +201,6 @@
     <ClInclude Include="TextBox.h">
       <Filter>Header Files\PG\Gui\Element</Filter>
     </ClInclude>
-    <ClInclude Include="MonkeyEngineInstance.h">
-      <Filter>MonkeyEngine\Engine</Filter>
-    </ClInclude>
     <ClInclude Include="ShaderProgram.h">
       <Filter>Header Files\PG\Engine\Renderer\ShaderProgram</Filter>
     </ClInclude>
@@ -255,9 +246,6 @@
     <ClInclude Include="MapAtlasRawDataV1.h">
       <Filter>Header Files\GameEditor\FileData</Filter>
     </ClInclude>
-    <ClInclude Include="TileEditorUIWindow.h">
-      <Filter>Header Files\GameEditor\Gui</Filter>
-    </ClInclude>
     <ClInclude Include="ModelAtlasFile.h">
       <Filter>Header Files\GameEditor\FileData</Filter>
     </ClInclude>
@@ -276,6 +264,12 @@
     <ClInclude Include="DayTimeAnimation.h">
       <Filter>Header Files\GameEditor\Animation</Filter>
     </ClInclude>
+    <ClInclude Include="Light.h">
+      <Filter>Header Files\PG\Engine\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Material.h">
+      <Filter>Header Files\PG\Engine\Renderer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -283,9 +277,6 @@
     </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MonkeyEngineInstance.cpp">
-      <Filter>MonkeyEngine\Engine</Filter>
     </ClCompile>
     <ClCompile Include="ShaderProgram.cpp">
       <Filter>Header Files\PG\Engine\Renderer\ShaderProgram</Filter>
@@ -329,9 +320,6 @@
     <ClCompile Include="MapAtlasRawDataV1.cpp">
       <Filter>Header Files\GameEditor\FileData</Filter>
     </ClCompile>
-    <ClCompile Include="TileEditorUIWindow.cpp">
-      <Filter>Header Files\GameEditor\Gui</Filter>
-    </ClCompile>
     <ClCompile Include="ModelAtlasFile.cpp">
       <Filter>Header Files\GameEditor\FileData</Filter>
     </ClCompile>
@@ -355,6 +343,12 @@
     </ClCompile>
     <ClCompile Include="GUICanvas.cpp">
       <Filter>Header Files\PG\Gui</Filter>
+    </ClCompile>
+    <ClCompile Include="Light.cpp">
+      <Filter>Header Files\PG\Engine\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Material.cpp">
+      <Filter>Header Files\PG\Engine\Renderer</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
