@@ -270,6 +270,9 @@
     <ClInclude Include="Material.h">
       <Filter>Header Files\PG\Engine\Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="EngineSettingWindow.h">
+      <Filter>Header Files\GameEditor\Gui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -349,6 +352,9 @@
     </ClCompile>
     <ClCompile Include="Material.cpp">
       <Filter>Header Files\PG\Engine\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineSettingWindow.cpp">
+      <Filter>Header Files\GameEditor\Gui</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -4,6 +4,7 @@
 
 EditorInstance::EditorInstance() {
 	anmation_manager = new AnimatorManager();
+	this->game_canvas = new GUICanvas();
 }
 
 
@@ -37,7 +38,6 @@ void EditorInstance::Build() {
 
 
 	//Build the needed UI for the game
-	this->game_canvas = new GUICanvas();
 	this->game_canvas->Build(this->Game_Window, this->Mouse_Picker, this->Asset_Manager);
 
 

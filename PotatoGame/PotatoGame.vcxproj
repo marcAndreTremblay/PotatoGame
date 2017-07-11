@@ -155,6 +155,7 @@
     <ClInclude Include="DayTimeAnimation.h" />
     <ClInclude Include="Debugger.h" />
     <ClInclude Include="EditorInstance.h" />
+    <ClInclude Include="EngineSettingWindow.h" />
     <ClInclude Include="GridRawDataV2.h" />
     <ClInclude Include="HexaGridMapMesh.h" />
     <ClInclude Include="HexaGridMapMeshV2.h" />
@@ -219,6 +220,7 @@
     <ClCompile Include="DayTimeAnimation.cpp" />
     <ClCompile Include="Debugger.cpp" />
     <ClCompile Include="EditorInstance.cpp" />
+    <ClCompile Include="EngineSettingWindow.cpp" />
     <ClCompile Include="GridRawDataV2.cpp" />
     <ClCompile Include="GUICanvas.cpp" />
     <ClCompile Include="HexaGridMapMesh.cpp" />

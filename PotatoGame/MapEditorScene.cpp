@@ -73,8 +73,6 @@ MapEditorScene::MapEditorScene(MousePicker* mouse_picker) : Scene(mouse_picker){
 
 	Model_Atlas_File = nullptr;
 }
-
-
 MapEditorScene::~MapEditorScene() {
 	delete(top_tile_raw_data);
 	delete(bottom_tile_raw_data);

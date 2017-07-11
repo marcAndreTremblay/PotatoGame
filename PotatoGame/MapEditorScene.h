@@ -46,8 +46,6 @@ class MapEditorScene :
 private:
 	MapAtlasRawDataV1* map_atlas;
 
-
-
 	//Display information
 	MapAtlasRegion* map_atlas_region_display[9];
 	bool map_atlas_region_edited[9];
